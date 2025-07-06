@@ -57,10 +57,10 @@ const Header = () => {
                   key={tab.path}
                   to={tab.path}
                   className={({ isActive }) =>
-                    `px-5 py-3 rounded-full text-base font-normal transition-all duration-300 ${
+                    `px-5 py-3 rounded-full text-base  transition-all duration-300 ${
                       isActive
-                        ? "bg-primary text-white"
-                        : "text-black hover:bg-primary_light"
+                        ? "bg-primary text-white font-semibold"
+                        : "text-black hover:bg-primary_light font-normal"
                     }`
                   }
                 >

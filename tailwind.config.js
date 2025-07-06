@@ -15,6 +15,7 @@ export default {
       colors: {
         primary: '#03e8d3',
         primary2: '#028B7E',
+        primary3: '#07E5D1',
         primary_light: '#E6FCFA',
         
         gray_light: "#FAFAFA",

@@ -2037,7 +2037,7 @@ const SimulationResultsContent: React.FC<SimulationResultsContentProps> = ({
                       return (
                         <div
                           key={index}
-                          className="flex flex-col gap-3 p-4 rounded-[20px] bg-[#FAFAFA]"
+                          className="flex flex-col gap-3 p-4 rounded-[20px] border-[#F5F5F5] border bg-[#FAFAFA]"
                         >
                           {/* Top Row: Avatar + Name + Segment */}
                           <div className="flex justify-between items-center  border-b border-[#E8E8E8] pb-3">
@@ -2057,7 +2057,7 @@ const SimulationResultsContent: React.FC<SimulationResultsContentProps> = ({
                                 {personaInfo.name}
                               </p>
                             </div>
-                            <span className="bg-primary text-white text-[10px] font-semibold px-3 py-[5px] rounded-full capitalize">
+                            <span className="bg-primary3 text-black text-[10px] font-semibold px-3 py-[5px] rounded-full capitalize">
                               {persona.name?.replace(/_/g, " ") || "Profile"}
                             </span>
                           </div>
@@ -2065,7 +2065,7 @@ const SimulationResultsContent: React.FC<SimulationResultsContentProps> = ({
                           {/* Bottom Row: Age & Role */}
                           <div className="flex items-center justify-between text-xs text-gray-700">
                             <div className="flex items-center gap-1.5">
-                              <PiPerson className="h-3.5 w-3.5 text-teal-500" />
+                              <PiPerson className="h-5 w-5 text-primary" />
                               <span>
                                 Age:{" "}
                                 <span className="font-semibold text-gray-900">
@@ -2075,7 +2075,7 @@ const SimulationResultsContent: React.FC<SimulationResultsContentProps> = ({
                               </span>
                             </div>
                             <div className="flex items-center gap-1.5">
-                              <PiAddressBook className="h-3.5 w-3.5 text-teal-500" />
+                              <PiAddressBook className="h-5 w-5 text-primary" />
                               <span>
                                 Role:{" "}
                                 <span className="font-semibold text-gray-900">
@@ -2312,7 +2312,7 @@ const SimulationResultsContent: React.FC<SimulationResultsContentProps> = ({
                 setIsListCollapsed?.(true);
                 setIsChatCollapsed(false);
               }}
-              className={`px-4 py-2 cursor-pointer rounded-full font-medium text-sm transition-all duration-300 ${
+              className={`px-4 py-2 w-[74px] cursor-pointer rounded-full font-medium text-sm transition-all duration-300 ${
                 activeChatTab === "chat" ? "text-white" : "text-black"
               }`}
             >
@@ -2324,8 +2324,8 @@ const SimulationResultsContent: React.FC<SimulationResultsContentProps> = ({
                 setActiveChatTab("simulation");
                 setIsChatCollapsed(true);
               }}
-              className={`px-4 py-2 cursor-pointer rounded-full font-medium text-sm transition-all duration-300 ${
-                activeChatTab === "simulation" ? "text-white" : "text-black"
+              className={`px-4 py-2 w-[172px] cursor-pointer rounded-full  text-sm transition-all duration-300 ${
+                activeChatTab === "simulation" ? "text-white font-semibold" : "text-black font-medium"
               }`}
             >
               Simulation Analysis
