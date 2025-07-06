@@ -1235,55 +1235,75 @@ export const NoChatIcon = () => {
 };
 
 export const ChatMsend = () => (
+  <svg
+    width="28"
+    height="28"
+    viewBox="0 0 28 28"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <g filter="url(#filter0_d_302_2877)">
+      <path
+        d="M20.14 4.96004L11.11 7.96004C5.04 9.99004 5.04 13.3 11.11 15.32L13.79 16.21L14.68 18.89C16.7 24.96 20.02 24.96 22.04 18.89L25.05 9.87004C26.39 5.82004 24.19 3.61004 20.14 4.96004ZM20.46 10.34L16.66 14.16C16.51 14.31 16.32 14.38 16.13 14.38C15.94 14.38 15.75 14.31 15.6 14.16C15.31 13.87 15.31 13.39 15.6 13.1L19.4 9.28004C19.69 8.99004 20.17 8.99004 20.46 9.28004C20.75 9.57004 20.75 10.05 20.46 10.34Z"
+        fill="white"
+      />
+    </g>
+    <defs>
+      <filter
+        id="filter0_d_302_2877"
+        x="0.557495"
+        y="0.563477"
+        width="26.8852"
+        height="26.8792"
+        filterUnits="userSpaceOnUse"
+        color-interpolation-filters="sRGB"
+      >
+        <feFlood flood-opacity="0" result="BackgroundImageFix" />
+        <feColorMatrix
+          in="SourceAlpha"
+          type="matrix"
+          values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+          result="hardAlpha"
+        />
+        <feOffset dx="-2" />
+        <feGaussianBlur stdDeviation="2" />
+        <feComposite in2="hardAlpha" operator="out" />
+        <feColorMatrix
+          type="matrix"
+          values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.12 0"
+        />
+        <feBlend
+          mode="normal"
+          in2="BackgroundImageFix"
+          result="effect1_dropShadow_302_2877"
+        />
+        <feBlend
+          mode="normal"
+          in="SourceGraphic"
+          in2="effect1_dropShadow_302_2877"
+          result="shape"
+        />
+      </filter>
+    </defs>
+  </svg>
+);
+
+export const CloseButton = () => {
+  return (
     <svg
-      width="28"
-      height="28"
-      viewBox="0 0 28 28"
+      width="32"
+      height="32"
+      viewBox="0 0 32 32"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >
-      <g filter="url(#filter0_d_302_2877)">
-        <path
-          d="M20.14 4.96004L11.11 7.96004C5.04 9.99004 5.04 13.3 11.11 15.32L13.79 16.21L14.68 18.89C16.7 24.96 20.02 24.96 22.04 18.89L25.05 9.87004C26.39 5.82004 24.19 3.61004 20.14 4.96004ZM20.46 10.34L16.66 14.16C16.51 14.31 16.32 14.38 16.13 14.38C15.94 14.38 15.75 14.31 15.6 14.16C15.31 13.87 15.31 13.39 15.6 13.1L19.4 9.28004C19.69 8.99004 20.17 8.99004 20.46 9.28004C20.75 9.57004 20.75 10.05 20.46 10.34Z"
-          fill="white"
-        />
-      </g>
-      <defs>
-        <filter
-          id="filter0_d_302_2877"
-          x="0.557495"
-          y="0.563477"
-          width="26.8852"
-          height="26.8792"
-          filterUnits="userSpaceOnUse"
-          color-interpolation-filters="sRGB"
-        >
-          <feFlood flood-opacity="0" result="BackgroundImageFix" />
-          <feColorMatrix
-            in="SourceAlpha"
-            type="matrix"
-            values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
-            result="hardAlpha"
-          />
-          <feOffset dx="-2" />
-          <feGaussianBlur stdDeviation="2" />
-          <feComposite in2="hardAlpha" operator="out" />
-          <feColorMatrix
-            type="matrix"
-            values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.12 0"
-          />
-          <feBlend
-            mode="normal"
-            in2="BackgroundImageFix"
-            result="effect1_dropShadow_302_2877"
-          />
-          <feBlend
-            mode="normal"
-            in="SourceGraphic"
-            in2="effect1_dropShadow_302_2877"
-            result="shape"
-          />
-        </filter>
-      </defs>
+      <path
+        d="M24 8L8 24M8 8L24 24"
+        stroke="black"
+        stroke-width="2.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
     </svg>
   );
+};

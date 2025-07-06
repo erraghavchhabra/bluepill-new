@@ -51,6 +51,7 @@ import html2canvas from "html2canvas";
 import TableView from "@/components/TableView";
 import {
   ChatMsend,
+  CloseButton,
   CopyIcon,
   DownloadIcon,
   NoChatIcon,
@@ -241,6 +242,7 @@ const SimulationResultsContent: React.FC<SimulationResultsContentProps> = ({
   const navigate = useNavigate();
 
   const [popupImage, setPopupImage] = useState<string | null>(null);
+  const [popupText, setPopupText] = useState<any>(null);
 
   // State for collapsible cards in content summary
   const [expandedCards, setExpandedCards] = useState<Record<string, boolean>>({
@@ -367,7 +369,7 @@ const SimulationResultsContent: React.FC<SimulationResultsContentProps> = ({
   const getSimulationStep = (status: string): string => {
     switch (status) {
       case "initializing":
-        return "Initializing simulation";
+        return "Loading";
       case "segment_processing":
         return "Processing audience segments";
       case "generating_personas":
@@ -928,7 +930,7 @@ const SimulationResultsContent: React.FC<SimulationResultsContentProps> = ({
 
   const renderLoadingAnimation = () => (
     <div className="flex flex-col items-center justify-center py-16">
-    <img src="/images/loadingSimulationImage.png" alt="" />
+      <img src="/images/loadingSimulationImage.png" alt="" />
       <h3 className="text-[28px] mt-4 font-semibold mb-2 flex items-center text-primary2">
         <span className="flex items-center space-x-1 text-primary2 text-2xl font-bold">
           <span>
@@ -1294,6 +1296,53 @@ const SimulationResultsContent: React.FC<SimulationResultsContentProps> = ({
     const innerParsedResponse = parseSimulationResponse(
       simulation?.simulation_response || ""
     );
+    const extractSummaryFromRow = (cells: any) => {
+      try {
+        let rank = null;
+        let score = null;
+        let summary = "";
+
+        for (let cell of cells) {
+          const rawText = cell?.props?.children;
+          const text = Array.isArray(rawText)
+            ? rawText.join(" ").trim()
+            : String(rawText || "").trim();
+
+
+          // Check for rank: usually a small integer
+          if (rank === null && /^\d+$/.test(text)) {
+            rank = parseInt(text, 10);
+            continue;
+          }
+
+          // Check for score: decimal number
+          if (score === null && /^\d+(\.\d+)?$/.test(text)) {
+            score = parseFloat(text);
+            continue;
+          }
+
+          // Check for long summary text
+          if (summary === "" && text.length > 20 && text.includes(" ")) {
+            summary = text;
+          }
+
+          // Exit early if all found
+          if (rank !== null && score !== null && summary) break;
+        }
+
+        return {
+          rank,
+          score,
+          summary,
+        };
+      } catch (e) {
+        return {
+          rank: null,
+          score: null,
+          summary: "",
+        };
+      }
+    };
 
     // Custom table component to find "Rank" column and render images
     const CustomTableComponent = (props: any) => {
@@ -1409,7 +1458,14 @@ const SimulationResultsContent: React.FC<SimulationResultsContentProps> = ({
                                         src={imageSrc}
                                         alt={`Ad ${imageIdx + 1}`}
                                         className="max-w-[80px] max-h-[60px] w-auto h-auto object-contain bg-gray-100 cursor-pointer rounded-md border"
-                                        onClick={() => setPopupImage(imageSrc)}
+                                        onClick={() => {
+                                          setPopupImage(imageSrc);
+                                          setPopupText(
+                                            extractSummaryFromRow(
+                                              row.props.children
+                                            )
+                                          );
+                                        }}
                                       />
                                       <div className="absolute left-1/2 -translate-x-1/2 -top-8 px-2 py-1 bg-black text-white text-xs rounded opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity whitespace-nowrap z-20 shadow-lg">
                                         Click to preview
@@ -2325,7 +2381,9 @@ const SimulationResultsContent: React.FC<SimulationResultsContentProps> = ({
                 setIsChatCollapsed(true);
               }}
               className={`px-4 py-2 w-[172px] cursor-pointer rounded-full  text-sm transition-all duration-300 ${
-                activeChatTab === "simulation" ? "text-white font-semibold" : "text-black font-medium"
+                activeChatTab === "simulation"
+                  ? "text-white font-semibold"
+                  : "text-black font-medium"
               }`}
             >
               Simulation Analysis
@@ -2701,25 +2759,57 @@ const SimulationResultsContent: React.FC<SimulationResultsContentProps> = ({
       )}
       {popupImage && (
         <div
-          className="fixed inset-0 z-[100] flex items-center justify-center bg-black bg-opacity-75"
+          className="fixed inset-0 z-[100] flex items-center justify-end bg-black bg-opacity-50"
           onClick={() => setPopupImage(null)}
         >
           <div
-            className="relative p-4 bg-white rounded-lg shadow-xl"
+            className="relative w-full max-w-md h-full bg-white shadow-xl scrollbar-hide overflow-y-auto rounded-none transition-transform duration-500 transform translate-x-0"
             onClick={(e) => e.stopPropagation()}
           >
-            <img
-              src={popupImage}
-              alt="Popup"
-              className="max-w-screen-md max-h-[80vh] object-contain"
-            />
-            <button
-              onClick={() => setPopupImage(null)}
-              className="absolute -top-3 -right-3 text-white bg-gray-800 rounded-full h-8 w-8 flex items-center justify-center text-lg font-bold hover:bg-black"
-              aria-label="Close image popup"
-            >
-              &times;
-            </button>
+            {/* Close button */}
+
+            {/* Content */}
+            <div className="h-full flex flex-col p-[30px] space-y-5 ">
+              {" "}
+              {/* top padding because of close button */}
+              <div className="flex items-center gap-7 ">
+                <button
+                  onClick={() => setPopupImage(null)}
+                  aria-label="Close popup"
+                >
+                  <CloseButton />
+                </button>
+                <h2 className="text-2xl font-semibold text-primary2">
+                  Product Effectiveness
+                </h2>
+              </div>
+              {popupText?.score && (
+                <div className="bg-gray_light p-[12px_16px] rounded-[20px]">
+                  <p className="text-xl font-medium text-black mb-3">Rank</p>
+                  <p className="text-base font-semibold text-primary2">
+                    {popupText?.score}
+                  </p>
+                </div>
+              )}
+              {popupText?.summary && (
+                <div className="bg-gray_light p-[12px_16px] rounded-[20px]">
+                  <p className="text-xl font-medium text-black mb-3">
+                    Summary Rationale
+                  </p>
+                  <p className="text-sm font-normal text-[#595E64]">{popupText.summary}</p>
+                </div>
+              )}
+              {/* Image Block with gray_light background */}
+              {popupImage && (
+                <div className="bg-gray_light p-4 rounded-lg">
+                  <img
+                    src={popupImage}
+                    alt="Popup"
+                    className="w-full h-auto object-contain rounded-md"
+                  />
+                </div>
+              )}
+            </div>
           </div>
         </div>
       )}
