@@ -201,7 +201,7 @@ const SimulationResultsContent: React.FC<SimulationResultsContentProps> = ({
     "pending" | "running" | "completed"
   >("pending");
   const [currentStep, setCurrentStep] = useState<string>(
-    "Initializing simulation"
+    "Loading"
   );
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [showTooltip, setShowTooltip] = useState("");
