@@ -39,25 +39,25 @@ const Header = () => {
         {/* Logo */}
         <div
           onClick={() => (window.location.href = "/")}
-          className="cursor-pointer bg-gray_light px-6 rounded-full"
+          className="cursor-pointer bg-gray_light px-6 ml-[-40px] rounded-full"
         >
           <img
             src={`${import.meta.env.VITE_PUBLIC_URL}/logo.png`}
             alt="Bluepill Logo"
-            className="w-auto h-[50px]"
+            className="w-auto h-[60px]"
           />
         </div>
 
         {/* Desktop Nav */}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3 mr-[-40px]">
           {isAuthenticated && (
-            <nav className="hidden md:flex items-center bg-gray_light rounded-full">
+            <nav className="hidden md:flex items-center bg-gray_light rounded-full h-[50px]">
               {navTabs.map((tab) => (
                 <NavLink
                   key={tab.path}
                   to={tab.path}
                   className={({ isActive }) =>
-                    `px-5 py-3 rounded-full text-base  transition-all duration-300 ${
+                    `px-5 py-3 rounded-full text-base  transition-all h-[50px]  duration-300 ${
                       isActive
                         ? "bg-primary text-white font-semibold"
                         : "text-black hover:bg-primary_light font-normal"
@@ -75,10 +75,10 @@ const Header = () => {
             {isAuthenticated ? (
               <>
                 {/* Settings + Notifications */}
-                <button className="p-3 rounded-full hover:bg-primary bg-gray_light hidden md:block">
+                <button className="p-3 h-[50px] w-[50px] rounded-full hover:bg-primary bg-gray_light hidden md:block">
                   <Settings className="h-6 w-6 text-gray-600" />
                 </button>
-                <button className="p-3 rounded-full hover:bg-primary bg-gray_light hidden md:block">
+                <button className="p-3 rounded-full h-[50px] w-[50px] hover:bg-primary bg-gray_light hidden md:block">
                   <Bell className="h-6 w-6 text-gray-600" />
                 </button>
 
@@ -86,10 +86,10 @@ const Header = () => {
                 <div className="relative">
                   <button
                     onClick={() => setProfileMenuOpen(!profileMenuOpen)}
-                    className={`flex items-center gap-2  group pr-1.5 rounded-full `}
+                    className={`flex items-center gap-2  group  rounded-full `}
                   >
                     <div
-                      className={`p-3 rounded-full group-hover:bg-primary bg-gray_light ${
+                      className={`p-3 rounded-full h-[50px] w-[50px] group-hover:bg-primary bg-gray_light ${
                         profileMenuOpen && "bg-primary"
                       }`}
                     >

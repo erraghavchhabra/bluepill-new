@@ -200,9 +200,7 @@ const SimulationResultsContent: React.FC<SimulationResultsContentProps> = ({
   const [optimizationStatus, setOptimizationStatus] = useState<
     "pending" | "running" | "completed"
   >("pending");
-  const [currentStep, setCurrentStep] = useState<string>(
-    "Loading"
-  );
+  const [currentStep, setCurrentStep] = useState<string>("Loading");
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [showTooltip, setShowTooltip] = useState("");
   const [copied, setCopied] = useState(false);
@@ -242,7 +240,9 @@ const SimulationResultsContent: React.FC<SimulationResultsContentProps> = ({
   const navigate = useNavigate();
 
   const [popupImage, setPopupImage] = useState<string | null>(null);
+  const [popupImageVisible, setPopupImageVisible] = useState<boolean>(false);
   const [popupText, setPopupText] = useState<any>(null);
+  console.log(515415, popupText);
 
   // State for collapsible cards in content summary
   const [expandedCards, setExpandedCards] = useState<Record<string, boolean>>({
@@ -1296,48 +1296,41 @@ const SimulationResultsContent: React.FC<SimulationResultsContentProps> = ({
     const innerParsedResponse = parseSimulationResponse(
       simulation?.simulation_response || ""
     );
-    const extractSummaryFromRow = (cells: any) => {
+    const extractSummaryFromRow = (cells: any[]) => {
       try {
-        let rank = null;
-        let score = null;
         let summary = "";
+        let score: number | null = null;
 
-        for (let cell of cells) {
-          const rawText = cell?.props?.children;
-          const text = Array.isArray(rawText)
-            ? rawText.join(" ").trim()
-            : String(rawText || "").trim();
+        const abc: any = cells;
+        const isSummary = (text: any) => {
+          if (!text || typeof text !== "string") return false;
 
+          const cleanText = text.replace(/^"(.*)"$/, "$1").trim();
 
-          // Check for rank: usually a small integer
-          if (rank === null && /^\d+$/.test(text)) {
-            rank = parseInt(text, 10);
-            continue;
+          const wordCount = cleanText.split(/\s+/).length;
+          const hasPunctuation = /[.,;!?]/.test(cleanText);
+          const isNumber = !isNaN(Number(cleanText));
+
+          return wordCount > 10 && hasPunctuation && !isNumber;
+        };
+        if (typeof abc[2]?.props?.children == "object") {
+          score = Number(abc[1]?.props?.children);
+          summary =
+            abc[2]?.props?.children[0]?.props?.children +
+            String(abc[2]?.props?.children[1]).trim();
+        } else {
+          if (isSummary(abc[2]?.props?.children)) {
+            score = Number(abc[1]?.props?.children);
+            summary = String(abc[2]?.props?.children).trim();
+          } else {
+            score = Number(abc[2]?.props?.children);
+            summary = "";
           }
-
-          // Check for score: decimal number
-          if (score === null && /^\d+(\.\d+)?$/.test(text)) {
-            score = parseFloat(text);
-            continue;
-          }
-
-          // Check for long summary text
-          if (summary === "" && text.length > 20 && text.includes(" ")) {
-            summary = text;
-          }
-
-          // Exit early if all found
-          if (rank !== null && score !== null && summary) break;
         }
 
-        return {
-          rank,
-          score,
-          summary,
-        };
+        return { score, summary };
       } catch (e) {
         return {
-          rank: null,
           score: null,
           summary: "",
         };
@@ -1465,6 +1458,9 @@ const SimulationResultsContent: React.FC<SimulationResultsContentProps> = ({
                                               row.props.children
                                             )
                                           );
+                                          setTimeout(() => {
+                                            setPopupImageVisible(true);
+                                          }, 200);
                                         }}
                                       />
                                       <div className="absolute left-1/2 -translate-x-1/2 -top-8 px-2 py-1 bg-black text-white text-xs rounded opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity whitespace-nowrap z-20 shadow-lg">
@@ -1496,7 +1492,7 @@ const SimulationResultsContent: React.FC<SimulationResultsContentProps> = ({
         className="h-full overflow-auto max-h-[calc(90vh-120px)]"
       >
         <div className="mb-6">
-          {isDetailsDropdownOpen && <SimulationDetailsDropdown />}
+          <div>{SimulationDetailsDropdown()}</div>
           <div className="bg-white rounded-2xl overflow-hidden">
             <div className="ms-content">
               {/* {abTestSection} */}
@@ -1974,7 +1970,7 @@ const SimulationResultsContent: React.FC<SimulationResultsContentProps> = ({
     return (
       <div
         className={`fixed top-0 right-0 z-50 h-full w-1/2 max-w-[100vw] bg-white shadow-lg border-l border-gray-200
-          transition-all duration-500 ease-in-out overflow-auto scrollbar-hide  
+          transition-transform duration-500 ease-in-out overflow-auto scrollbar-hide  
           ${isDetailsDropdownOpen ? "translate-x-0" : "translate-x-full"}
         `}
       >
@@ -2423,7 +2419,7 @@ const SimulationResultsContent: React.FC<SimulationResultsContentProps> = ({
             {renderChatInterface()}
           </div>
           <div
-            className={` rounded-xl shadow-sm overflow-hidden w-full h-full flex flex-col transition-all duration-300 ease-in-out `}
+            className={` rounded-xl overflow-hidden w-full h-full flex flex-col transition-all duration-300 ease-in-out `}
           >
             <div className="">
               <div className="flex justify-between items-center pb-5">
@@ -2552,15 +2548,13 @@ const SimulationResultsContent: React.FC<SimulationResultsContentProps> = ({
                     <button
                       onMouseEnter={() => setShowTooltip("inputs")}
                       onMouseLeave={() => setShowTooltip("")}
-                      onClick={() =>
-                        setIsDetailsDropdownOpen(!isDetailsDropdownOpen)
-                      }
+                      onClick={() => setIsDetailsDropdownOpen(true)}
                       className="flex items-center justify-center w-[50px] h-[50px] rounded-full bg-white hover:bg-[#07E5D1] transition-all duration-300 hover:shadow-lg"
                     >
                       <SimulationInputIcon className="h-5 w-5 text-black" />
                     </button>
                     {showTooltip === "inputs" && (
-                      <div className="absolute left-1/2 -translate-x-1/2 mt-2 bg-gray-800 text-white text-xs px-2 py-1 rounded whitespace-nowrap z-20">
+                      <div className="absolute left-1/2 -translate-x-[95%] mt-2 bg-gray-800 text-white text-xs px-2 py-1 rounded whitespace-nowrap z-20">
                         Click to view simulation inputs
                       </div>
                     )}
@@ -2759,11 +2753,21 @@ const SimulationResultsContent: React.FC<SimulationResultsContentProps> = ({
       )}
       {popupImage && (
         <div
-          className="fixed inset-0 z-[100] flex items-center justify-end bg-black bg-opacity-50"
-          onClick={() => setPopupImage(null)}
+          className={`fixed inset-0 z-[100] flex transition-all duration-200 items-center justify-end ${
+            popupImageVisible ? " bg-black" : ""
+          }  bg-opacity-50`}
+          onClick={() => {
+            setPopupImageVisible(false);
+            setTimeout(() => {
+              setPopupImage(null);
+            }, 200);
+          }}
         >
           <div
-            className="relative w-full max-w-md h-full bg-white shadow-xl scrollbar-hide overflow-y-auto rounded-none transition-transform duration-500 transform translate-x-0"
+            className={`relative w-full h-full bg-white shadow-xl max-w-md scrollbar-hide overflow-y-auto rounded-none 
+                transform transition-all duration-200 
+                ${popupImageVisible ? "translate-x-0" : "translate-x-full"}
+              `}
             onClick={(e) => e.stopPropagation()}
           >
             {/* Close button */}
@@ -2774,7 +2778,12 @@ const SimulationResultsContent: React.FC<SimulationResultsContentProps> = ({
               {/* top padding because of close button */}
               <div className="flex items-center gap-7 ">
                 <button
-                  onClick={() => setPopupImage(null)}
+                  onClick={() => {
+                    setPopupImageVisible(false);
+                    setTimeout(() => {
+                      setPopupImage(null);
+                    }, 200);
+                  }}
                   aria-label="Close popup"
                 >
                   <CloseButton />
@@ -2796,7 +2805,9 @@ const SimulationResultsContent: React.FC<SimulationResultsContentProps> = ({
                   <p className="text-xl font-medium text-black mb-3">
                     Summary Rationale
                   </p>
-                  <p className="text-sm font-normal text-[#595E64]">{popupText.summary}</p>
+                  <p className="text-sm font-normal text-[#595E64]">
+                    {popupText.summary}
+                  </p>
                 </div>
               )}
               {/* Image Block with gray_light background */}

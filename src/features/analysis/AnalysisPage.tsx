@@ -146,7 +146,7 @@ const AnalysisPage: React.FC = () => {
   );
 
   const renderSimulationsList = () => (
-    <div className="flex flex-col h-full p-4 pt-0 overflow-hidden">
+    <div className="flex flex-col h-full px-[30px] pt-0 overflow-hidden">
       {/* This container holds all content that will slide out */}
       <div
         className={`transition-all duration-500 ease-in-out flex flex-col h-full min-w-[250px] ${
@@ -155,7 +155,7 @@ const AnalysisPage: React.FC = () => {
             : "opacity-100 translate-x-0"
         }`}
       >
-        <h1 className="font-semibold text-3xl py-5">History Overview</h1>
+        <h1 className="font-semibold text-[24px] py-5">History Overview</h1>
 
         <div className="flex items-center gap-2 mb-4">
           <div className="relative flex-grow">
@@ -164,7 +164,7 @@ const AnalysisPage: React.FC = () => {
               onClick={() => setIsAudienceDropdownOpen(!isAudienceDropdownOpen)}
               className="w-full flex items-center justify-between h-[50px]  rounded-[12px] px-3 py-2 text-sm  bg-gray-100 hover:bg-gray-50"
             >
-              <span>
+              <span className='font-medium'>
                 {selectedAudienceId
                   ? audiences.find((a) => a.id === selectedAudienceId)?.name
                   : "All Audiences"}
@@ -245,10 +245,10 @@ const AnalysisPage: React.FC = () => {
                     <span>{simulation.audience_name}</span>
                   </div>
                   <div className="bg-white border sim-btn-bottom border-gray-200">
-                    <div className="font-medium text-black-600">
+                    <div className="font-semibold text-[14px] text-black-600">
                       {simulation.name}
                     </div>
-                    <div className="text-sm text-gray-600 mt-1">
+                    <div className="text-[12px] text-gray-600 mt-1">
                       {simulation.description?.substring(0, 60) ||
                         "No description"}
                       {(simulation.description?.length || 0) > 60 ? "..." : ""}
@@ -258,7 +258,7 @@ const AnalysisPage: React.FC = () => {
                         {/* Date */}
                         <div className="flex items-center gap-2">
                           <CalendarDays className="text-primary w-5 h-5" />
-                          <span className="text-black font-medium">
+                          <span className="text-black text-[12px] font-medium">
                             {format(
                               new Date(simulation?.created_at),
                               "MMM dd, yyyy"
@@ -269,7 +269,7 @@ const AnalysisPage: React.FC = () => {
                         {/* Time */}
                         <div className="flex items-center gap-2">
                           <AlarmClock className="text-primary w-5 h-5" />
-                          <span className="text-black font-medium">
+                          <span className="text-black text-[12px] font-medium">
                             {format(
                               new Date(simulation?.created_at),
                               "hh:mm a"
@@ -329,7 +329,7 @@ const AnalysisPage: React.FC = () => {
               }}
             >
               <div>
-                <div className="absolute top-7 right-4 z-10">
+                <div className="absolute top-7 right-[30px] z-10">
                   <button
                     className=""
                     onClick={() => setIsListCollapsed((prev) => !prev)}
@@ -360,7 +360,7 @@ const AnalysisPage: React.FC = () => {
               </div>
             </div>
 
-            <div className="flex-1 bg-gray_light shadow-sm rounded-tl-[30px] overflow-hidden h-full ml-4">
+            <div className="flex-1 bg-gray_light shadow-sm rounded-tl-[30px] overflow-hidden h-full">
               {urlSimId ? (
                 <SimulationResultsContent
                   simulationId={urlSimId}
