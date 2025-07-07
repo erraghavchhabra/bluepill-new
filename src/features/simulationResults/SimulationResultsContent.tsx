@@ -1442,7 +1442,7 @@ const SimulationResultsContent: React.FC<SimulationResultsContentProps> = ({
                                     className="flex items-center justify-start gap-2"
                                     style={{ minWidth: 80, maxWidth: 180 }}
                                   >
-                                    <span>{rankText}</span>
+                                    {/* <span>{rankText}</span> */}
                                     <div
                                       className="relative group"
                                       style={{ display: "inline-block" }}
@@ -2045,16 +2045,9 @@ const SimulationResultsContent: React.FC<SimulationResultsContentProps> = ({
               </div>
             )}
 
-          {contentData?.images && contentData?.images?.length > 0 && (
+          {/* {contentData?.images && contentData?.images?.length > 0 && (
             <div className="mb-6">
-              {/* <div className="flex items-center mb-2">
-                <div className="mr-2 bg-purple-100 p-1.5 rounded-md">
-											<Image className="h-4 w-4 text-purple-600" />
-										</div>
-                <h3 className="text-base font-medium text-purple-800">
-                  Images
-                </h3>
-              </div> */}
+              
               <SectionHeader
                 icon={<PiImagesLight size={24} />}
                 title="Images"
@@ -2071,7 +2064,7 @@ const SimulationResultsContent: React.FC<SimulationResultsContentProps> = ({
                 ))}
               </div>
             </div>
-          )}
+          )} */}
 
           {/* Used Personas - COLLAPSIBLE */}
           {simulation.personas && simulation.personas.length > 0 && (
@@ -2079,7 +2072,7 @@ const SimulationResultsContent: React.FC<SimulationResultsContentProps> = ({
               <SectionHeader
                 icon={<PiUsers size={24} />}
                 title={`User Profile (${simulation.personas.length})`}
-                number={5}
+                number={4}
               />
               {simulation.personas && (
                 <div className="p-3 bg-white">
@@ -2159,7 +2152,7 @@ const SimulationResultsContent: React.FC<SimulationResultsContentProps> = ({
               <SectionHeader
                 icon={<HelpCircle size={24} />}
                 title="Additional Information"
-                number={6}
+                number={5}
               />
 
               <div className="bg-[#FAFAFA] p-4 flex flex-col gap-3 items-center rounded-[20px] mb-6">
