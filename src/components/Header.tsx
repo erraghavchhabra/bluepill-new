@@ -39,7 +39,7 @@ const Header = () => {
         {/* Logo */}
         <div
           onClick={() => (window.location.href = "/")}
-          className="cursor-pointer bg-gray_light px-6 ml-[-40px] rounded-full"
+          className="cursor-pointer bg-gray_light px-6 rounded-full"
         >
           <img
             src={`${import.meta.env.VITE_PUBLIC_URL}/logo.png`}
@@ -49,7 +49,7 @@ const Header = () => {
         </div>
 
         {/* Desktop Nav */}
-        <div className="flex items-center gap-3 mr-[-40px]">
+        <div className="flex items-center gap-3 ">
           {isAuthenticated && (
             <nav className="hidden md:flex items-center bg-gray_light rounded-full h-[50px]">
               {navTabs.map((tab) => (

@@ -149,7 +149,7 @@ const AnalysisPage: React.FC = () => {
     <div className="flex flex-col h-full px-[30px] pt-0 overflow-hidden">
       {/* This container holds all content that will slide out */}
       <div
-        className={`transition-all duration-500 ease-in-out flex flex-col h-full min-w-[250px] ${
+        className={`transition-all duration-500 ease-in-out flex flex-col h-full  w-full ${
           isListCollapsed
             ? "opacity-0 -translate-x-full"
             : "opacity-100 translate-x-0"
@@ -254,7 +254,7 @@ const AnalysisPage: React.FC = () => {
                       {(simulation.description?.length || 0) > 60 ? "..." : ""}
                     </div>
                     <div className="flex justify-between items-center border-t mt-2 text-xs text-gray-500">
-                      <div className="flex items-center justify-between pt-4 pb-1 bg-white w-full max-w-md">
+                      <div className="flex items-center justify-between pt-4 pb-1 bg-white w-full">
                         {/* Date */}
                         <div className="flex items-center gap-2">
                           <CalendarDays className="text-primary w-5 h-5" />
@@ -323,9 +323,9 @@ const AnalysisPage: React.FC = () => {
 
           <div className="flex flex-row items-start h-[calc(100vh)]">
             <div
-              className="relative h-full transition-[width] duration-700 ease-in-out flex-shrink-0"
+              className="relative h-full transition-[width] duration-700   ease-in-out flex-shrink-0"
               style={{
-                width: isListCollapsed ? "5.5rem" : "clamp(300px, 25%, 400px)",
+                width: isListCollapsed ? "5.5rem" : "26%",
               }}
             >
               <div>
