@@ -348,7 +348,7 @@ const AnalysisPage: React.FC = () => {
                 </div>
               </div>
               <div
-                className={`h-full rounded-xl overflow-hidden transition-colors duration-700 ease-in-out ${
+                className={`h-full min-w-[390px] rounded-xl overflow-hidden transition-colors duration-700 ease-in-out ${
                   isListCollapsed
                     ? "bg-transparent shadow-none"
                     : "bg-white "
