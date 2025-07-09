@@ -183,7 +183,7 @@ function ChannelEventStrategyDesign({ data, contentData }: any) {
                   <tr
                     key={index}
                     className={`border-[#E8E8E8] ${
-                      table?.rows?.length !== index + 1 ? "border-b" : ""
+                      summaryTable?.rows?.length !== index + 1 ? "border-b" : ""
                     }`}
                   >
                     <td className="text-left align-top font-medium text-xs text-primary2 py-3 w-[130px]">
