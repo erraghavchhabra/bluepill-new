@@ -172,3 +172,10 @@ border-bottom: 0px;
   border: 0px;
   padding: 12px
 }
+.smooth-dropdown {
+  transition: max-height 0.4s ease, opacity 0.4s ease;
+  overflow: hidden;
+}
+.tableFirstRowColor td:first-child{
+  color: #028B7E;
+}

@@ -68,7 +68,7 @@ import {
 } from "react-icons/pi";
 import { BiFilterAlt } from "react-icons/bi";
 import { FaRegUser } from "react-icons/fa";
-import { PortsIcon } from "@/icons/Other";
+import { DetailedAnalysisIcon, PortsIcon } from "@/icons/Other";
 import ChannelEventStrategyDesign from "./ChannelEventStrategyDesign";
 import BuyerInsightsREportB2C from "./BuyerInsightsREportB2C";
 
@@ -1494,7 +1494,7 @@ const SimulationResultsContent: React.FC<SimulationResultsContentProps> = ({
     };
     console.log("jsonData:", innerParsedResponse?.allData);
     console.log("contentData:", contentData);
-    
+
     return (
       <div
         id="simulation-analysis-section"
@@ -1503,111 +1503,113 @@ const SimulationResultsContent: React.FC<SimulationResultsContentProps> = ({
         <div className="mb-6">
           <div>{SimulationDetailsDropdown()}</div>
           <div>
-             <ReactMarkdown
-                      remarkPlugins={[
-                        [remarkGfm, { stringLength: stringWidth }],
-                      ]}
-                      rehypePlugins={[rehypeRaw]}
-                      remarkRehypeOptions={{ passThrough: ["link"] }}
-                      components={{
-                        table: CustomTableComponent,
-                      }}
-                    >
-                      {innerParsedResponse.output[1]}
-                    </ReactMarkdown>
+            <ReactMarkdown
+              remarkPlugins={[[remarkGfm, { stringLength: stringWidth }]]}
+              rehypePlugins={[rehypeRaw]}
+              remarkRehypeOptions={{ passThrough: ["link"] }}
+              components={{
+                table: CustomTableComponent,
+              }}
+            >
+              {innerParsedResponse.output[1]}
+            </ReactMarkdown>
           </div>
-          {contentData?.task == "buyer-insights-report-b2c" && (
-            <BuyerInsightsREportB2C data={innerParsedResponse?.allData} />
-          )}
+          {contentData?.task == "buyer-insights-report-b2c" &&
+            typeof innerParsedResponse?.allData?.output == "object" && (
+              <BuyerInsightsREportB2C data={innerParsedResponse?.allData} />
+            )}
           {(contentData?.task == "channel-event-strategy" ||
-            contentData?.task == "ab-test-creatives") &&  (typeof innerParsedResponse?.allData?.output == "object") && (
-            <ChannelEventStrategyDesign data={innerParsedResponse?.allData} contentData={contentData}/>
-          )}
-          {contentData?.task !== "buyer-insights-report-b2c" 
-            &&  (typeof innerParsedResponse?.allData?.output == "string")  && (
-              <div className="bg-white rounded-2xl overflow-hidden">
-                <div className="ms-content">
-                  {/* {abTestSection} */}
-                  <div className="prose prose-blue max-w-none p-4 markdown-body ">
-                    {/* Only render non-table charts if present */}
-                    {innerParsedResponse.tables &&
-                      innerParsedResponse.tables.length > 0 &&
-                      innerParsedResponse.tables.some(
+            contentData?.task == "ab-test-creatives") &&
+            typeof innerParsedResponse?.allData?.output == "object" && (
+              <ChannelEventStrategyDesign
+                data={innerParsedResponse?.allData}
+                contentData={contentData}
+              />
+            )}
+          {typeof innerParsedResponse?.allData?.output == "string" && (
+            <div className="bg-white rounded-2xl overflow-hidden">
+              <div className="ms-content">
+                {/* {abTestSection} */}
+                <div className="prose prose-blue max-w-none p-4 markdown-body ">
+                  {/* Only render non-table charts if present */}
+                  {innerParsedResponse.tables &&
+                    innerParsedResponse.tables.length > 0 &&
+                    innerParsedResponse.tables.some(
+                      (table: TableData) => table.type !== "table"
+                    ) &&
+                    renderTables(
+                      innerParsedResponse.tables.filter(
                         (table: TableData) => table.type !== "table"
-                      ) &&
-                      renderTables(
-                        innerParsedResponse.tables.filter(
-                          (table: TableData) => table.type !== "table"
-                        )
-                      )}
+                      )
+                    )}
 
-                    <ReactMarkdown
-                      remarkPlugins={[
-                        [remarkGfm, { stringLength: stringWidth }],
-                      ]}
-                      rehypePlugins={[rehypeRaw]}
-                      remarkRehypeOptions={{ passThrough: ["link"] }}
-                      components={{
-                        table: CustomTableComponent,
-                      }}
-                    >
-                      {innerParsedResponse.output}
-                    </ReactMarkdown>
+                  <ReactMarkdown
+                    remarkPlugins={[[remarkGfm, { stringLength: stringWidth }]]}
+                    rehypePlugins={[rehypeRaw]}
+                    remarkRehypeOptions={{ passThrough: ["link"] }}
+                    components={{
+                      table: CustomTableComponent,
+                    }}
+                  >
+                    {innerParsedResponse.output}
+                  </ReactMarkdown>
 
-                    {/* Only render table type tables if present */}
-                    {innerParsedResponse.tables &&
-                      innerParsedResponse.tables.length > 0 &&
-                      innerParsedResponse.tables.some(
+                  {/* Only render table type tables if present */}
+                  {innerParsedResponse.tables &&
+                    innerParsedResponse.tables.length > 0 &&
+                    innerParsedResponse.tables.some(
+                      (table: TableData) => table.type === "table"
+                    ) &&
+                    renderTables(
+                      innerParsedResponse.tables.filter(
                         (table: TableData) => table.type === "table"
-                      ) &&
-                      renderTables(
-                        innerParsedResponse.tables.filter(
-                          (table: TableData) => table.type === "table"
-                        )
-                      )}
+                      )
+                    )}
 
-                    {/* Only render analysis if present */}
-                    {innerParsedResponse.hasJsonBlock &&
-                      innerParsedResponse.analysis && (
-                        <div className="mt-6">
-                          <div className="border-t border-gray-200 pt-4">
-                            <button
-                              onClick={() =>
-                                setExpandedCards((prev) => ({
-                                  ...prev,
-                                  analysis: !prev.analysis,
-                                }))
-                              }
-                              className="flex items-center justify-between w-full text-left text-sm font-medium text-gray-700 hover:text-gray-900"
-                            >
-                              <div className="flex items-center">
-                                <Brain className="h-4 w-4 mr-2 text-indigo-600" />
-                                <span>Detailed Analysis</span>
-                              </div>
-                              {expandedCards.analysis ? (
-                                <ChevronUp className="h-4 w-4" />
-                              ) : (
-                                <ChevronDown className="h-4 w-4" />
-                              )}
-                            </button>
-
-                            {expandedCards.analysis && (
-                              <div className="mt-4 prose prose-sm prose-indigo max-w-none markdown-body">
-                                <ReactMarkdown
-                                  remarkPlugins={[remarkGfm]}
-                                  rehypePlugins={[rehypeRaw]}
-                                >
-                                  {innerParsedResponse.analysis}
-                                </ReactMarkdown>
-                              </div>
+                  {/* Only render analysis if present */}
+                  {innerParsedResponse.hasJsonBlock &&
+                    innerParsedResponse.analysis && (
+                      <div className="mt-6">
+                        <div className="border-t border-gray-200 pt-4">
+                          <button
+                            onClick={() =>
+                              setExpandedCards((prev) => ({
+                                ...prev,
+                                analysis: !prev.analysis,
+                              }))
+                            }
+                            className="flex items-center justify-between w-full "
+                          >
+                            <div className="flex items-center gap-[10px]">
+                              <DetailedAnalysisIcon />
+                              <p className="font-semibold text-xl text-primary2">
+                                Detailed Analysis
+                              </p>
+                            </div>
+                            {expandedCards.analysis ? (
+                              <ChevronUp className="h-4 w-4" />
+                            ) : (
+                              <ChevronDown className="h-4 w-4" />
                             )}
-                          </div>
+                          </button>
+
+                          {expandedCards.analysis && (
+                            <div className="mt-4 prose prose-sm prose-indigo max-w-none markdown-body">
+                              <ReactMarkdown
+                                remarkPlugins={[remarkGfm]}
+                                rehypePlugins={[rehypeRaw]}
+                              >
+                                {innerParsedResponse.analysis}
+                              </ReactMarkdown>
+                            </div>
+                          )}
                         </div>
-                      )}
-                  </div>
+                      </div>
+                    )}
                 </div>
               </div>
-            )}
+            </div>
+          )}
         </div>
       </div>
     );

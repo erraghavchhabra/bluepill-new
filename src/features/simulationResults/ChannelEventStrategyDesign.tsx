@@ -1,29 +1,49 @@
 import { CloseButton } from "@/icons/SimulationIcons";
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
+import { FaChevronDown } from "react-icons/fa";
+import DetailedAnalysis from "./components/DetailedAnalysis";
+import { DetailedAnalysisIcon, DownArrowAnnalysis } from "@/icons/Other";
+import ExpertRecommendations from "./components/ExpertRecommendations";
 
 function ChannelEventStrategyDesign({ data, contentData }: any) {
   const [popupImageVisible, setPopupImageVisible] = useState<boolean>(false);
   const [popupDetail, setPopupDetail] = useState<any>(null);
+  const [detailDropDown, setDetailDropDown] = useState(false);
+  const [maxHeight, setMaxHeight] = useState("0px");
+
   console.log(1651, data, contentData, typeof data?.output);
   const table = data?.output?.overall_ranking?.ranking_table;
   const summaryTable = data?.output?.winning_ad?.summary;
+  const expert_recommendationsData =
+    data?.output?.winning_ad?.expert_recommendations;
   const images = contentData.images;
+  const detailedAnalysisData = data?.analysis?.detailed_analysis;
 
   function iamgeSRCFunc(imageIdx: any) {
     const imageSRc = images[imageIdx];
     return imageSRc;
   }
+  const contentRef: any = useRef(null);
+
+  useEffect(() => {
+    if (detailDropDown) {
+      setMaxHeight(`${contentRef.current.scrollHeight}px`);
+    } else {
+      setMaxHeight("0px");
+    }
+  }, [detailDropDown]);
+
   return (
     <section>
       {/* ranking table */}
       {table && (
-        <div className="bg-white text-primary2 rounded-2xl p-5 mb-5">
-          <h4 className="font-semibold text-xl text-primary2 mb-5">
+        <div className="bg-white rounded-2xl p-5">
+          <h4 className="font-semibold text-xl text-black mb-5">
             Overall Ranking & Summary
           </h4>
           {/* ranking table */}
           <div>
-            <h5 className="font-semibold text-xl text-black w-full pb-5 border-b border-[#E8E8E8]">
+            <h5 className="font-semibold text-base text-primary2 w-full pb-5 border-b border-[#E8E8E8]">
               {table?.title}
             </h5>
             <table className="w-full">
@@ -51,7 +71,7 @@ function ChannelEventStrategyDesign({ data, contentData }: any) {
                     <td className="text-left align-top font-medium text-xs text-primary2 py-3 w-[80px]">
                       {row?.overall_score?.toFixed(2)}
                     </td>
-                    <td className="text-left align-top text-sm text-gray-700 py-3 w-[110px]">
+                    <td className="text-left align-top text-sm text-[#595E64] py-3 w-[110px]">
                       <img
                         className="h-[60px] object-cover cursor-pointer"
                         src={iamgeSRCFunc(row?.ad_index)}
@@ -68,8 +88,8 @@ function ChannelEventStrategyDesign({ data, contentData }: any) {
                         alt="channel-event-strategy"
                       />
                     </td>
-                    <td className="text-left align-top font-normal leading-[17px] text-xs text-gray-700 py-3">
-                      {row?.summary_rationale}
+                    <td className="text-left align-top font-normal leading-[17px] text-xs text-[#595E64] py-3">
+                       {row?.summary_rationale?.replace(/\*/g, "")}
                     </td>
                   </tr>
                 ))}
@@ -153,14 +173,15 @@ function ChannelEventStrategyDesign({ data, contentData }: any) {
           </div>
         </div>
       )}
+
       {/* Ad Summary  */}
       {summaryTable && (
-        <div className="p-5 bg-white rounded-2xl ">
-          <h4 className="font-semibold text-xl text-primary2 mb-5">
+        <div className="p-5 bg-white rounded-2xl mt-3">
+          <h4 className="font-semibold text-xl text-black mb-5">
             Winning Ad Summary & Improvement Recommendations
           </h4>
           <div>
-            <h5 className="font-medium text-base text-black w-full pb-4 border-b border-[#E8E8E8]">
+            <h5 className="font-semibold text-base text-primary2 w-full pb-4 border-b border-[#E8E8E8]">
               {summaryTable?.title}
             </h5>
             <table className="w-full">
@@ -193,13 +214,77 @@ function ChannelEventStrategyDesign({ data, contentData }: any) {
                       {row?.score?.toFixed(2)}
                     </td>
 
-                    <td className="text-left align-top font-normal leading-[17px] text-xs text-gray-700 py-3">
+                    <td className="text-left align-top font-normal leading-[17px] text-xs text-[#595E64] py-3">
                       {row?.justification}
                     </td>
                   </tr>
                 ))}
               </tbody>
             </table>
+          </div>
+        </div>
+      )}
+      {expert_recommendationsData && (
+        <div className="bg-white rounded-2xl mt-3">
+          <h5 className="font-semibold text-xl p-5 text-black">
+            Improvement Recommendations
+          </h5>
+          <ExpertRecommendations
+            data={expert_recommendationsData?.critical_changes}
+          />
+          <ExpertRecommendations
+            data={expert_recommendationsData?.high_impact_improvements}
+          />
+          <ExpertRecommendations
+            data={expert_recommendationsData?.optimization_opportunities}
+          />
+        </div>
+      )}
+      {detailedAnalysisData && (
+        <div className="bg-white rounded-2xl mt-3">
+          {/* Header */}
+          <div
+            className="flex items-center justify-between  p-5 pb-[25px] cursor-pointer"
+            onClick={() => setDetailDropDown(!detailDropDown)}
+          >
+            <div className="flex items-center gap-[10px]">
+              <DetailedAnalysisIcon />
+              <p className="font-semibold text-xl text-black">
+                Detailed Analysis
+              </p>
+            </div>
+            <div
+              className={`transition-transform duration-600 ${
+                !detailDropDown ? "rotate-180" : "rotate-0"
+              }`}
+            >
+              <DownArrowAnnalysis />
+            </div>
+          </div>
+
+          {/* Smooth Dropdown Content */}
+          <div
+            ref={contentRef}
+            className="smooth-dropdown "
+            style={{
+              maxHeight: maxHeight,
+              opacity: detailDropDown ? 1 : 0,
+              // marginTop: detailDropDown ? "20px" : 0,
+            }}
+          >
+            <p className="text-xl font-semibold border-t   border-[#E8E8E8] w-full mx-5 pt-[25px]  text-black ">
+              Detailed Persona Analysis
+            </p>
+            {detailedAnalysisData?.map((data: any, index: number) => (
+              <DetailedAnalysis
+                border={
+                  detailedAnalysisData?.length !== index + 1 ? true : false
+                }
+                data={data}
+                key={index}
+                mainIndex={index}
+              />
+            ))}
           </div>
         </div>
       )}
