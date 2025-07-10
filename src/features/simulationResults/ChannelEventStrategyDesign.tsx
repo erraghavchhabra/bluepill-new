@@ -89,7 +89,7 @@ function ChannelEventStrategyDesign({ data, contentData }: any) {
                       />
                     </td>
                     <td className="text-left align-top font-normal leading-[17px] text-xs text-[#595E64] py-3">
-                       {row?.summary_rationale?.replace(/\*/g, "")}
+                      {row?.summary_rationale?.replace(/\*/g, "")}
                     </td>
                   </tr>
                 ))}
@@ -155,7 +155,7 @@ function ChannelEventStrategyDesign({ data, contentData }: any) {
                     Summary Rationale
                   </p>
                   <p className="text-sm font-normal text-[#595E64]">
-                    {popupDetail.summary}
+                    {popupDetail.summary?.replace(/\*/g, "")}
                   </p>
                 </div>
               )}
