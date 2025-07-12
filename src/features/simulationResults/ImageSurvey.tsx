@@ -43,9 +43,9 @@ function ImageSurvey({ data, contentData }: any) {
   }
 
   return (
-    <div className="space-y-10">
+    <div className="flex flex-col gap-3 items-start">
       {/* Rankings Table */}
-      <div className="bg-white rounded-2xl p-5">
+      <div className="bg-white rounded-2xl p-5 w-full">
         <h2 className="text-xl font-semibold mb-4">Image Rankings</h2>
         <table className="w-full">
           <thead className="border-b border-[#E8E8E8]">
@@ -79,10 +79,12 @@ function ImageSurvey({ data, contentData }: any) {
                     onClick={() => {
                       setPopupDetail({
                         score: row.total_score?.toFixed(2),
-                        summary: row.summary_rationale,
-                        image: iamgeSRCFunc(row.ad_index),
+                        percentage: row.percentage,
+                        image: iamgeSRCFunc(row?.ad_index),
                       });
-                      setPopupImageVisible(true);
+                      setTimeout(() => {
+                        setPopupImageVisible(true);
+                      }, 200);
                     }}
                   />
                 </td>
@@ -98,7 +100,7 @@ function ImageSurvey({ data, contentData }: any) {
         </table>
       </div>
       {personas && (
-        <div className="bg-white rounded-2xl">
+        <div className="bg-white rounded-2xl w-full">
           <div
             className="flex items-center justify-between  p-5 cursor-pointer"
             onClick={() => setDetailDropDown(!detailDropDown)}
@@ -187,27 +189,42 @@ function ImageSurvey({ data, contentData }: any) {
       {/* Popup */}
       {popupDetail?.image && (
         <div
-          className={`fixed inset-0 z-50 flex items-center justify-end ${
-            popupImageVisible ? "bg-black bg-opacity-50" : ""
-          }`}
+          className={`fixed inset-0 z-[100] flex transition-all duration-200 items-center justify-end ${
+            popupImageVisible ? " bg-black" : ""
+          }  bg-opacity-50`}
           onClick={() => {
             setPopupImageVisible(false);
-            setTimeout(() => setPopupDetail(null), 200);
+            setTimeout(() => {
+              setPopupDetail(null);
+            }, 200);
           }}
         >
           <div
-            className={`relative w-full max-w-md h-full bg-white shadow-xl rounded-none overflow-y-auto transform transition-all duration-200 ${
-              popupImageVisible ? "translate-x-0" : "translate-x-full"
-            }`}
+            className={`relative w-full h-full bg-white shadow-xl max-w-md scrollbar-hide overflow-y-auto rounded-none 
+                            transform transition-all duration-200 
+                            ${
+                              popupImageVisible
+                                ? "translate-x-0"
+                                : "translate-x-full"
+                            }
+                          `}
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="h-full flex flex-col p-[30px] space-y-5">
-              <div className="flex items-center gap-7">
+            {/* Close button */}
+
+            {/* Content */}
+            <div className="h-full flex flex-col p-[30px] space-y-5 ">
+              {" "}
+              {/* top padding because of close button */}
+              <div className="flex items-center gap-7 ">
                 <button
                   onClick={() => {
                     setPopupImageVisible(false);
-                    setTimeout(() => setPopupDetail(null), 200);
+                    setTimeout(() => {
+                      setPopupDetail(null);
+                    }, 200);
                   }}
+                  aria-label="Close popup"
                 >
                   <CloseButton />
                 </button>
@@ -216,25 +233,36 @@ function ImageSurvey({ data, contentData }: any) {
                 </h2>
               </div>
               {popupDetail?.score && (
-                <div className="bg-gray_light p-4 rounded-[20px]">
-                  <p className="text-xl font-medium mb-2">Rank</p>
+                <div className="bg-gray_light p-[12px_16px] rounded-[20px]">
+                  <p className="text-xl font-medium text-black mb-3">Rank</p>
                   <p className="text-base font-semibold text-primary2">
-                    {popupDetail.score}
+                    {popupDetail?.score}
+                  </p>
+                </div>
+              )}
+              {popupDetail?.percentage && (
+                <div className="bg-gray_light p-[12px_16px] rounded-[20px]">
+                  <p className="text-xl font-medium text-black mb-3">Percentage</p>
+                  <p className="text-base font-semibold text-primary2">
+                    {popupDetail?.percentage}%
                   </p>
                 </div>
               )}
               {popupDetail?.summary && (
-                <div className="bg-gray_light p-4 rounded-[20px]">
-                  <p className="text-xl font-medium mb-2">Summary Rationale</p>
-                  <p className="text-sm text-[#595E64]">
+                <div className="bg-gray_light p-[12px_16px] rounded-[20px]">
+                  <p className="text-xl font-medium text-black mb-3">
+                    Summary Rationale
+                  </p>
+                  <p className="text-sm font-normal text-[#595E64]">
                     {popupDetail.summary?.replace(/\*/g, "")}
                   </p>
                 </div>
               )}
+              {/* Image Block with gray_light background */}
               {popupDetail?.image && (
                 <div className="bg-gray_light p-4 rounded-lg">
                   <img
-                    src={popupDetail.image}
+                    src={popupDetail?.image}
                     alt="Popup"
                     className="w-full h-auto object-contain rounded-md"
                   />
