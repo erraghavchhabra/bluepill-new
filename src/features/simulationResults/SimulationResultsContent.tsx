@@ -68,7 +68,12 @@ import {
 } from "react-icons/pi";
 import { BiFilterAlt } from "react-icons/bi";
 import { FaRegUser } from "react-icons/fa";
-import { DetailedAnalysisIcon, PortsIcon } from "@/icons/Other";
+import {
+  CloseXIcon,
+  DetailedAnalysisIcon,
+  PortsIcon,
+  SMS_MailIcon,
+} from "@/icons/Other";
 import ChannelEventStrategyDesign from "./ChannelEventStrategyDesign";
 import BuyerInsightsREportB2C from "./BuyerInsightsREportB2C";
 import ImageSurvey from "./ImageSurvey";
@@ -1521,8 +1526,12 @@ const SimulationResultsContent: React.FC<SimulationResultsContentProps> = ({
               <BuyerInsightsREportB2C data={innerParsedResponse?.allData} />
             )}
           {contentData?.task == "image-survey" &&
-            (!innerParsedResponse?.allData?.output || typeof innerParsedResponse?.allData?.output == "object") && (
-              <ImageSurvey data={innerParsedResponse?.allData} contentData={contentData} />
+            (!innerParsedResponse?.allData?.output ||
+              typeof innerParsedResponse?.allData?.output == "object") && (
+              <ImageSurvey
+                data={innerParsedResponse?.allData}
+                contentData={contentData}
+              />
             )}
           {contentData?.task == "ab-test-messaging" &&
             typeof innerParsedResponse?.allData?.output == "object" && (
@@ -2019,83 +2028,94 @@ const SimulationResultsContent: React.FC<SimulationResultsContentProps> = ({
 
     return (
       <div
-        className={`fixed top-0 right-0 z-50 h-full w-1/2 max-w-[100vw] bg-white shadow-lg border-l border-gray-200
+        className={`fixed inset-0  flex transition-all duration-200 items-center justify-end ${
+          isDetailsDropdownOpen ? " bg-black z-[100]" : "-z-50"
+        }  bg-opacity-50`}
+        onClick={() => {
+          setIsDetailsDropdownOpen(false);
+        }}
+      >
+        <div
+          className={`absolute top-0 right-0 z-50 h-full w-1/2 max-w-[100vw] bg-white shadow-lg border-l border-gray-200
           transition-transform duration-500 ease-in-out overflow-auto scrollbar-hide  
           ${isDetailsDropdownOpen ? "translate-x-0" : "translate-x-full"}
         `}
-      >
-        {/* Summary section - Header */}
-        {/* Header */}
-        <div className="p-[30px]  bg-white  flex items-center gap-3 justify-between">
-          <h2 className="text-2xl font-semibold text-primary2 ">
-            Simulation Inputs
-          </h2>
-          <button onClick={() => setIsDetailsDropdownOpen(false)}>
-            <X />
-          </button>
-        </div>
-
-        {/* Main content area */}
-        <div className="p-5">
-          {/* Key information grid */}
-          <SectionHeader
-            icon={<PiUser size={24} />}
-            title="Creator Detail"
-            number={1}
-          />
-          <div className="bg-[#FAFAFA] p-4 flex flex-col gap-3 items-center rounded-[20px] mb-6">
-            {Object.entries(importantData).map(
-              ([key, value], index: number) => (
-                <div
-                  key={key}
-                  className={`${
-                    Object.entries(importantData).length == index + 1
-                      ? ""
-                      : "border-b pb-3"
-                  } flex items-center gap-3 justify-between border-[#E8E8E8]  w-full`}
-                >
-                  <span className="text-[#595E64] text-sm font-medium capitalize">
-                    {key.replace(/_/g, " ")}
-                  </span>
-                  <span className="text-right text-sm font-semibold text-gray-900">
-                    {value as string}
-                  </span>
-                </div>
-              )
-            )}
+        >
+          {/* Summary section - Header */}
+          {/* Header */}
+          <div className="p-[30px]  bg-white  flex items-center gap-3 justify-between">
+            <h2 className="text-2xl font-semibold text-primary2 ">
+              Simulation Inputs
+            </h2>
+            <button onClick={() => setIsDetailsDropdownOpen(false)}>
+              <X />
+            </button>
           </div>
 
-          {/* Segments section */}
-
-          {contentData.segment_ids && (
-            <div className="mb-6">
-              <SectionHeader
-                icon={<PiLineSegments size={24} />}
-                title="Audience Segments"
-                number={2}
-              />
-              <div className="bg-green-50/30 p-3 rounded-lg border border-green-100">
-                {formatValue("segment_ids", contentData.segment_ids)}
-              </div>
+          {/* Main content area */}
+          <div className="p-5">
+            {/* Key information grid */}
+            <SectionHeader
+              icon={<PiUser size={24} />}
+              title="Creator Detail"
+              number={1}
+            />
+            <div className="bg-[#FAFAFA] p-4 flex flex-col gap-3 items-center rounded-[20px] mb-6">
+              {Object.entries(importantData).map(
+                ([key, value], index: number) => (
+                  <div
+                    key={key}
+                    className={`${
+                      Object.entries(importantData).length == index + 1
+                        ? ""
+                        : "border-b pb-3"
+                    } flex items-center gap-3 justify-between border-[#E8E8E8]  w-full`}
+                  >
+                    <span className="text-[#595E64] text-sm font-medium capitalize">
+                      {key.replace(/_/g, " ")}
+                    </span>
+                    <span className="text-right text-sm font-semibold text-gray-900">
+                      {value as string}
+                    </span>
+                  </div>
+                )
+              )}
             </div>
-          )}
 
-          {/* Filters section */}
-          {contentData.persona_filters &&
-            Object.keys(contentData.persona_filters).length > 0 && (
+            {/* Segments section */}
+
+            {contentData.segment_ids && (
               <div className="mb-6">
                 <SectionHeader
-                  icon={<BiFilterAlt size={24} />}
-                  title="Applied Filters"
-                  number={3}
+                  icon={<PiLineSegments size={24} />}
+                  title="Audience Segments"
+                  number={2}
                 />
-                <div className="">
-                  {formatValue("persona_filters", contentData.persona_filters)}
+                <div className="bg-green-50/30 p-3 rounded-lg border border-green-100">
+                  {formatValue("segment_ids", contentData.segment_ids)}
                 </div>
               </div>
             )}
 
-          {/* {contentData?.images && contentData?.images?.length > 0 && (
+            {/* Filters section */}
+            {contentData.persona_filters &&
+              Object.keys(contentData.persona_filters).length > 0 && (
+                <div className="mb-6">
+                  <SectionHeader
+                    icon={<BiFilterAlt size={24} />}
+                    title="Applied Filters"
+                    number={3}
+                  />
+                  <div className="">
+                    {formatValue(
+                      "persona_filters",
+                      contentData.persona_filters
+                    )}
+                  </div>
+                </div>
+              )}
+
+            {/* {contentData?.images && contentData?.images?.length > 0 && (
             <div className="mb-6">
               
               <SectionHeader
@@ -2116,128 +2136,131 @@ const SimulationResultsContent: React.FC<SimulationResultsContentProps> = ({
             </div>
           )} */}
 
-          {/* Used Personas - COLLAPSIBLE */}
-          {simulation.personas && simulation.personas.length > 0 && (
-            <div className="mb-6">
-              <SectionHeader
-                icon={<PiUsers size={24} />}
-                title={`User Profile (${simulation.personas.length})`}
-                number={4}
-              />
-              {simulation.personas && (
-                <div className="p-3 bg-white">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                    {simulation.personas.map((persona, index) => {
-                      const personaInfo: any = extractPersonaInfo(persona.data);
-                      return (
-                        <div
-                          key={index}
-                          className="flex flex-col gap-3 p-4 rounded-[20px] border-[#F5F5F5] border bg-[#FAFAFA]"
-                        >
-                          {/* Top Row: Avatar + Name + Segment */}
-                          <div className="flex justify-between items-center  border-b border-[#E8E8E8] pb-3">
-                            <div className="flex items-center gap-3">
-                              <div className="h-[30px] w-[30px] rounded-full overflow-hidden bg-gray-100 flex items-center justify-center text-gray-500">
-                                {personaInfo?.avatar ? (
-                                  <img
-                                    src={personaInfo?.avatar}
-                                    alt={personaInfo?.name}
-                                    className="h-full w-full object-cover"
-                                  />
-                                ) : (
-                                  <FaRegUser className="h-5 w-5" />
-                                )}
+            {/* Used Personas - COLLAPSIBLE */}
+            {simulation.personas && simulation.personas.length > 0 && (
+              <div className="mb-6">
+                <SectionHeader
+                  icon={<PiUsers size={24} />}
+                  title={`User Profile (${simulation.personas.length})`}
+                  number={4}
+                />
+                {simulation.personas && (
+                  <div className="p-3 bg-white">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                      {simulation.personas.map((persona, index) => {
+                        const personaInfo: any = extractPersonaInfo(
+                          persona.data
+                        );
+                        return (
+                          <div
+                            key={index}
+                            className="flex flex-col gap-3 p-4 rounded-[20px] border-[#F5F5F5] border bg-[#FAFAFA]"
+                          >
+                            {/* Top Row: Avatar + Name + Segment */}
+                            <div className="flex justify-between items-center  border-b border-[#E8E8E8] pb-3">
+                              <div className="flex items-center gap-3">
+                                <div className="h-[30px] w-[30px] rounded-full overflow-hidden bg-gray-100 flex items-center justify-center text-gray-500">
+                                  {personaInfo?.avatar ? (
+                                    <img
+                                      src={personaInfo?.avatar}
+                                      alt={personaInfo?.name}
+                                      className="h-full w-full object-cover"
+                                    />
+                                  ) : (
+                                    <FaRegUser className="h-5 w-5" />
+                                  )}
+                                </div>
+                                <p className="text-[#595E64] font-medium text-sm">
+                                  {personaInfo.name}
+                                </p>
                               </div>
-                              <p className="text-[#595E64] font-medium text-sm">
-                                {personaInfo.name}
-                              </p>
-                            </div>
-                            <span className="bg-primary3 text-black text-[10px] font-semibold px-3 py-[5px] rounded-full capitalize">
-                              {persona.name?.replace(/_/g, " ") || "Profile"}
-                            </span>
-                          </div>
-
-                          {/* Bottom Row: Age & Role */}
-                          <div className="flex items-center justify-between text-xs text-gray-700">
-                            <div className="flex items-center gap-1.5">
-                              <PiPerson className="h-5 w-5 text-primary" />
-                              <span>
-                                Age:{" "}
-                                <span className="font-semibold text-gray-900">
-                                  {personaInfo.age?.match(/\(([^)]+)\)/)?.[1] ||
-                                    "N/A"}
-                                </span>
+                              <span className="bg-primary3 text-black text-[10px] font-semibold px-3 py-[5px] rounded-full capitalize">
+                                {persona.name?.replace(/_/g, " ") || "Profile"}
                               </span>
                             </div>
-                            <div className="flex items-center gap-1.5">
-                              <PiAddressBook className="h-5 w-5 text-primary" />
-                              <span>
-                                Role:{" "}
-                                <span className="font-semibold text-gray-900">
-                                  {personaInfo.job_title || "N/A"}
+
+                            {/* Bottom Row: Age & Role */}
+                            <div className="flex items-center justify-between text-xs text-gray-700">
+                              <div className="flex items-center gap-1.5">
+                                <PiPerson className="h-5 w-5 text-primary" />
+                                <span>
+                                  Age:{" "}
+                                  <span className="font-semibold text-gray-900">
+                                    {personaInfo.age?.match(
+                                      /\(([^)]+)\)/
+                                    )?.[1] || "N/A"}
+                                  </span>
                                 </span>
-                              </span>
+                              </div>
+                              <div className="flex items-center gap-1.5">
+                                <PiAddressBook className="h-5 w-5 text-primary" />
+                                <span>
+                                  Role:{" "}
+                                  <span className="font-semibold text-gray-900">
+                                    {personaInfo.job_title || "N/A"}
+                                  </span>
+                                </span>
+                              </div>
                             </div>
                           </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
-              )}
-            </div>
-          )}
-
-          {/* Additional Information */}
-          {Object.entries(contentData).filter(
-            ([key]) =>
-              !importantFields.includes(key) &&
-              key !== "segment_ids" &&
-              key !== "persona_filters" &&
-              key !== "images" &&
-              key !== "audience_id" &&
-              key !== "image_descriptions"
-          ).length > 0 && (
-            <div className="mb-6">
-              <SectionHeader
-                icon={<HelpCircle size={24} />}
-                title="Additional Information"
-                number={5}
-              />
-
-              <div className="bg-[#FAFAFA] p-4 flex flex-col gap-3 items-center rounded-[20px] mb-6">
-                {Object.entries(contentData)
-                  .filter(
-                    ([key]) =>
-                      !importantFields.includes(key) &&
-                      key !== "segment_ids" &&
-                      key !== "persona_filters" &&
-                      key !== "images" &&
-                      key !== "audience_id" &&
-                      key !== "image_descriptions"
-                  )
-                  .map(([key, value], idx, arr) => (
-                    <div
-                      key={idx}
-                      className={`${
-                        arr.length === idx + 1 ? "" : "border-b pb-3"
-                      } flex items-start gap-3 justify-between border-[#E8E8E8] w-full`}
-                    >
-                      <p className="text-[#595E64] text-xs font-medium mb-1 capitalize">
-                        {key.replace(/_/g, " ")}
-                      </p>
-                      <div className="text-black font-semibold text-right text-sm whitespace-pre-line max-w-[70%]">
-                        {formatValue(key, value)}
-                      </div>
+                        );
+                      })}
                     </div>
-                  ))}
+                  </div>
+                )}
               </div>
-            </div>
-          )}
-        </div>
+            )}
 
-        {/* Footer */}
-        {/* <div className="p-3 bg-gray-50 border-t mb-10 border-gray-200 flex justify-end">
+            {/* Additional Information */}
+            {Object.entries(contentData).filter(
+              ([key]) =>
+                !importantFields.includes(key) &&
+                key !== "segment_ids" &&
+                key !== "persona_filters" &&
+                key !== "images" &&
+                key !== "audience_id" &&
+                key !== "image_descriptions"
+            ).length > 0 && (
+              <div className="mb-6">
+                <SectionHeader
+                  icon={<HelpCircle size={24} />}
+                  title="Additional Information"
+                  number={5}
+                />
+
+                <div className="bg-[#FAFAFA] p-4 flex flex-col gap-3 items-center rounded-[20px] mb-6">
+                  {Object.entries(contentData)
+                    .filter(
+                      ([key]) =>
+                        !importantFields.includes(key) &&
+                        key !== "segment_ids" &&
+                        key !== "persona_filters" &&
+                        key !== "images" &&
+                        key !== "audience_id" &&
+                        key !== "image_descriptions"
+                    )
+                    .map(([key, value], idx, arr) => (
+                      <div
+                        key={idx}
+                        className={`${
+                          arr.length === idx + 1 ? "" : "border-b pb-3"
+                        } flex items-start gap-3 justify-between border-[#E8E8E8] w-full`}
+                      >
+                        <p className="text-[#595E64] text-xs font-medium mb-1 capitalize">
+                          {key.replace(/_/g, " ")}
+                        </p>
+                        <div className="text-black font-semibold text-right text-sm whitespace-pre-line max-w-[70%]">
+                          {formatValue(key, value)}
+                        </div>
+                      </div>
+                    ))}
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Footer */}
+          {/* <div className="p-3 bg-gray-50 border-t mb-10 border-gray-200 flex justify-end">
           <button
             onClick={() => setIsDetailsDropdownOpen(false)}
             className="px-3 py-1.5 bg-white border border-gray-300 rounded text-sm font-medium text-gray-600 hover:bg-gray-50"
@@ -2245,6 +2268,7 @@ const SimulationResultsContent: React.FC<SimulationResultsContentProps> = ({
             Close
           </button>
         </div> */}
+        </div>
       </div>
     );
   };
@@ -2622,175 +2646,155 @@ const SimulationResultsContent: React.FC<SimulationResultsContentProps> = ({
       {/* Export Modal */}
       {showExportModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-30">
-          <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-md relative">
+          <div className="bg-white rounded-[30px] p-[30px] w-full max-w-[500px] flex items-start flex-col gap-[30px] relative">
+            <div className="w-full flex justify-between items-center gap-3">
+              <h2 className="text-2xl font-semibold text-primary2">
+                Export Simulation Analysis
+              </h2>
+              <button
+                className="hover:text-primary2"
+                onClick={() => {
+                  setShowExportModal(false);
+                  setExportStatus("idle");
+                  setExportError("");
+                  setExportEmailStatus("idle");
+                  setExportEmailError("");
+                }}
+                aria-label="Close"
+              >
+                <CloseXIcon />
+              </button>
+            </div>
+
             <button
-              className="absolute top-2 right-2 text-gray-400 hover:text-gray-600"
+              className={`w-full py-3 rounded-full bg-primary2 text-white font-semibold text-base flex items-center justify-center ${
+                pdfGenerating || !cachedPdfUrl
+                  ? "opacity-60 cursor-not-allowed"
+                  : ""
+              }`}
+              disabled={pdfGenerating || !cachedPdfUrl}
               onClick={() => {
-                setShowExportModal(false);
-                setExportStatus("idle");
-                setExportError("");
-                setExportEmailStatus("idle");
-                setExportEmailError("");
+                if (cachedPdfUrl) {
+                  const link = document.createElement("a");
+                  link.href = cachedPdfUrl;
+                  link.download = "simulation-analysis.pdf";
+                  document.body.appendChild(link);
+                  link.click();
+                  document.body.removeChild(link);
+                }
               }}
-              aria-label="Close"
-              onMouseEnter={() => setShowTooltip("closeExport")}
-              onMouseLeave={() => setShowTooltip("")}
             >
-              <ChevronDown className="h-5 w-5 rotate-180" />
+              {!cachedPdfUrl || pdfGenerating ? (
+                <>
+                  <svg
+                    className="animate-spin h-5 w-5 mr-2 text-white"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                    ></circle>
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8v8z"
+                    ></path>
+                  </svg>
+                  Preparing PDF...
+                </>
+              ) : (
+                "Export as PDF"
+              )}
             </button>
-            {showTooltip === "closeExport" && (
-              <div className="absolute right-10 top-2 bg-gray-800 text-white text-xs px-2 py-1 rounded whitespace-nowrap z-20">
-                Close export modal
-              </div>
-            )}
-            <h2 className="text-lg font-semibold mb-4 text-blue-800 flex items-center">
-              <Download className="h-5 w-5 mr-2" /> Export Simulation Analysis
-            </h2>
-            <div className="space-y-3">
-              <div className="relative">
-                <button
-                  className={`w-full py-2 rounded bg-blue-600 text-white font-semibold hover:bg-blue-700 transition-colors flex items-center justify-center ${
-                    pdfGenerating || !cachedPdfUrl
-                      ? "opacity-60 cursor-not-allowed"
-                      : ""
-                  }`}
-                  disabled={pdfGenerating || !cachedPdfUrl}
-                  onClick={() => {
-                    if (cachedPdfUrl) {
-                      const link = document.createElement("a");
-                      link.href = cachedPdfUrl;
-                      link.download = "simulation-analysis.pdf";
-                      document.body.appendChild(link);
-                      link.click();
-                      document.body.removeChild(link);
-                    }
-                  }}
-                  onMouseEnter={() => setShowTooltip("exportPDF")}
-                  onMouseLeave={() => setShowTooltip("")}
-                >
-                  {!cachedPdfUrl || pdfGenerating ? (
-                    <>
-                      <svg
-                        className="animate-spin h-5 w-5 mr-2 text-white"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                      >
-                        <circle
-                          className="opacity-25"
-                          cx="12"
-                          cy="12"
-                          r="10"
-                          stroke="currentColor"
-                          strokeWidth="4"
-                        ></circle>
-                        <path
-                          className="opacity-75"
-                          fill="currentColor"
-                          d="M4 12a8 8 0 018-8v8z"
-                        ></path>
-                      </svg>
-                      Preparing PDF...
-                    </>
-                  ) : (
-                    "Export as PDF"
-                  )}
-                </button>
-                {showTooltip === "exportPDF" && (
-                  <div className="absolute left-1/2 -translate-x-1/2 mt-2 bg-gray-800 text-white text-xs px-2 py-1 rounded whitespace-nowrap z-20">
-                    Download simulation analysis as PDF
-                  </div>
-                )}
-              </div>
-              <div className="text-center text-gray-400 text-xs">or</div>
-              <div>
-                <label className="block mb-2 text-sm font-medium text-gray-700">
-                  Send PDF to Email
-                </label>
+            <div className="w-full bg-[#F5F5F5] p-[12px_16px] rounded-[20px]">
+              <label
+                htmlFor="emailpdf"
+                className=" text-xl font-medium text-black "
+              >
+                Send PDF to Email
+              </label>
+              <div className="bg-white p-[6px] pl-4 flex rounded-full items-center gap-[10px] mt-3">
+                <SMS_MailIcon className="min-w-6" />
                 <input
                   type="email"
-                  className="w-full border border-gray-300 rounded px-3 py-2 mb-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                  id="emailpdf"
+                  className="w-full text-sm  text-[#595E64] font-normal outline-none border-none"
                   placeholder="recipient@example.com"
                   value={exportEmailTo}
                   onChange={(e) => setExportEmailTo(e.target.value)}
                   disabled={exportEmailStatus === "sending"}
                 />
-                <div className="relative">
-                  <button
-                    className={`w-full py-2 rounded bg-blue-600 text-white font-semibold hover:bg-blue-700 transition-colors ${
-                      exportEmailStatus === "sending"
-                        ? "opacity-60 cursor-not-allowed"
-                        : ""
-                    }`}
-                    disabled={
-                      exportEmailStatus === "sending" ||
-                      !exportEmailTo ||
-                      !cachedPdfUrl
+                <button
+                  className={`p-[13px_20px] bg-primary2 text-white text-base font-semibold rounded-full${
+                    exportEmailStatus === "sending"
+                      ? "opacity-60 cursor-not-allowed"
+                      : ""
+                  }`}
+                  disabled={
+                    exportEmailStatus === "sending" ||
+                    !exportEmailTo ||
+                    !cachedPdfUrl
+                  }
+                  onClick={async () => {
+                    setExportEmailStatus("sending");
+                    setExportEmailError("");
+                    try {
+                      if (!cachedPdfUrl) throw new Error("PDF not ready");
+                      // Fetch the blob from the object URL
+                      const pdfBlob = await fetch(cachedPdfUrl).then((res) =>
+                        res.blob()
+                      );
+                      const pdfDataUrl = await blobToDataURL(pdfBlob);
+                      // Send to backend
+                      const res = await fetch(
+                        `${API_URL}/send-simulation-pdf`,
+                        {
+                          method: "POST",
+                          headers: { "Content-Type": "application/json" },
+                          body: JSON.stringify({
+                            to: exportEmailTo,
+                            subject: "Simulation Analysis PDF",
+                            pdfDataUrl,
+                          }),
+                          credentials: "include",
+                          signal: AbortSignal.timeout(300000), // 5 minute timeout
+                        }
+                      );
+                      if (!res.ok) throw new Error("Failed to send email");
+                      setExportEmailStatus("success");
+                    } catch (err: any) {
+                      setExportEmailStatus("error");
+                      setExportEmailError(
+                        err.message || "Failed to send email"
+                      );
                     }
-                    onClick={async () => {
-                      setExportEmailStatus("sending");
-                      setExportEmailError("");
-                      try {
-                        if (!cachedPdfUrl) throw new Error("PDF not ready");
-                        // Fetch the blob from the object URL
-                        const pdfBlob = await fetch(cachedPdfUrl).then((res) =>
-                          res.blob()
-                        );
-                        const pdfDataUrl = await blobToDataURL(pdfBlob);
-                        // Send to backend
-                        const res = await fetch(
-                          `${API_URL}/send-simulation-pdf`,
-                          {
-                            method: "POST",
-                            headers: { "Content-Type": "application/json" },
-                            body: JSON.stringify({
-                              to: exportEmailTo,
-                              subject: "Simulation Analysis PDF",
-                              pdfDataUrl,
-                            }),
-                            credentials: "include",
-                            signal: AbortSignal.timeout(300000), // 5 minute timeout
-                          }
-                        );
-                        if (!res.ok) throw new Error("Failed to send email");
-                        setExportEmailStatus("success");
-                      } catch (err: any) {
-                        setExportEmailStatus("error");
-                        setExportEmailError(
-                          err.message || "Failed to send email"
-                        );
-                      }
-                    }}
-                    onMouseEnter={() => setShowTooltip("sendEmail")}
-                    onMouseLeave={() => setShowTooltip("")}
-                  >
-                    {exportEmailStatus === "sending"
-                      ? "Sending..."
-                      : "Send PDF to Email"}
-                  </button>
-                  {showTooltip === "sendEmail" && (
-                    <div className="absolute left-1/2 -translate-x-1/2 mt-2 bg-gray-800 text-white text-xs px-2 py-1 rounded whitespace-nowrap z-20">
-                      Send PDF to the specified email address
-                    </div>
-                  )}
-                </div>
-                {exportEmailStatus === "success" && (
-                  <div className="mt-2 text-green-600 text-sm font-medium">
-                    Email sent successfully!
-                  </div>
-                )}
-                {exportEmailStatus === "error" && (
-                  <div className="mt-2 text-red-600 text-sm font-medium">
-                    {exportEmailError}
-                  </div>
-                )}
+                  }}
+                >
+                  {exportEmailStatus === "sending" ? "Sending..." : "Send"}
+                </button>
               </div>
-              {exportStatus === "error" && (
-                <div className="mt-2 text-red-600 text-sm font-medium">
-                  {exportError}
+              {/* {exportEmailStatus === "success" && (
+                <div className="mt-2 text-green-600 text-sm font-medium">
+                  Email sent successfully!
                 </div>
               )}
+              {exportEmailStatus === "error" && (
+                <div className="mt-2 text-red-600 text-sm font-medium">
+                  {exportEmailError}
+                </div>
+              )} */}
             </div>
+            {/* {exportStatus === "error" && (
+              <div className="mt-2 text-red-600 text-sm font-medium">
+                {exportError}
+              </div>
+            )} */}
           </div>
         </div>
       )}
