@@ -1521,7 +1521,7 @@ const SimulationResultsContent: React.FC<SimulationResultsContentProps> = ({
               <BuyerInsightsREportB2C data={innerParsedResponse?.allData} />
             )}
           {contentData?.task == "image-survey" &&
-            typeof innerParsedResponse?.allData == "object" && (
+            (!innerParsedResponse?.allData?.output || typeof innerParsedResponse?.allData?.output == "object") && (
               <ImageSurvey data={innerParsedResponse?.allData} contentData={contentData} />
             )}
           {contentData?.task == "ab-test-messaging" &&

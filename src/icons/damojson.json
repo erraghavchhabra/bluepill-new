@@ -1,0 +1,112 @@
+{
+  "detailed_response": {
+    "rankings": [
+      {
+        "rank": 1,
+        "ad_index": 2,
+        "image_index": 3,
+        "total_score": 106,
+        "percentage": "52.0"
+      },
+      {
+        "rank": 2,
+        "ad_index": 0,
+        "image_index": 1,
+        "total_score": 72,
+        "percentage": "35.3"
+      }
+    ],
+    "persona_choices": [
+      {
+        "persona_number": 1,
+        "persona_name": "Tyler Chen",
+        "image_choice": 1,
+        "ad_index": 0,
+        "justification": "Ugh, another ad. Okay, so I'm scrolling on my phone, probably late at night. I spend all day on my feet and all night gaming, so my eyes are probably shot. I don't want something that looks like my mom's vitamins. Image 2 with the fruit is trying too hard, looks like some influencer 'wellness' junk. Image 3 with the box is too serious, too corporate. Image 4 is a blurry mess, hard pass. Image 1 is clean. It's got a modern, minimalist vibe, kinda like a cool tech product. The frosted bottle and wood cap are a nice touch. It looks straightforward, no BS. It's the one that matches my 'vibe' without making me feel like I'm buying into some lame health fad. It's simple, looks effective, and I can just add it to my cart and move on.",
+        "key_factors": null,
+        "persona_segment": null
+      },
+      {
+        "persona_number": 2,
+        "persona_name": "Jasmine Williams",
+        "image_choice": 2,
+        "ad_index": 1,
+        "justification": "As a teacher, I'm always looking for things that are both practical and aesthetically pleasing for my classroom and my life. My eyes get tired from grading and planning. When I see these options, Image 2 immediately stands out. The pops of color from the flower and fruits are so pretty and cheerful. It makes the product feel natural and wholesome, which I value. It suggests it's made from good things. Image 1 is too plain, and Image 3 with the box is nice and looks professional, but Image 2 has that 'Pinterest-worthy' aesthetic I love. It makes taking a supplement feel like a little act of self-care, not a chore. I would definitely be more drawn to click on this one.",
+        "key_factors": null,
+        "persona_segment": null
+      }
+    ],
+    "overall_insights": {
+      "total_personas_evaluated": 204,
+      "total_images_evaluated": 4,
+      "most_popular_image": {
+        "ad_index": 2,
+        "image_index": 3,
+        "total_selections": 106,
+        "selection_percentage": "52.0",
+        "selecting_personas": [
+          "Aisha Patel",
+          "Sofia Gonzalez",
+          "Rachel Green",
+          "Aaliyah Davis",
+          "Jennifer Martinez",
+          "Sarah Williams"
+        ],
+        "least_popular_image": {
+          "ad_index": 3,
+          "image_index": 4,
+          "total_selections": 1,
+          "selection_percentage": "0.5",
+          "selecting_personas": ["Billy Ray Johnson"],
+          "common_themes": [
+            "Budget/cheapest option",
+            "Bulk quantity appearance",
+            "Lower quality acceptable for price"
+          ]
+        },
+        "consensus_level": "Strong preference for professional presentation",
+        "distribution_pattern": "Clear hierarchy with professional packaging dominant",
+        "key_findings": [
+          "Professional packaging (Image 3) achieved majority preference across diverse demographics",
+          "Minimalist/data-driven presentation (Image 1) appealed strongly to analytical and practical personas",
+          "Natural/aesthetic presentation (Image 2) found niche appeal among creative and wellness-focused individuals",
+          "Low-quality presentation (Image 4) was almost universally rejected, with only one selection"
+        ],
+        "segment_preferences": {
+          "Healthcare Professionals": [2, 0],
+          "Tech/Engineering": [0, 2],
+          "Creative/Aesthetic": [1, 2]
+        }
+      }
+    },
+    "image_performance": [
+      {
+        "ad_index": 2,
+        "image_index": 3,
+        "total_selections": 106,
+        "selection_percentage": "52.0",
+        "selecting_personas": [
+          "Aisha Patel",
+          "Sofia Gonzalez",
+          "Rachel Green",
+          "Aaliyah Davis",
+          "Jennifer Martinez"
+        ]
+      },
+      {
+        "ad_index": 2,
+        "image_index": 3,
+        "total_selections": 106,
+        "selection_percentage": "52.0",
+        "selecting_personas": [
+          "Aisha Patel",
+          "Sofia Gonzalez",
+          "Rachel Green",
+          "Aaliyah Davis",
+          "Jennifer Martinez"
+        ]
+      }
+    ],
+    "processing_summary": null
+  }
+}
