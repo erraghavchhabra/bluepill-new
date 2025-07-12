@@ -71,6 +71,8 @@ import { FaRegUser } from "react-icons/fa";
 import { DetailedAnalysisIcon, PortsIcon } from "@/icons/Other";
 import ChannelEventStrategyDesign from "./ChannelEventStrategyDesign";
 import BuyerInsightsREportB2C from "./BuyerInsightsREportB2C";
+import ImageSurvey from "./ImageSurvey";
+import AB_estMessaging from "./AB_estMessaging";
 
 const API_URL = import.meta.env.VITE_API_URL || "";
 
@@ -1518,6 +1520,14 @@ const SimulationResultsContent: React.FC<SimulationResultsContentProps> = ({
             typeof innerParsedResponse?.allData?.output == "object" && (
               <BuyerInsightsREportB2C data={innerParsedResponse?.allData} />
             )}
+          {contentData?.task == "image-survey" &&
+            typeof innerParsedResponse?.allData == "object" && (
+              <ImageSurvey data={innerParsedResponse?.allData} contentData={contentData} />
+            )}
+          {contentData?.task == "ab-test-messaging" &&
+            typeof innerParsedResponse?.allData?.output == "object" && (
+              <AB_estMessaging data={innerParsedResponse?.allData} />
+            )}
           {(contentData?.task == "channel-event-strategy" ||
             contentData?.task == "ab-test-creatives") &&
             typeof innerParsedResponse?.allData?.output == "object" && (
@@ -1582,7 +1592,10 @@ const SimulationResultsContent: React.FC<SimulationResultsContentProps> = ({
                           >
                             <div className="flex items-center gap-[10px]">
                               <DetailedAnalysisIcon />
-                              <p className="font-semibold text-xl text-primary2">
+                              <p
+                                className="font-semibold text-xl text-primary2"
+                                style={{ margin: "0" }}
+                              >
                                 Detailed Analysis
                               </p>
                             </div>

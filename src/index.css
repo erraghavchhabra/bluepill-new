@@ -8,7 +8,7 @@
 
 body {
   /* font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; */
-   font-family: 'General Sans', sans-serif;
+  font-family: "General Sans", sans-serif;
 }
 
 .animate-fadeIn {
@@ -16,18 +16,18 @@ body {
 }
 
 .custom-scrollbar::-webkit-scrollbar {
-          width: 8px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-track {
-          background: transparent;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-          background-color: rgba(203, 213, 225, 0.5);
-          border-radius: 20px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-          background-color: rgba(148, 163, 184, 0.7);
-        }
+  width: 8px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: rgba(203, 213, 225, 0.5);
+  border-radius: 20px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(148, 163, 184, 0.7);
+}
 
 @keyframes fadeIn {
   from {
@@ -39,12 +39,11 @@ body {
     transform: translateY(0);
   }
 }
-.container{
+.container {
   max-width: 100%;
   margin: 0 auto;
   padding: 0 30px;
   width: 100%;
-
 }
 .animate-fadeOut {
   animation: fadeOut var(--animation-duration) ease-in-out;
@@ -97,7 +96,8 @@ body {
 }
 
 @keyframes bounce {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0);
   }
   50% {
@@ -128,12 +128,11 @@ body {
   }
 }
 
-
 .markdown-body table {
   background: #fff !important;
 }
 
-.markdown-body th, 
+.markdown-body th,
 .markdown-body td {
   background: #fff !important;
   color: #24292e; /* GitHub's default text color */
@@ -143,7 +142,7 @@ body {
 
 .sim-btn .sim-btn-top {
   border-radius: 16px 16px 0px 0px;
-  padding:1px 10px 30px 10px;
+  padding: 1px 10px 30px 10px;
 }
 
 .sim-btn .sim-btn-top span {
@@ -157,25 +156,49 @@ body {
   margin-top: -30px;
 }
 
-.ms-content .markdown-body h2{
-color :#028B7E;
-font-weight: 700;
-border-bottom: 0px;
+.ms-content .markdown-body h2 {
+  color: #028b7e;
+  font-weight: 700;
+  border-bottom: 0px;
 }
-.ms-content .markdown-body table tbody tr td:first-child{
-  color: #028B7E;
+.ms-content .markdown-body table tbody tr td:first-child {
+  color: #028b7e;
 }
-.ms-content .markdown-body table th{
+.ms-content .markdown-body table th {
   white-space: nowrap;
 }
-.ms-content .markdown-body table th,.ms-content .markdown-body table td{
+.ms-content .markdown-body table th,
+.ms-content .markdown-body table td {
   border: 0px;
-  padding: 12px
+  padding: 12px;
 }
 .smooth-dropdown {
   transition: max-height 0.4s ease, opacity 0.4s ease;
   overflow: hidden;
 }
-.tableFirstRowColor td:first-child{
-  color: #028B7E;
+.tableFirstRowColor td:first-child {
+  color: #028b7e;
+}
+/* -----------------------------Scrollable container ---------------------*/
+
+.table-scroll::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+  border: none;
+}
+
+.table-scroll::-webkit-scrollbar-track {
+  /* border-radius: 20px; */
+  background-color: #FCFCFC;
+}
+
+.table-scroll::-webkit-scrollbar-thumb {
+  background: linear-gradient(94.58deg, #636363b4 0%, #636363b4 100%);
+  border-radius: 20px;
+  overflow: hidden;
+  height: 100px;
+}
+
+.table-scroll::-webkit-scrollbar-corner {
+  background: transparent;
 }

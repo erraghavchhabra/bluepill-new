@@ -11,7 +11,6 @@ function ChannelEventStrategyDesign({ data, contentData }: any) {
   const [detailDropDown, setDetailDropDown] = useState(false);
   const [maxHeight, setMaxHeight] = useState("0px");
 
-  console.log(1651, data, contentData, typeof data?.output);
   const table = data?.output?.overall_ranking?.ranking_table;
   const summaryTable = data?.output?.winning_ad?.summary;
   const expert_recommendationsData =
