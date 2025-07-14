@@ -1,5 +1,6 @@
-import React from 'react';
-import Card from './Card';
+import React from "react";
+import Card from "./Card";
+import { HiOutlineArrowRight } from "react-icons/hi";
 
 interface SimulationCardProps {
   icon: React.ReactNode;
@@ -21,12 +22,24 @@ const SimulationCard: React.FC<SimulationCardProps> = ({
   comingSoon = false,
 }) => {
   return (
-    <Card 
-      className={`p-5 transition-all duration-200 relative ${disabled ? 'opacity-60 cursor-not-allowed' : 'cursor-pointer'}`}
+    <Card
+      className={`p-5 flex group flex-col gap-5 h-full hover:bg-primary bg-white rounded-2xl items-center  transition-all duration-500 ${
+        disabled ? "opacity-60 cursor-not-allowed" : "cursor-pointer"
+      } `}
       onClick={disabled ? undefined : onClick}
       selected={selected}
     >
-      <div className="flex items-start">
+      {icon}
+      <div className="flex flex-col items-center gap-2">
+        <h3 className="text-center text-xl text-black  ">
+          {title}
+        </h3>
+        <p className="text-sm text-[#595E64] text-center group-hover:text-black font-normal">{description}</p>
+      </div>
+      <div className="group-hover:text-black text-center text-primary2">
+        <HiOutlineArrowRight size={24}/>
+      </div>
+      {/* <div className="flex items-start">
         <div className={`mr-4 p-2 rounded-lg ${disabled ? 'text-gray-400 bg-gray-100' : 'text-blue-600 bg-blue-50'}`}>
           {icon}
         </div>
@@ -41,7 +54,7 @@ const SimulationCard: React.FC<SimulationCardProps> = ({
           </div>
           <p className={`text-sm ${disabled ? 'text-gray-400' : 'text-gray-600'}`}>{description}</p>
         </div>
-      </div>
+      </div> */}
     </Card>
   );
 };

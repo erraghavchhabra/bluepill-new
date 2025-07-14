@@ -1,87 +1,114 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { BrowserRouter as Router, Routes, Route, useLocation, Navigate } from 'react-router-dom';
-import Layout from './components/Layout';
-import ProgressSteps from './components/ProgressSteps';
-import LandingScreen from './features/landing/LandingScreen';
-import AudienceTypeSelect from './features/buildAudience/AudienceTypeSelect';
-import AudienceSegmentSelect from './features/buildAudience/AudienceSegmentSelect';
-import AudiencePreview from './features/buildAudience/AudiencePreview';
-import ExistingAudiences from './features/existingAudience/ExistingAudiences';
-import UseCaseSelector from './features/simulationUseCase/UseCaseSelector';
-import SimulationResults from './features/simulationResults/SimulationResults';
-import ChatPage from './features/chat/ChatPage';
-import AdminPanel from './features/admin/AdminPanel';
-import AnalysisPage from './features/analysis/AnalysisPage';
+import React, { useState, useEffect, useCallback } from "react";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  useLocation,
+  Navigate,
+} from "react-router-dom";
+import Layout from "./components/Layout";
+import ProgressSteps from "./components/ProgressSteps";
+import LandingScreen from "./features/landing/LandingScreen";
+import AudienceTypeSelect from "./features/buildAudience/AudienceTypeSelect";
+import AudienceSegmentSelect from "./features/buildAudience/AudienceSegmentSelect";
+import AudiencePreview from "./features/buildAudience/AudiencePreview";
+import ExistingAudiences from "./features/existingAudience/ExistingAudiences";
+import UseCaseSelector from "./features/simulationUseCase/UseCaseSelector";
+import SimulationResults from "./features/simulationResults/SimulationResults";
+import ChatPage from "./features/chat/ChatPage";
+import AdminPanel from "./features/admin/AdminPanel";
+import AnalysisPage from "./features/analysis/AnalysisPage";
 // import ChatWithPersona from './features/chatWithPersonas/ChatWithPersona.tsx';
-import { AuthProvider, useAuth } from './context/AuthContext';
-import { AudienceProvider, useAudience } from './context/AudienceContext';
-import Auth from './features/auth/Auth';
-import ProtectedRoute from './components/ProtectedRoute';
-import Button from './components/Button';
-import { ArrowLeft } from 'lucide-react';
-import ChatWithPersona from './features/chatWithPersonas/ChatWithPersona';
+import { AuthProvider, useAuth } from "./context/AuthContext";
+import { AudienceProvider, useAudience } from "./context/AudienceContext";
+import Auth from "./features/auth/Auth";
+import ProtectedRoute from "./components/ProtectedRoute";
+import Button from "./components/Button";
+import { ArrowLeft, icons, LucideNetwork } from "lucide-react";
+import ChatWithPersona from "./features/chatWithPersonas/ChatWithPersona";
 
-type Step = 
-  | 'landing'
-  | 'audience-type'
-  | 'audience-segment'
-  | 'audience-preview'
-  | 'existing-audiences'
-  | 'simulation-use-case'
-  | 'simulation-results';
+import {
+  PiChartDonut,
+  PiEyeLight,
+  PiNotebook,
+  PiUsersThree,
+} from "react-icons/pi";
 
-type FlowStep = 'segment-selection' | 'use-case-selection' | 'form-filling' | 'results-view';
+type Step =
+  | "landing"
+  | "audience-type"
+  | "audience-segment"
+  | "audience-preview"
+  | "existing-audiences"
+  | "simulation-use-case"
+  | "simulation-results";
+
+type FlowStep =
+  | "segment-selection"
+  | "use-case-selection"
+  | "form-filling"
+  | "results-view";
 
 // Main application content component
 const AppContent: React.FC = () => {
   const location = useLocation();
   const { isAuthenticated } = useAuth();
-  const { currentStep, setCurrentStep, audienceData, updateAudienceData } = useAudience();
-  const [stepMapping, setStepMapping] = useState<Step>('landing');
-  const [flowType, setFlowType] = useState<'build' | 'existing' | null>(null);
-  const [selectedAudienceId, setSelectedAudienceId] = useState<number | null>(null);
-  const [selectedAudienceName, setSelectedAudienceName] = useState<string>('');
-  const [currentStepInUseCase, setCurrentStepInUseCase] = useState<FlowStep>('segment-selection');
+  const { currentStep, setCurrentStep, audienceData, updateAudienceData } =
+    useAudience();
+  const [stepMapping, setStepMapping] = useState<Step>("landing");
+  const [flowType, setFlowType] = useState<"build" | "existing" | null>(null);
+  const [selectedAudienceId, setSelectedAudienceId] = useState<number | null>(
+    null
+  );
+  const [selectedAudienceName, setSelectedAudienceName] = useState<string>("");
+  const [currentStepInUseCase, setCurrentStepInUseCase] =
+    useState<FlowStep>("segment-selection");
   const [hasEditedStep, setHasEditedStep] = useState<boolean>(false); // Track if user has edited a step
   const [formState, setFormState] = useState<Record<string, any>>({}); // Track form data
-  const [visitedSteps, setVisitedSteps] = useState<Set<Step>>(new Set(['landing']));
-  const [visitedUseCaseSteps, setVisitedUseCaseSteps] = useState<Set<FlowStep>>(new Set());
-  const [currentSimulationId, setCurrentSimulationId] = useState<number | null>(null); // Add state to store the simulation ID that was generated
-  
+  const [visitedSteps, setVisitedSteps] = useState<Set<Step>>(
+    new Set(["landing"])
+  );
+  const [visitedUseCaseSteps, setVisitedUseCaseSteps] = useState<Set<FlowStep>>(
+    new Set()
+  );
+  const [currentSimulationId, setCurrentSimulationId] = useState<number | null>(
+    null
+  ); // Add state to store the simulation ID that was generated
+
   // Map numeric currentStep to string step type
   const updateStepMapping = useCallback((step: number) => {
     switch (step) {
-      case 1: 
-        setStepMapping('audience-type');
+      case 1:
+        setStepMapping("audience-type");
         break;
       case 2:
-        setStepMapping('audience-segment');
+        setStepMapping("audience-segment");
         break;
       case 3:
-        setStepMapping('audience-preview');
+        setStepMapping("audience-preview");
         break;
       default:
-        setStepMapping('landing');
+        setStepMapping("landing");
     }
   }, []);
-  
+
   const handleBuildAudience = useCallback(() => {
-    setFlowType('build');
+    setFlowType("build");
     setCurrentStep(1); // Set to first step - Audience Type
     updateStepMapping(1);
   }, [setFlowType, setCurrentStep, updateStepMapping]);
-  
+
   const handleSelectExisting = useCallback(() => {
-    setFlowType('existing');
-    setStepMapping('existing-audiences');
+    setFlowType("existing");
+    setStepMapping("existing-audiences");
   }, [setFlowType, setStepMapping]);
-  
+
   const handleNext = () => {
     const nextStep = currentStep + 1;
     setCurrentStep(nextStep);
     updateStepMapping(nextStep);
   };
-  
+
   const handleBack = () => {
     if (currentStep > 1) {
       const prevStep = currentStep - 1;
@@ -89,35 +116,35 @@ const AppContent: React.FC = () => {
       updateStepMapping(prevStep);
     } else {
       // Go back to landing
-      setStepMapping('landing');
+      setStepMapping("landing");
       setFlowType(null);
     }
   };
-  
+
   const handleReset = () => {
-    setStepMapping('landing');
+    setStepMapping("landing");
     setCurrentStep(1);
     setFlowType(null);
     updateAudienceData({
       type: null,
-      websiteUrl: '',
+      websiteUrl: "",
       segmentType: null,
-      specificSegment: '',
-      qualitativeInfo: '',
+      specificSegment: "",
+      qualitativeInfo: "",
       uploadedFile: null,
       audienceId: null,
-      audienceName: '',
+      audienceName: "",
       selectedUseCase: null,
       selectedSegments: [],
       personaFilters: {},
     });
   };
-  
+
   // Check URL path and set appropriate step on component mount or route change
   useEffect(() => {
-    if (location.pathname === '/build-audience') {
+    if (location.pathname === "/build-audience") {
       handleBuildAudience();
-    } else if (location.pathname === '/simulate') {
+    } else if (location.pathname === "/simulate") {
       handleSelectExisting();
     }
   }, [location.pathname, handleBuildAudience, handleSelectExisting]);
@@ -126,24 +153,29 @@ const AppContent: React.FC = () => {
     setSelectedAudienceId(audienceId);
     setSelectedAudienceName(audienceName);
     // Skip segment selection step and go directly to use case
-    updateAudienceData({ 
+    updateAudienceData({
       audienceId: audienceId,
       audienceName: audienceName,
       selectedSegments: [], // Initialize with empty segments
-      personaFilters: {}    // Initialize with empty filters
+      personaFilters: {}, // Initialize with empty filters
     });
-    setStepMapping('simulation-use-case');
-    setCurrentStepInUseCase('segment-selection'); // Always go to step 2 after selection
+    setStepMapping("simulation-use-case");
+    setCurrentStepInUseCase("segment-selection"); // Always go to step 2 after selection
     // Reset edit tracking when selecting a new audience
     setHasEditedStep(false);
     // Mark this step as visited
-    setVisitedSteps(prev => new Set([...prev, 'existing-audiences', 'simulation-use-case']));
+    setVisitedSteps(
+      (prev) => new Set([...prev, "existing-audiences", "simulation-use-case"])
+    );
   };
-  
-  const handleFormDataChange = (useCaseType: string, data: Record<string, any>) => {
-    setFormState(prev => ({
+
+  const handleFormDataChange = (
+    useCaseType: string,
+    data: Record<string, any>
+  ) => {
+    setFormState((prev) => ({
       ...prev,
-      [useCaseType.toLowerCase()]: data
+      [useCaseType.toLowerCase()]: data,
     }));
   };
 
@@ -158,118 +190,167 @@ const AppContent: React.FC = () => {
   const handleUseCaseStepChange = (newStep: FlowStep) => {
     console.log(`Changing step from ${currentStepInUseCase} to ${newStep}`);
     setCurrentStepInUseCase(newStep);
-    
+
     // Mark this step as visited
-    setVisitedUseCaseSteps(prev => new Set([...prev, newStep]));
-    
+    setVisitedUseCaseSteps((prev) => new Set([...prev, newStep]));
+
     // If moving forward in the flow naturally, reset the edit flag
     if (
-      (currentStepInUseCase === 'segment-selection' && newStep === 'use-case-selection') ||
-      (currentStepInUseCase === 'use-case-selection' && newStep === 'form-filling') ||
-      (currentStepInUseCase === 'form-filling' && newStep === 'results-view')
+      (currentStepInUseCase === "segment-selection" &&
+        newStep === "use-case-selection") ||
+      (currentStepInUseCase === "use-case-selection" &&
+        newStep === "form-filling") ||
+      (currentStepInUseCase === "form-filling" && newStep === "results-view")
     ) {
       setHasEditedStep(false);
     }
   };
 
   const getProgressSteps = () => {
-    if (flowType === 'build') {
+    if (flowType === "build") {
       return [
-        { 
-          label: audienceData.type ? `Type: ${audienceData.type}` : 'Audience Type', 
-          completed: currentStep > 1, 
+        {
+          label: audienceData.type
+            ? `Type: ${audienceData.type}`
+            : "Audience Type",
+          completed: currentStep > 1,
           current: currentStep === 1,
-          onClick: currentStep > 1 ? () => {
-            setCurrentStep(1);
-            updateStepMapping(1);
-          } : undefined
+          onClick:
+            currentStep > 1
+              ? () => {
+                  setCurrentStep(1);
+                  updateStepMapping(1);
+                }
+              : undefined,
         },
-        { 
-          label: audienceData.segmentType ? `Segments (${audienceData.segmentType})` : 'Define Segments', 
-          completed: currentStep > 2, 
+        {
+          label: audienceData.segmentType
+            ? `Segments (${audienceData.segmentType})`
+            : "Define Segments",
+          completed: currentStep > 2,
           current: currentStep === 2,
-          onClick: currentStep > 2 ? () => {
-            setCurrentStep(2);
-            updateStepMapping(2);
-          } : undefined
+          onClick:
+            currentStep > 2
+              ? () => {
+                  setCurrentStep(2);
+                  updateStepMapping(2);
+                }
+              : undefined,
         },
-        { 
-          label: 'Preview & Save', 
-          completed: false, 
+        {
+          label: "Preview & Save",
+          completed: false,
           current: currentStep === 3,
-          onClick: undefined
-        }
+          onClick: undefined,
+        },
       ];
-    } else if (flowType === 'existing') {
+    } else if (flowType === "existing") {
       // Expanded 5-step flow for better granularity
       return [
-        { 
-          label: selectedAudienceName ? `1. Audience: ${selectedAudienceName}` : '1. Select Audience', 
-          completed: hasVisitedStep('simulation-use-case') || stepMapping === 'simulation-results', 
-          current: stepMapping === 'existing-audiences',
+        {
+          label: selectedAudienceName
+            ? `Audience: ${selectedAudienceName}`
+            : "Select Audience",
+          completed:
+            hasVisitedStep("simulation-use-case") ||
+            stepMapping === "simulation-results",
+          current: stepMapping === "existing-audiences",
           // Always allow going back to audience selection
+          icons: <PiUsersThree size={24} />,
           onClick: () => {
-            setStepMapping('existing-audiences');
+            setStepMapping("existing-audiences");
             setHasEditedStep(false); // Reset edits when going back to first step
-          }
+          },
         },
-        { 
-          label: '2. Select Segments',
-          completed: hasVisitedUseCaseStep('use-case-selection') || 
-                     hasVisitedUseCaseStep('form-filling') || 
-                     hasVisitedUseCaseStep('results-view') ||
-                     stepMapping === 'simulation-results',
-          current: stepMapping === 'simulation-use-case' && currentStepInUseCase === 'segment-selection',
+        {
+          label: "Select Segments",
+          completed:
+            hasVisitedUseCaseStep("use-case-selection") ||
+            hasVisitedUseCaseStep("form-filling") ||
+            hasVisitedUseCaseStep("results-view") ||
+            stepMapping === "simulation-results",
+          current:
+            stepMapping === "simulation-use-case" &&
+            currentStepInUseCase === "segment-selection",
           // Make this clickable if we've been to segments before
-          onClick: (hasVisitedUseCaseStep('segment-selection') || selectedAudienceId) ? 
-            () => {
-              setStepMapping('simulation-use-case');
-              setCurrentStepInUseCase('segment-selection');
-              setHasEditedStep(false);
-            } : undefined
+          icons: <PiChartDonut size={24} />,
+          onClick:
+            hasVisitedUseCaseStep("segment-selection") || selectedAudienceId
+              ? () => {
+                  setStepMapping("simulation-use-case");
+                  setCurrentStepInUseCase("segment-selection");
+                  setHasEditedStep(false);
+                }
+              : undefined,
         },
-        { 
-          label: audienceData.selectedUseCase ? `3. Use Case: ${audienceData.selectedUseCase}` : '3. Select Use Case', 
-          completed: hasVisitedUseCaseStep('form-filling') || 
-                     hasVisitedUseCaseStep('results-view') || 
-                     stepMapping === 'simulation-results',
-          current: stepMapping === 'simulation-use-case' && currentStepInUseCase === 'use-case-selection',
+        {
+          label: audienceData.selectedUseCase
+            ? `Use Case: ${audienceData.selectedUseCase}`
+            : "Select Use Case",
+          completed:
+            hasVisitedUseCaseStep("form-filling") ||
+            hasVisitedUseCaseStep("results-view") ||
+            stepMapping === "simulation-results",
+          current:
+            stepMapping === "simulation-use-case" &&
+            currentStepInUseCase === "use-case-selection",
           // Make this clickable if we've been to this step before or selected a use case
-          onClick: (hasVisitedUseCaseStep('use-case-selection') || audienceData.selectedUseCase) ? 
-            () => {
-              setStepMapping('simulation-use-case');
-              setCurrentStepInUseCase('use-case-selection');
-              // If we're going back to this step from a later step, reset edit flag
-              if (currentStepInUseCase === 'form-filling' || currentStepInUseCase === 'results-view') {
-                setHasEditedStep(false);
-              }
-            } : undefined
+          icons: <LucideNetwork size={24} />,
+          onClick:
+            hasVisitedUseCaseStep("use-case-selection") ||
+            audienceData.selectedUseCase
+              ? () => {
+                  setStepMapping("simulation-use-case");
+                  setCurrentStepInUseCase("use-case-selection");
+                  // If we're going back to this step from a later step, reset edit flag
+                  if (
+                    currentStepInUseCase === "form-filling" ||
+                    currentStepInUseCase === "results-view"
+                  ) {
+                    setHasEditedStep(false);
+                  }
+                }
+              : undefined,
         },
-        { 
-          label: '4. Complete Form', 
-          completed: hasVisitedUseCaseStep('results-view') || stepMapping === 'simulation-results',
-          current: stepMapping === 'simulation-use-case' && currentStepInUseCase === 'form-filling',
+        {
+          label: "Complete Form",
+          completed:
+            hasVisitedUseCaseStep("results-view") ||
+            stepMapping === "simulation-results",
+          current:
+            stepMapping === "simulation-use-case" &&
+            currentStepInUseCase === "form-filling",
           // Make this clickable if we've been to this step before
-          onClick: (hasVisitedUseCaseStep('form-filling') || formState[audienceData.selectedUseCase?.toLowerCase()]) ? 
-            () => {
-              setStepMapping('simulation-use-case');
-              setCurrentStepInUseCase('form-filling');
-              // If we're going back to this step from results view, reset edit flag
-              if (currentStepInUseCase === 'results-view') {
-                setHasEditedStep(false);
-              }
-            } : undefined
+          icons: <PiNotebook size={24} />,
+          onClick:
+            hasVisitedUseCaseStep("form-filling") ||
+            formState[audienceData.selectedUseCase?.toLowerCase()]
+              ? () => {
+                  setStepMapping("simulation-use-case");
+                  setCurrentStepInUseCase("form-filling");
+                  // If we're going back to this step from results view, reset edit flag
+                  if (currentStepInUseCase === "results-view") {
+                    setHasEditedStep(false);
+                  }
+                }
+              : undefined,
         },
-        { 
-          label: '5. View Results', 
+        {
+          label: "View Results",
           completed: false, // This is always false as it's the last step
-          current: stepMapping === 'simulation-results' || 
-                   (stepMapping === 'simulation-use-case' && currentStepInUseCase === 'results-view'),
+          current:
+            stepMapping === "simulation-results" ||
+            (stepMapping === "simulation-use-case" &&
+              currentStepInUseCase === "results-view"),
           // Make this clickable if we've been to this step before
-          onClick: (hasVisitedUseCaseStep('results-view') || stepMapping === 'simulation-results') ? 
-            () => {
-              setStepMapping('simulation-results');
-            } : undefined
+          icons: <PiEyeLight size={24} />,
+          onClick:
+            hasVisitedUseCaseStep("results-view") ||
+            stepMapping === "simulation-results"
+              ? () => {
+                  setStepMapping("simulation-results");
+                }
+              : undefined,
         },
       ];
     }
@@ -278,52 +359,41 @@ const AppContent: React.FC = () => {
 
   const renderCurrentStep = () => {
     switch (stepMapping) {
-      case 'landing':
+      case "landing":
         return (
-          <LandingScreen 
-            onBuildAudience={handleBuildAudience} 
-            onSelectExisting={handleSelectExisting} 
+          <LandingScreen
+            onBuildAudience={handleBuildAudience}
+            onSelectExisting={handleSelectExisting}
           />
         );
-      case 'audience-type':
+      case "audience-type":
+        return <AudienceTypeSelect onNext={handleNext} onBack={handleBack} />;
+      case "audience-segment":
         return (
-          <AudienceTypeSelect 
-            onNext={handleNext} 
-            onBack={handleBack}
-          />
+          <AudienceSegmentSelect onNext={handleNext} onBack={handleBack} />
         );
-      case 'audience-segment':
+      case "audience-preview":
+        return <AudiencePreview onSave={handleReset} onBack={handleBack} />;
+      case "existing-audiences":
         return (
-          <AudienceSegmentSelect 
-            onNext={handleNext}
-            onBack={handleBack}
-          />
-        );
-      case 'audience-preview':
-        return (
-          <AudiencePreview 
-            onSave={handleReset}
-            onBack={handleBack}
-          />
-        );
-      case 'existing-audiences':
-        return (
-          <ExistingAudiences 
+          <ExistingAudiences
             onSelectAudience={handleSelectAudience}
             onBack={handleReset}
           />
         );
-      case 'simulation-use-case':
+      case "simulation-use-case":
         return (
-          <UseCaseSelector 
+          <UseCaseSelector
             onComplete={(simulationId) => {
               setCurrentSimulationId(simulationId);
-              setStepMapping('simulation-results');
+              setStepMapping("simulation-results");
               // Mark this step as visited
-              setVisitedSteps(prev => new Set([...prev, 'simulation-results']));
+              setVisitedSteps(
+                (prev) => new Set([...prev, "simulation-results"])
+              );
             }}
             onBack={() => {
-              setStepMapping('existing-audiences');
+              setStepMapping("existing-audiences");
               setHasEditedStep(false); // Reset edit flag when going back to audiences
             }}
             audienceId={selectedAudienceId || 0}
@@ -337,9 +407,12 @@ const AppContent: React.FC = () => {
             onFormDataChange={handleFormDataChange}
           />
         );
-      case 'simulation-results':
+      case "simulation-results":
         return (
-          <div className="w-full" style={{ height: "90vh", overflow: "hidden" }}>
+          <div
+            className="w-full"
+            style={{ height: "90vh", overflow: "hidden" }}
+          >
             {currentSimulationId ? (
               <div className="h-full flex flex-col">
                 <div className="mb-4 flex-shrink-0">
@@ -347,8 +420,8 @@ const AppContent: React.FC = () => {
                     variant="ghost"
                     size="sm"
                     onClick={() => {
-                      setStepMapping('simulation-use-case');
-                      setCurrentStepInUseCase('form-filling');
+                      setStepMapping("simulation-use-case");
+                      setCurrentStepInUseCase("form-filling");
                     }}
                     icon={<ArrowLeft className="w-4 h-4 mr-1" />}
                   >
@@ -356,18 +429,23 @@ const AppContent: React.FC = () => {
                   </Button>
                 </div>
                 <div className="flex-grow overflow-hidden">
-                  <SimulationResults simulationId={currentSimulationId} embedded={true} />
+                  <SimulationResults
+                    simulationId={currentSimulationId}
+                    embedded={true}
+                  />
                 </div>
               </div>
             ) : (
               <div className="text-center py-8">
-                <p className="text-gray-600">No simulation results to display.</p>
-                <Button 
-                  variant="outline" 
+                <p className="text-gray-600">
+                  No simulation results to display.
+                </p>
+                <Button
+                  variant="outline"
                   className="mt-4"
                   onClick={() => {
-                    setStepMapping('simulation-use-case');
-                    setCurrentStepInUseCase('segment-selection');
+                    setStepMapping("simulation-use-case");
+                    setCurrentStepInUseCase("segment-selection");
                   }}
                 >
                   Start a new simulation
@@ -388,13 +466,13 @@ const AppContent: React.FC = () => {
 
   // If authenticated, show main app content
   return (
-    <Layout>
-      {stepMapping !== 'landing' && (
-        <div className="mb-8">
+    <Layout noContainer={true}>
+      {stepMapping !== "landing" && (
+        <div className="flex items-start gap-[30px] relative">
           <ProgressSteps steps={getProgressSteps()} />
+          {renderCurrentStep()}
         </div>
       )}
-      {renderCurrentStep()}
     </Layout>
   );
 };
@@ -403,14 +481,14 @@ const AppContent: React.FC = () => {
 const AuthRoute: React.FC = () => {
   const { isAuthenticated } = useAuth();
   const location = useLocation();
-  
+
   // If user is already authenticated, redirect to home or the previous location
   if (isAuthenticated) {
     const state = location.state as { from?: { pathname: string } };
-    const from = state?.from?.pathname || '/';
+    const from = state?.from?.pathname || "/";
     return <Navigate to={from} replace />;
   }
-  
+
   return <Auth onAuthSuccess={() => {}} />;
 };
 
@@ -418,53 +496,80 @@ const AuthRoute: React.FC = () => {
 const AppRoutes: React.FC = () => {
   return (
     <Routes>
-      <Route path="/" element={
-        <ProtectedRoute>
-          <AppContent />
-        </ProtectedRoute>
-      } />
-      <Route path="/build-audience" element={
-        <ProtectedRoute>
-          <AppContent />
-        </ProtectedRoute>
-      } />
-      <Route path="/simulate" element={
-        <ProtectedRoute>
-          <AppContent />
-        </ProtectedRoute>
-      } />
-      <Route path="/simulation-results/:simulationId" element={
-        <ProtectedRoute>
-          <SimulationResults />
-        </ProtectedRoute>
-      } />
-      <Route path="/analysis" element={
-        <ProtectedRoute>
-          <AnalysisPage />
-        </ProtectedRoute>
-      } />
-      <Route path="/analysis/:simulationId" element={
-        <ProtectedRoute>
-          <AnalysisPage />
-        </ProtectedRoute>
-      } />
-      <Route path="/chat" element={
-        <ProtectedRoute>
-          <ChatPage />
-        </ProtectedRoute>
-      } />
-      <Route path="/admin" element={
-        <ProtectedRoute>
-          <AdminPanel />
-        </ProtectedRoute>
-      } />
+      <Route
+        path="/"
+        element={
+          <ProtectedRoute>
+            <AppContent />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/build-audience"
+        element={
+          <ProtectedRoute>
+            <AppContent />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/simulate"
+        element={
+          <ProtectedRoute>
+            <AppContent />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/simulation-results/:simulationId"
+        element={
+          <ProtectedRoute>
+            <SimulationResults />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/analysis"
+        element={
+          <ProtectedRoute>
+            <AnalysisPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/analysis/:simulationId"
+        element={
+          <ProtectedRoute>
+            <AnalysisPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/chat"
+        element={
+          <ProtectedRoute>
+            <ChatPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin"
+        element={
+          <ProtectedRoute>
+            <AdminPanel />
+          </ProtectedRoute>
+        }
+      />
 
-<Route path="/chat-with-persona" element={
-        <ProtectedRoute>
-          <ChatWithPersona />
-        </ProtectedRoute>
-      } />
-  
+      <Route
+        path="/chat-with-persona"
+        element={
+          <ProtectedRoute>
+            <ChatWithPersona />
+          </ProtectedRoute>
+        }
+      />
+
       <Route path="/auth" element={<AuthRoute />} />
     </Routes>
   );
@@ -475,7 +580,7 @@ function App() {
   return (
     <AuthProvider>
       <AudienceProvider>
-        <Router >
+        <Router>
           <AppRoutes />
         </Router>
       </AudienceProvider>

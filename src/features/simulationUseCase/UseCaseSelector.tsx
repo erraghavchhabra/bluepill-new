@@ -1,5 +1,5 @@
 // filepath: c:\Users\Puneet Bajaj\Desktop\Ankit\ankitnewform\src\features\simulationUseCase\UseCaseSelector.tsx
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import {
   PenTool,
   TestTube,
@@ -8,36 +8,46 @@ import {
   Share2,
   Target,
   ArrowLeft,
-  SearchCheck
-} from 'lucide-react';
-import StepContainer from '../../components/StepContainer';
-import SimulationCard from '../../components/SimulationCard';
-import Button from '../../components/Button';
-import ContentCreationForm from './useCaseForms/ContentCreationForm';
-import ContentTestingForm from './useCaseForms/ContentTestingForm';
-import InsightsForm from './useCaseForms/InsightsForm';
-import PricingForm from './useCaseForms/PricingForm';
-import ChannelStrategyForm from './useCaseForms/ABTestCreatives';
-import ABTestCreativesFormGemini from './useCaseForms/ABTestCreativesGemini';
+  SearchCheck,
+} from "lucide-react";
+import StepContainer from "../../components/StepContainer";
+import SimulationCard from "../../components/SimulationCard";
+import Button from "../../components/Button";
+import ContentCreationForm from "./useCaseForms/ContentCreationForm";
+import ContentTestingForm from "./useCaseForms/ContentTestingForm";
+import InsightsForm from "./useCaseForms/InsightsForm";
+import PricingForm from "./useCaseForms/PricingForm";
+import ChannelStrategyForm from "./useCaseForms/ABTestCreatives";
+import ABTestCreativesFormGemini from "./useCaseForms/ABTestCreativesGemini";
 // import PackagingReviewGemini from './useCaseForms/PackagingReviewGemini';
-import ABTestCreativePackagingForm from './useCaseForms/ABTestCreativePackaging';
-import AttributionForm from './useCaseForms/AttributionForm';
-import BuyerInsightsForm from './useCaseForms/BuyerInsightsForm';
-import SurveyAndFocusGroups from './useCaseForms/SurveyAndFocusGroups';
-import TestUseCase from './useCaseForms/TestUseCase';
-import LongContentCreationForm from './useCaseForms/LongContentCreationForm';
-import SimulationResults from '../simulationResults/SimulationResults';
-import SegmentsSelector from './SegmentsSelector';
-import SegmentsSelectorGrove from './SegmentsSelectorGrove';
-import SegmentsSelectorYoga from './SegmentsSelectorYoga';
-import SegmentsSelectorCoreStack from './SegmentsSelectorCoreStack';
-import SegmentsSelectorSolidigm from './SegmentsSelectorSolidigm';
-import SegmentsSelectorKettleAndFire from './SegmentsSelectorKettleAndFire';
-import SegmentsSelectorLoverery from './SegmentsSelectorLoverery';
-import { useAudience } from '../../context/AudienceContext';
-import SimulationHistoryPanel from '../../components/SimulationHistoryPanel';
-import { useNavigate } from 'react-router-dom';
-import CreateCampaignStratergy from './useCaseForms/CreateCampaignStratergy';
+import ABTestCreativePackagingForm from "./useCaseForms/ABTestCreativePackaging";
+import AttributionForm from "./useCaseForms/AttributionForm";
+import BuyerInsightsForm from "./useCaseForms/BuyerInsightsForm";
+import SurveyAndFocusGroups from "./useCaseForms/SurveyAndFocusGroups";
+import TestUseCase from "./useCaseForms/TestUseCase";
+import LongContentCreationForm from "./useCaseForms/LongContentCreationForm";
+import SimulationResults from "../simulationResults/SimulationResults";
+import SegmentsSelector from "./SegmentsSelector";
+import SegmentsSelectorGrove from "./SegmentsSelectorGrove";
+import SegmentsSelectorYoga from "./SegmentsSelectorYoga";
+import SegmentsSelectorCoreStack from "./SegmentsSelectorCoreStack";
+import SegmentsSelectorSolidigm from "./SegmentsSelectorSolidigm";
+import SegmentsSelectorKettleAndFire from "./SegmentsSelectorKettleAndFire";
+import SegmentsSelectorLoverery from "./SegmentsSelectorLoverery";
+import { useAudience } from "../../context/AudienceContext";
+import SimulationHistoryPanel from "../../components/SimulationHistoryPanel";
+import { useNavigate } from "react-router-dom";
+import CreateCampaignStratergy from "./useCaseForms/CreateCampaignStratergy";
+import {
+  AdsIcon,
+  CampaignConceptsIcon,
+  InsightsReportIcon,
+  MessagingIcon,
+  PackagingIcon,
+  PenToolIcon,
+  SurveyIcon,
+  TestUseCaseIcon,
+} from "@/icons/simulatePageIcons";
 
 // Interface to track persona filters within each segment
 export interface SegmentPersonaFilters {
@@ -48,22 +58,26 @@ export interface SegmentPersonaFilters {
 }
 
 export type UseCaseType =
-  | 'create-content'
-  | 'content-testing'
-  | 'get-insights'
-  | 'pricing-analysis'
-  | 'channel-strategy'
-  | 'ab-test-creatives-gemini'
-  | 'packaging-review-gemini'
-  | 'attribution'
-  | 'buyer-insights-report'
-  | 'survey-and-focus-groups'
-  | 'create-campaign-strategy'
-  | 'test-use-case'
+  | "create-content"
+  | "content-testing"
+  | "get-insights"
+  | "pricing-analysis"
+  | "channel-strategy"
+  | "ab-test-creatives-gemini"
+  | "packaging-review-gemini"
+  | "attribution"
+  | "buyer-insights-report"
+  | "survey-and-focus-groups"
+  | "create-campaign-strategy"
+  | "test-use-case"
   | null;
 
 // Define the possible steps in the flow
-type FlowStep = 'segment-selection' | 'use-case-selection' | 'form-filling' | 'results-view';
+type FlowStep =
+  | "segment-selection"
+  | "use-case-selection"
+  | "form-filling"
+  | "results-view";
 
 interface UseCaseSelectorProps {
   onComplete: (simulationId: number) => void; // Modified to pass the simulationId
@@ -87,10 +101,10 @@ const UseCaseSelector: React.FC<UseCaseSelectorProps> = ({
   onFormDataChange,
 }) => {
   const { audienceData, updateAudienceData } = useAudience();
-  const navigate = useNavigate();  // Define which use cases are "coming soon"
+  const navigate = useNavigate(); // Define which use cases are "coming soon"
   const COMING_SOON_USE_CASES: UseCaseType[] = [
     // 'get-insights',
-    // 'pricing-analysis', 
+    // 'pricing-analysis',
     // 'attribution',
     // 'channel-strategy'
   ];
@@ -98,10 +112,11 @@ const UseCaseSelector: React.FC<UseCaseSelectorProps> = ({
   const useCases = [
     // Available use cases
     {
-      type: 'create-content' as UseCaseType,
-      icon: <PenTool className="w-5 h-5" />,
-      title: 'Create Content',
-      description: 'Generate content, messages, ads, emails and more tailored to your audience',
+      type: "create-content" as UseCaseType,
+      icon: <PenToolIcon />,
+      title: "Create Content",
+      description:
+        "Generate content, messages, ads, emails and more tailored to your audience",
     },
     // {
     //   type: 'content-testing' as UseCaseType,
@@ -110,10 +125,11 @@ const UseCaseSelector: React.FC<UseCaseSelectorProps> = ({
     //   description: 'Run A/B or multivariate tests on any content, creatives and more',
     // },
     {
-      type: 'channel-strategy' as UseCaseType,
-      icon: <Share2 className="w-5 h-5" />,
-      title: 'A/B Test Creatives, Ads ',
-      description: 'Discover the best way to reach this audience with detailed  execution plan',
+      type: "channel-strategy" as UseCaseType,
+      icon: <AdsIcon />,
+      title: "A/B Test Creatives, Ads ",
+      description:
+        "Discover the best way to reach this audience with detailed  execution plan",
     },
     // {
     //   type: 'ab-test-creatives-gemini' as UseCaseType,
@@ -122,16 +138,16 @@ const UseCaseSelector: React.FC<UseCaseSelectorProps> = ({
     //   description: 'Discover the best way to reach this audience with detailed  execution plan'
     // },
     {
-      type: 'packaging-review-gemini' as UseCaseType,
-      icon: <Share2 className="w-5 h-5" />,
-      title: 'Packaging Review',
-      description: 'Review and optimize your packaging design',
+      type: "packaging-review-gemini" as UseCaseType,
+      icon: <PackagingIcon />,
+      title: "Packaging Review",
+      description: "Review and optimize your packaging design",
     },
     {
-      type: 'buyer-insights-report' as UseCaseType,
-      icon: <SearchCheck className="w-5 h-5" />,
-      title: 'Customer Insights Report',
-      description: 'Generate a detailed report on customer insights',
+      type: "buyer-insights-report" as UseCaseType,
+      icon: <InsightsReportIcon />,
+      title: "Customer Insights Report",
+      description: "Generate a detailed report on customer insights",
     },
 
     // // Coming soon use cases - placed at the end
@@ -148,34 +164,34 @@ const UseCaseSelector: React.FC<UseCaseSelectorProps> = ({
     //   description: 'Test how price points perform across different segments',
     // },
     {
-      type: 'attribution' as UseCaseType,
-      icon: <Target className="w-5 h-5" />,
-      title: 'AB Test Messaging',
-      description: 'Learn what drives or blocks conversions',
+      type: "attribution" as UseCaseType,
+      icon: <MessagingIcon />,
+      title: "AB Test Messaging",
+      description: "Learn what drives or blocks conversions",
     },
     {
-      type: 'survey-and-focus-groups' as UseCaseType,
-      icon: <SearchCheck className="w-5 h-5" />,
-      title: 'Survey',
-      description: 'Simulate a survey or focus group to get insights',
+      type: "survey-and-focus-groups" as UseCaseType,
+      icon: <SurveyIcon />,
+      title: "Survey",
+      description: "Simulate a survey or focus group to get insights",
     },
     {
-      type: 'create-campaign-strategy' as UseCaseType,
-      icon: <SearchCheck className="w-5 h-5" />,
-      title: 'Create Campaign Concepts',
-      description: 'Create a campaign concept',
+      type: "create-campaign-strategy" as UseCaseType,
+      icon: <CampaignConceptsIcon />,
+      title: "Create Campaign Concepts",
+      description: "Create a campaign concept",
     },
     {
-      type: 'test-use-case' as UseCaseType,
-      icon: <SearchCheck className="w-5 h-5" />,
-      title: 'Test Use Case',
-      description: 'Simulate a test to get insights',
+      type: "test-use-case" as UseCaseType,
+      icon: <TestUseCaseIcon />,
+      title: "Test Use Case",
+      description: "Simulate a test to get insights",
     },
   ];
 
   // Initialize with provided step or default to segment selection
   const [localCurrentStep, setLocalCurrentStep] = useState<FlowStep>(
-    providedStep || 'segment-selection'
+    providedStep || "segment-selection"
   );
 
   // Use either the provided step from props or our local state
@@ -185,24 +201,28 @@ const UseCaseSelector: React.FC<UseCaseSelectorProps> = ({
   const getInitialUseCase = (): UseCaseType => {
     if (!audienceData.selectedUseCase) return null;
 
-    const matchingUseCase = useCases.find(uc =>
-      uc.title.toLowerCase() === audienceData.selectedUseCase?.toLowerCase()
+    const matchingUseCase = useCases.find(
+      (uc) =>
+        uc.title.toLowerCase() === audienceData.selectedUseCase?.toLowerCase()
     );
 
     return matchingUseCase?.type || null;
   };
 
   // Initialize from context if available, or use previously saved values
-  const [selectedUseCase, setSelectedUseCase] = useState<UseCaseType>(getInitialUseCase());
+  const [selectedUseCase, setSelectedUseCase] = useState<UseCaseType>(
+    getInitialUseCase()
+  );
   const [selectedSegments, setSelectedSegments] = useState<number[]>(
     audienceData.selectedSegments || []
   );
-  const [personaFilters, setPersonaFilters] = useState<Record<number, SegmentPersonaFilters>>(
-    audienceData.personaFilters || {}
-  );
+  const [personaFilters, setPersonaFilters] = useState<
+    Record<number, SegmentPersonaFilters>
+  >(audienceData.personaFilters || {});
   const [simulationId, setSimulationId] = useState<number | null>(null);
   const [isHistoryPanelOpen, setIsHistoryPanelOpen] = useState(false);
-  const [localHasEditedStep, setLocalHasEditedStep] = useState<boolean>(hasEditedStep);
+  const [localHasEditedStep, setLocalHasEditedStep] =
+    useState<boolean>(hasEditedStep);
 
   // Store form data between steps
   const [formState, setFormState] = useState<Record<string, any>>({});
@@ -222,10 +242,14 @@ const UseCaseSelector: React.FC<UseCaseSelectorProps> = ({
 
   // Update local step and notify parent component
   const setCurrentStep = (step: FlowStep) => {
-
     // Check if we're trying to move forward while having edited
     if (localHasEditedStep) {
-      const stepOrder: FlowStep[] = ['segment-selection', 'use-case-selection', 'form-filling', 'results-view'];
+      const stepOrder: FlowStep[] = [
+        "segment-selection",
+        "use-case-selection",
+        "form-filling",
+        "results-view",
+      ];
       const currentStepIndex = stepOrder.indexOf(currentStep);
       const targetStepIndex = stepOrder.indexOf(step);
 
@@ -236,8 +260,14 @@ const UseCaseSelector: React.FC<UseCaseSelectorProps> = ({
     }
 
     // Check if we're moving backward - if so, allow it regardless of edit state
-    const stepOrder: FlowStep[] = ['segment-selection', 'use-case-selection', 'form-filling', 'results-view'];
-    const isMovingBackward = stepOrder.indexOf(step) < stepOrder.indexOf(currentStep);
+    const stepOrder: FlowStep[] = [
+      "segment-selection",
+      "use-case-selection",
+      "form-filling",
+      "results-view",
+    ];
+    const isMovingBackward =
+      stepOrder.indexOf(step) < stepOrder.indexOf(currentStep);
 
     if (isMovingBackward) {
       // If moving backward, reset local edit state for that step
@@ -245,9 +275,15 @@ const UseCaseSelector: React.FC<UseCaseSelectorProps> = ({
     }
 
     // When changing steps, update the selected use case if appropriate
-    if (step === 'form-filling' && !selectedUseCase && audienceData.selectedUseCase) {
+    if (
+      step === "form-filling" &&
+      !selectedUseCase &&
+      audienceData.selectedUseCase
+    ) {
       // Find the use case type from its title
-      const matchingUseCase = useCases.find(uc => uc.title === audienceData.selectedUseCase);
+      const matchingUseCase = useCases.find(
+        (uc) => uc.title === audienceData.selectedUseCase
+      );
       if (matchingUseCase) {
         setSelectedUseCase(matchingUseCase.type);
       }
@@ -260,10 +296,13 @@ const UseCaseSelector: React.FC<UseCaseSelectorProps> = ({
   };
 
   // Store form data to persist across navigation
-  const updateFormState = (formType: UseCaseType, data: Record<string, any>) => {
-    setFormState(prev => ({
+  const updateFormState = (
+    formType: UseCaseType,
+    data: Record<string, any>
+  ) => {
+    setFormState((prev) => ({
       ...prev,
-      [formType as string]: data
+      [formType as string]: data,
     }));
 
     // Also notify the parent component
@@ -287,35 +326,37 @@ const UseCaseSelector: React.FC<UseCaseSelectorProps> = ({
   };
 
   // Handle segment selection
-  const handleSegmentSelect = (segments: number[], filters: Record<number, SegmentPersonaFilters>) => {
-
+  const handleSegmentSelect = (
+    segments: number[],
+    filters: Record<number, SegmentPersonaFilters>
+  ) => {
     setSelectedSegments(segments);
     setPersonaFilters(filters);
 
     // Update audience context
     updateAudienceData({
       selectedSegments: segments,
-      personaFilters: filters
+      personaFilters: filters,
     });
 
     // Move to use case selection step using both local state and parent notification
 
     // Update local state
-    setLocalCurrentStep('use-case-selection');
+    setLocalCurrentStep("use-case-selection");
 
     // Also directly notify parent about step change
     if (onStepChange) {
-      onStepChange('use-case-selection');
+      onStepChange("use-case-selection");
     }
   };
 
   // Handle form submission with simulation ID
   const handleFormSubmit = (simId: number) => {
     setSimulationId(simId);
-    setCurrentStep('results-view');
-    // When navigating to results view, tell the parent we're moving forward normally 
+    setCurrentStep("results-view");
+    // When navigating to results view, tell the parent we're moving forward normally
     if (onStepChange) {
-      onStepChange('results-view');
+      onStepChange("results-view");
     }
     // Pass the simulation ID to the parent
     onComplete(simId);
@@ -328,7 +369,7 @@ const UseCaseSelector: React.FC<UseCaseSelectorProps> = ({
       onEditStep();
       setLocalHasEditedStep(true);
     }
-  };  // Handle use case selection
+  }; // Handle use case selection
   const handleUseCaseSelect = (useCase: UseCaseType) => {
     // Check if this is one of the "coming soon" use cases
     const isComingSoon = COMING_SOON_USE_CASES.includes(useCase);
@@ -342,24 +383,25 @@ const UseCaseSelector: React.FC<UseCaseSelectorProps> = ({
 
     // Update context with selected use case
     if (useCase) {
-      const useCaseTitle = useCases.find(uc => uc.type === useCase)?.title || '';
+      const useCaseTitle =
+        useCases.find((uc) => uc.type === useCase)?.title || "";
       updateAudienceData({ selectedUseCase: useCaseTitle });
     }
 
     // Move to form filling step
-    setCurrentStep('form-filling');
+    setCurrentStep("form-filling");
   };
 
   // Handle navigation back from use case to segments
   const handleBackFromUseCase = () => {
-    setCurrentStep('segment-selection');
+    setCurrentStep("segment-selection");
     // Reset edit flag when going back
     setLocalHasEditedStep(false);
   };
 
   // Handle navigation back from form to use case selection
   const handleBackFromForm = () => {
-    setCurrentStep('use-case-selection');
+    setCurrentStep("use-case-selection");
     // Reset edit flag when going back
     setLocalHasEditedStep(false);
   };
@@ -383,7 +425,7 @@ const UseCaseSelector: React.FC<UseCaseSelectorProps> = ({
     // Check if the selected use case is a "coming soon" use case
     if (selectedUseCase && COMING_SOON_USE_CASES.includes(selectedUseCase)) {
       // Go back to use case selection if somehow a coming soon use case was selected
-      setCurrentStep('use-case-selection');
+      setCurrentStep("use-case-selection");
       return null;
     }
 
@@ -391,9 +433,9 @@ const UseCaseSelector: React.FC<UseCaseSelectorProps> = ({
     const savedFormData = formState[selectedUseCase as string] || {};
 
     switch (selectedUseCase) {
-      case 'create-content':
+      case "create-content":
         return (
-          <div className="mx-auto w-[80vw] max-w-4xl">
+          <div className="w-full">
             {renderEditWarningMessage()}
             <ContentCreationForm
               onSubmit={handleFormSubmit}
@@ -402,11 +444,13 @@ const UseCaseSelector: React.FC<UseCaseSelectorProps> = ({
               onBack={handleBackFromForm}
               onEditStep={handleFormEdit}
               initialFormData={savedFormData}
-              onFormDataChange={(data) => updateFormState('create-content', data)}
+              onFormDataChange={(data) =>
+                updateFormState("create-content", data)
+              }
             />
           </div>
         );
-      case 'content-testing':
+      case "content-testing":
         return (
           <div className="mx-auto w-[80vw] max-w-4xl">
             {renderEditWarningMessage()}
@@ -417,11 +461,13 @@ const UseCaseSelector: React.FC<UseCaseSelectorProps> = ({
               onBack={handleBackFromForm}
               onEditStep={handleFormEdit}
               initialFormData={savedFormData}
-              onFormDataChange={(data) => updateFormState('content-testing', data)}
+              onFormDataChange={(data) =>
+                updateFormState("content-testing", data)
+              }
             />
           </div>
         );
-      case 'get-insights':
+      case "get-insights":
         return (
           <div className="mx-auto w-[80vw] max-w-4xl">
             {renderEditWarningMessage()}
@@ -432,11 +478,11 @@ const UseCaseSelector: React.FC<UseCaseSelectorProps> = ({
               onBack={handleBackFromForm}
               onEditStep={handleFormEdit}
               initialFormData={savedFormData}
-              onFormDataChange={(data) => updateFormState('get-insights', data)}
+              onFormDataChange={(data) => updateFormState("get-insights", data)}
             />
           </div>
         );
-      case 'pricing-analysis':
+      case "pricing-analysis":
         return (
           <div className="mx-auto w-[80vw] max-w-4xl">
             {renderEditWarningMessage()}
@@ -447,11 +493,13 @@ const UseCaseSelector: React.FC<UseCaseSelectorProps> = ({
               onBack={handleBackFromForm}
               onEditStep={handleFormEdit}
               initialFormData={savedFormData}
-              onFormDataChange={(data) => updateFormState('pricing-analysis', data)}
+              onFormDataChange={(data) =>
+                updateFormState("pricing-analysis", data)
+              }
             />
           </div>
         );
-      case 'channel-strategy':
+      case "channel-strategy":
         return (
           <div className="mx-auto w-[80vw] max-w-4xl">
             {renderEditWarningMessage()}
@@ -462,11 +510,13 @@ const UseCaseSelector: React.FC<UseCaseSelectorProps> = ({
               onBack={handleBackFromForm}
               onEditStep={handleFormEdit}
               initialFormData={savedFormData}
-              onFormDataChange={(data) => updateFormState('channel-strategy', data)}
+              onFormDataChange={(data) =>
+                updateFormState("channel-strategy", data)
+              }
             />
           </div>
         );
-      case 'ab-test-creatives-gemini':
+      case "ab-test-creatives-gemini":
         return (
           <div className="mx-auto w-[80vw] max-w-4xl">
             {renderEditWarningMessage()}
@@ -477,11 +527,13 @@ const UseCaseSelector: React.FC<UseCaseSelectorProps> = ({
               onBack={handleBackFromForm}
               onEditStep={handleFormEdit}
               initialFormData={savedFormData}
-              onFormDataChange={(data) => updateFormState('ab-test-creatives-gemini', data)}
+              onFormDataChange={(data) =>
+                updateFormState("ab-test-creatives-gemini", data)
+              }
             />
           </div>
         );
-      case 'packaging-review-gemini':
+      case "packaging-review-gemini":
         return (
           <div className="mx-auto w-[80vw] max-w-4xl">
             {renderEditWarningMessage()}
@@ -492,11 +544,13 @@ const UseCaseSelector: React.FC<UseCaseSelectorProps> = ({
               onBack={handleBackFromForm}
               onEditStep={handleFormEdit}
               initialFormData={savedFormData}
-              onFormDataChange={(data) => updateFormState('packaging-review-gemini', data)}
+              onFormDataChange={(data) =>
+                updateFormState("packaging-review-gemini", data)
+              }
             />
           </div>
         );
-      case 'attribution':
+      case "attribution":
         return (
           <div className="mx-auto w-[80vw] max-w-4xl">
             {renderEditWarningMessage()}
@@ -507,11 +561,11 @@ const UseCaseSelector: React.FC<UseCaseSelectorProps> = ({
               onBack={handleBackFromForm}
               onEditStep={handleFormEdit}
               initialFormData={savedFormData}
-              onFormDataChange={(data) => updateFormState('attribution', data)}
+              onFormDataChange={(data) => updateFormState("attribution", data)}
             />
           </div>
         );
-      case 'buyer-insights-report':
+      case "buyer-insights-report":
         return (
           <div className="mx-auto w-[80vw] max-w-4xl">
             {renderEditWarningMessage()}
@@ -522,11 +576,13 @@ const UseCaseSelector: React.FC<UseCaseSelectorProps> = ({
               onBack={handleBackFromForm}
               onEditStep={handleFormEdit}
               initialFormData={savedFormData}
-              onFormDataChange={(data) => updateFormState('buyer-insights-report', data)}
+              onFormDataChange={(data) =>
+                updateFormState("buyer-insights-report", data)
+              }
             />
           </div>
         );
-      case 'survey-and-focus-groups':
+      case "survey-and-focus-groups":
         return (
           <div className="mx-auto w-[80vw] max-w-4xl">
             {renderEditWarningMessage()}
@@ -537,26 +593,30 @@ const UseCaseSelector: React.FC<UseCaseSelectorProps> = ({
               onBack={handleBackFromForm}
               onEditStep={handleFormEdit}
               initialFormData={savedFormData}
-              onFormDataChange={(data) => updateFormState('survey-and-focus-groups', data)}
+              onFormDataChange={(data) =>
+                updateFormState("survey-and-focus-groups", data)
+              }
             />
           </div>
         );
-      case 'create-campaign-strategy':
+      case "create-campaign-strategy":
         return (
           <div className="mx-auto w-[80vw] max-w-4xl">
             {renderEditWarningMessage()}
             <CreateCampaignStratergy
-              onSubmit={handleFormSubmit} 
+              onSubmit={handleFormSubmit}
               selectedSegmentIds={selectedSegments}
               personaFilters={personaFilters}
               onBack={handleBackFromForm}
               onEditStep={handleFormEdit}
               initialFormData={savedFormData}
-              onFormDataChange={(data) => updateFormState('create-campaign-strategy', data)}
+              onFormDataChange={(data) =>
+                updateFormState("create-campaign-strategy", data)
+              }
             />
           </div>
         );
-      case 'test-use-case':
+      case "test-use-case":
         return (
           <div className="mx-auto w-[80vw] max-w-4xl">
             {renderEditWarningMessage()}
@@ -567,7 +627,9 @@ const UseCaseSelector: React.FC<UseCaseSelectorProps> = ({
               onBack={handleBackFromForm}
               onEditStep={handleFormEdit}
               initialFormData={savedFormData}
-              onFormDataChange={(data) => updateFormState('test-use-case', data)}
+              onFormDataChange={(data) =>
+                updateFormState("test-use-case", data)
+              }
             />
           </div>
         );
@@ -579,12 +641,15 @@ const UseCaseSelector: React.FC<UseCaseSelectorProps> = ({
 
   // Render the appropriate step component
   const renderStep = () => {
-
     switch (currentStep) {
-      case 'segment-selection':
+      case "segment-selection":
         console.log(audienceData.audienceName);
         // Conditionally render the Grove-specific segment selector if audience name contains "grove"
-        if (audienceData.audienceName && (audienceData.audienceName.toLowerCase().includes('grove') || audienceData.audienceName.toLowerCase().includes('nrc'))) {
+        if (
+          audienceData.audienceName &&
+          (audienceData.audienceName.toLowerCase().includes("grove") ||
+            audienceData.audienceName.toLowerCase().includes("nrc"))
+        ) {
           return (
             <SegmentsSelectorGrove
               audienceId={audienceId}
@@ -593,10 +658,11 @@ const UseCaseSelector: React.FC<UseCaseSelectorProps> = ({
               onEditStep={handleFormEdit}
             />
           );
-        }
-
-        else if (audienceData.audienceName && audienceData.audienceName.toLowerCase().includes('yoga')) {
-          console.log('yoga');
+        } else if (
+          audienceData.audienceName &&
+          audienceData.audienceName.toLowerCase().includes("yoga")
+        ) {
+          console.log("yoga");
           return (
             <SegmentsSelectorYoga
               audienceId={audienceId}
@@ -605,8 +671,10 @@ const UseCaseSelector: React.FC<UseCaseSelectorProps> = ({
               onEditStep={handleFormEdit}
             />
           );
-        }
-        else if (audienceData.audienceName && audienceData.audienceName.toLowerCase().includes('kettle & fire')) {
+        } else if (
+          audienceData.audienceName &&
+          audienceData.audienceName.toLowerCase().includes("kettle & fire")
+        ) {
           return (
             <SegmentsSelectorKettleAndFire
               audienceId={audienceId}
@@ -615,8 +683,10 @@ const UseCaseSelector: React.FC<UseCaseSelectorProps> = ({
               onEditStep={handleFormEdit}
             />
           );
-        }
-        else if (audienceData.audienceName && audienceData.audienceName.toLowerCase().includes('lovevery')) {
+        } else if (
+          audienceData.audienceName &&
+          audienceData.audienceName.toLowerCase().includes("lovevery")
+        ) {
           return (
             <SegmentsSelectorLoverery
               audienceId={audienceId}
@@ -625,8 +695,10 @@ const UseCaseSelector: React.FC<UseCaseSelectorProps> = ({
               onEditStep={handleFormEdit}
             />
           );
-        }
-        else if (audienceData.audienceName && audienceData.audienceName.toLowerCase().includes('core')) {
+        } else if (
+          audienceData.audienceName &&
+          audienceData.audienceName.toLowerCase().includes("core")
+        ) {
           return (
             <SegmentsSelectorCoreStack
               audienceId={audienceId}
@@ -635,8 +707,10 @@ const UseCaseSelector: React.FC<UseCaseSelectorProps> = ({
               onEditStep={handleFormEdit}
             />
           );
-        }
-        else if (audienceData.audienceName && audienceData.audienceName.toLowerCase().includes('solidigm')) {
+        } else if (
+          audienceData.audienceName &&
+          audienceData.audienceName.toLowerCase().includes("solidigm")
+        ) {
           return (
             <SegmentsSelectorSolidigm
               audienceId={audienceId}
@@ -645,9 +719,7 @@ const UseCaseSelector: React.FC<UseCaseSelectorProps> = ({
               onEditStep={handleFormEdit}
             />
           );
-        }
-        
-        else {
+        } else {
           return (
             <SegmentsSelector
               audienceId={audienceId}
@@ -657,7 +729,7 @@ const UseCaseSelector: React.FC<UseCaseSelectorProps> = ({
             />
           );
         }
-      case 'results-view':
+      case "results-view":
         return (
           <div className="w-full">
             {simulationId && (
@@ -666,48 +738,49 @@ const UseCaseSelector: React.FC<UseCaseSelectorProps> = ({
                   <Button
                     variant="ghost"
                     size="sm"
-                    onClick={() => setCurrentStep('form-filling')}
+                    onClick={() => setCurrentStep("form-filling")}
                     icon={<ArrowLeft className="w-4 h-4 mr-1" />}
                   >
                     Back to form
                   </Button>
                 </div>
-                <SimulationResults simulationId={simulationId} embedded={true} />
+                <SimulationResults
+                  simulationId={simulationId}
+                  embedded={true}
+                />
               </div>
             )}
           </div>
         );
-      case 'use-case-selection':
+      case "use-case-selection":
         return (
-          <StepContainer
-            title="What would you like to do today?"
-            subtitle={`Pick a use case to get started with ${audienceData.audienceName || 'your selected audience'}.`}
-            className="animate-fadeIn"
-          >
+          <div className="w-full bg-gray_light rounded-tl-[30px] p-[30px] relative">
+            <div>
+              <h3 className="text-[28px] font-semibold text-black mb-3">
+                Select Audience Segments (Kettle & Fire)
+              </h3>
+              <p className="text-xs font-normal text-[#595E64]">
+                Choose which segments of Kettle & Fire - v3 to include
+              </p>
+            </div>
             {renderEditWarningMessage()}
-            <div className="mb-6">
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={handleBackFromUseCase}
-                icon={<ArrowLeft className="w-4 h-4 mr-1" />}
-              >
-                Back to segment selection
-              </Button>
-            </div>            <div className="grid md:grid-cols-2 gap-4">
+
+            <div className="grid md:grid-cols-3 gap-5 mt-[30px] items-center justify-center">
               {useCases
                 .sort((a, b) => {
                   // Sort "coming soon" use cases to the end
                   const aIsComingSoon = COMING_SOON_USE_CASES.includes(a.type);
                   const bIsComingSoon = COMING_SOON_USE_CASES.includes(b.type);
 
-                  if (aIsComingSoon && !bIsComingSoon) return 1;  // a comes after b
+                  if (aIsComingSoon && !bIsComingSoon) return 1; // a comes after b
                   if (!aIsComingSoon && bIsComingSoon) return -1; // a comes before b
                   return 0; // maintain original order
                 })
                 .map((useCase) => {
                   // Check if this is one of the "coming soon" use cases
-                  const isComingSoon = COMING_SOON_USE_CASES.includes(useCase.type);
+                  const isComingSoon = COMING_SOON_USE_CASES.includes(
+                    useCase.type
+                  );
 
                   return (
                     <SimulationCard
@@ -717,14 +790,24 @@ const UseCaseSelector: React.FC<UseCaseSelectorProps> = ({
                       description={useCase.description}
                       disabled={isComingSoon}
                       comingSoon={isComingSoon}
-                      onClick={() => !isComingSoon && handleUseCaseSelect(useCase.type)}
+                      onClick={() =>
+                        !isComingSoon && handleUseCaseSelect(useCase.type)
+                      }
                     />
                   );
                 })}
             </div>
-          </StepContainer>
+            <div className="mt-[51px]">
+              <button
+                onClick={handleBackFromUseCase}
+                className="text-white bg-black p-[14px_30px] text-base font-semibold rounded-full"
+              >
+                Back
+              </button>
+            </div>
+          </div>
         );
-      case 'form-filling':
+      case "form-filling":
         return renderUseCaseForm();
       default:
         return null;
