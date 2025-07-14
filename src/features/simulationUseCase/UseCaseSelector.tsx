@@ -757,10 +757,10 @@ const UseCaseSelector: React.FC<UseCaseSelectorProps> = ({
           <div className="w-full bg-gray_light rounded-tl-[30px] p-[30px] relative">
             <div>
               <h3 className="text-[28px] font-semibold text-black mb-3">
-                Select Audience Segments (Kettle & Fire)
+                What would you like to do today?
               </h3>
               <p className="text-xs font-normal text-[#595E64]">
-                Choose which segments of Kettle & Fire - v3 to include
+                Pick a use case to get started with Kettle & Fire - v3.
               </p>
             </div>
             {renderEditWarningMessage()}
