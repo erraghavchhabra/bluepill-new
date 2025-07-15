@@ -73,6 +73,8 @@ import {
   PurchasingHabitsIcon,
   RightUniqueArrowIcon,
   SalesMarketingHooksIcon,
+  SegmentNameIcon,
+  SubsegmentIcon,
   TrustedSourcesIcon,
   ValueDriversIcon,
 } from "@/icons/Other.js";
@@ -2384,7 +2386,7 @@ const SegmentsSelectorKettleAndFire: React.FC<SegmentsSelectorProps> = ({
                                   <div className="p-4 border-2 border-[#ECECEC] bg-gradient-to-b from-[#E6FCFA] to-[#FEFEFE] rounded-2xl drop-shadow-md">
                                     <div className="flex items-start gap-3">
                                       <div className="text-primary2 pr-3 border-r border-[#DBDDE0]">
-                                        <LifeStageIcon />
+                                        <SegmentNameIcon />
                                       </div>
                                       <div className="flex items-start flex-col justify-between w-full gap-2">
                                         <h3 className="text-black text-start font-medium text-sm ">
@@ -2401,7 +2403,7 @@ const SegmentsSelectorKettleAndFire: React.FC<SegmentsSelectorProps> = ({
                                   <div className="p-4 border-2 border-[#ECECEC] bg-gradient-to-b from-[#E6FCFA] to-[#FEFEFE] rounded-2xl drop-shadow-md">
                                     <div className="flex items-start gap-3">
                                       <div className="text-primary2 pr-3 border-r border-[#DBDDE0]">
-                                        <PersonaSegmentIcon />
+                                        <SubsegmentIcon />
                                       </div>
                                       <div className="flex items-start flex-col justify-between w-full gap-2">
                                         <h3 className="text-black text-start font-medium text-sm ">

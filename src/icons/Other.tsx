@@ -484,3 +484,104 @@ export const ValueDriversIcon = () => (
     />
   </svg>
 );
+export const SubsegmentIcon = () => (
+  <svg
+    width="24"
+    height="25"
+    viewBox="0 0 24 25"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M7 8.5H4C2.9 8.5 2 7.6 2 6.5V4.5C2 3.4 2.9 2.5 4 2.5H7C8.1 2.5 9 3.4 9 4.5V6.5C9 7.6 8.1 8.5 7 8.5Z"
+      stroke="#028B7E"
+      stroke-width="1.5"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+    <path
+      d="M20.8 7.5H17.2C16.54 7.5 16 6.95999 16 6.29999V4.70001C16 4.04001 16.54 3.5 17.2 3.5H20.8C21.46 3.5 22 4.04001 22 4.70001V6.29999C22 6.95999 21.46 7.5 20.8 7.5Z"
+      stroke="#028B7E"
+      stroke-width="1.5"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+    <path
+      d="M20.8 15H17.2C16.54 15 16 14.46 16 13.8V12.2C16 11.54 16.54 11 17.2 11H20.8C21.46 11 22 11.54 22 12.2V13.8C22 14.46 21.46 15 20.8 15Z"
+      stroke="#028B7E"
+      stroke-width="1.5"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+    <path
+      d="M9 5.5H16"
+      stroke="#028B7E"
+      stroke-width="1.5"
+      stroke-miterlimit="10"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+    <path d="M12.5 5.5V18.5C12.5 19.6 13.4 20.5 14.5 20.5H16" fill="white" />
+    <path
+      d="M12.5 5.5V18.5C12.5 19.6 13.4 20.5 14.5 20.5H16"
+      stroke="#028B7E"
+      stroke-width="1.5"
+      stroke-miterlimit="10"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+    <path
+      d="M12.5 13H16"
+      stroke="#028B7E"
+      stroke-width="1.5"
+      stroke-miterlimit="10"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+    <path
+      d="M20.8 22.5H17.2C16.54 22.5 16 21.96 16 21.3V19.7C16 19.04 16.54 18.5 17.2 18.5H20.8C21.46 18.5 22 19.04 22 19.7V21.3C22 21.96 21.46 22.5 20.8 22.5Z"
+      stroke="#028B7E"
+      stroke-width="1.5"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+  </svg>
+);
+export const SegmentNameIcon = () => (
+  <svg
+    width="24"
+    height="25"
+    viewBox="0 0 24 25"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M5 8.5C6.65685 8.5 8 7.15685 8 5.5C8 3.84315 6.65685 2.5 5 2.5C3.34315 2.5 2 3.84315 2 5.5C2 7.15685 3.34315 8.5 5 8.5Z"
+      stroke="#028B7E"
+      stroke-width="1.5"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+    <path
+      d="M19 15.5C20.6569 15.5 22 14.1569 22 12.5C22 10.8431 20.6569 9.5 19 9.5C17.3431 9.5 16 10.8431 16 12.5C16 14.1569 17.3431 15.5 19 15.5Z"
+      stroke="#028B7E"
+      stroke-width="1.5"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+    <path
+      d="M5 22.5C6.65685 22.5 8 21.1569 8 19.5C8 17.8431 6.65685 16.5 5 16.5C3.34315 16.5 2 17.8431 2 19.5C2 21.1569 3.34315 22.5 5 22.5Z"
+      stroke="#028B7E"
+      stroke-width="1.5"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+    <path
+      d="M16 12.5H9C6.8 12.5 5 11.5 5 8.5V16.5"
+      stroke="#028B7E"
+      stroke-width="1.5"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+  </svg>
+);
