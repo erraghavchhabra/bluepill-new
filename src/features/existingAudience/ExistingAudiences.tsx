@@ -14,6 +14,7 @@ import {
   UserICon,
 } from "@/icons/simulatePageIcons";
 import { PiSelectionBackground } from "react-icons/pi";
+import BlackButton from "@/components/Buttons/BlackButton";
 
 interface Segment {
   id: number;
@@ -333,12 +334,7 @@ const ExistingAudiences: React.FC<ExistingAudiencesProps> = ({
         ))}
       </div>
       <div className="mt-[51px]">
-        <button
-          onClick={onBack}
-          className="text-white bg-black p-[14px_30px] text-base font-semibold rounded-full"
-        >
-          Back
-        </button>
+        <BlackButton onClick={onBack}>Back</BlackButton>
       </div>
     </div>
   );

@@ -1,8 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import Button from '../../../components/Button';
-import { ArrowLeft } from 'lucide-react';
-import { useAudience } from '../../../context/AudienceContext';
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import Button from "../../../components/Button";
+import { ArrowLeft, GoalIcon } from "lucide-react";
+import { useAudience } from "../../../context/AudienceContext";
+import CustomInput from "@/components/Buttons/CustomInput";
+import { PiNotepadLight, PiUser } from "react-icons/pi";
+import CustomTextarea from "@/components/Buttons/CustomTextarea";
+import { GroupQuesetionIcon, RightWhiteArrow } from "@/icons/simulatePageIcons";
+import BlackButton from "@/components/Buttons/BlackButton";
+import PrimaryButton from "@/components/Buttons/PrimaryButton";
 
 interface SegmentPersonaFilters {
   industryL1: string[];
@@ -30,46 +36,48 @@ interface Segment {
   updated_at: string;
 }
 
-const API_URL = import.meta.env.VITE_API_URL || '';
+const API_URL = import.meta.env.VITE_API_URL || "";
 
-const TestUseCase: React.FC<InsightsFormProps> = ({ 
-  onSubmit, 
-  selectedSegmentIds, 
-  personaFilters, 
+const TestUseCase: React.FC<InsightsFormProps> = ({
+  onSubmit,
+  selectedSegmentIds,
+  personaFilters,
   onBack,
   onEditStep,
   initialFormData = {},
-  onFormDataChange = () => {}
+  onFormDataChange = () => {},
 }) => {
   const navigate = useNavigate();
   const { audienceData } = useAudience();
   const [segments, setSegments] = useState<Segment[]>([]);
-  
+
   // Initialize form state from initialFormData
-  const [simName, setSimName] = useState(initialFormData.simName || '');
-  const [goal, setGoal] = useState(initialFormData.goal || ''); // New goal field
-  const [questionsText, setQuestionsText] = useState(initialFormData.questionsText || ''); // Combined questions in a text area
-  const [context, setContext] = useState(initialFormData.context || '');
-  
+  const [simName, setSimName] = useState(initialFormData.simName || "");
+  const [goal, setGoal] = useState(initialFormData.goal || ""); // New goal field
+  const [questionsText, setQuestionsText] = useState(
+    initialFormData.questionsText || ""
+  ); // Combined questions in a text area
+  const [context, setContext] = useState(initialFormData.context || "");
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  
+
   // Update parent component with form data changes
   useEffect(() => {
     const formData = {
       simName,
       goal,
       questionsText,
-      context
+      context,
     };
-    
+
     onFormDataChange(formData);
   }, [simName, goal, questionsText, context]); // Remove onFormDataChange from dependencies
-  
+
   // Handle field changes and notify parent about edits
   const handleFieldChange = (
-    setter: React.Dispatch<React.SetStateAction<string>>, 
+    setter: React.Dispatch<React.SetStateAction<string>>,
     value: string
   ) => {
     setter(value);
@@ -77,195 +85,171 @@ const TestUseCase: React.FC<InsightsFormProps> = ({
       onEditStep();
     }
   };
-  
+
   useEffect(() => {
     const fetchSegments = async () => {
       if (!audienceData.audienceId) return;
-      
+
       setLoading(true);
       try {
-        const response = await fetch(`${API_URL}/audience/${audienceData.audienceId}/segments`, {
-          credentials: 'include'
-        });
-        
+        const response = await fetch(
+          `${API_URL}/audience/${audienceData.audienceId}/segments`,
+          {
+            credentials: "include",
+          }
+        );
+
         if (!response.ok) {
-          throw new Error('Failed to fetch segments');
+          throw new Error("Failed to fetch segments");
         }
-        
+
         const data = await response.json();
         // Filter segments to only include the selected ones
-        const filteredSegments = data.filter((segment: Segment) => 
+        const filteredSegments = data.filter((segment: Segment) =>
           selectedSegmentIds.includes(segment.id)
         );
         setSegments(filteredSegments);
         setError(null);
       } catch (err) {
-        console.error('Error fetching segments:', err);
-        setError('Failed to load segments. Please try again.');
+        console.error("Error fetching segments:", err);
+        setError("Failed to load segments. Please try again.");
       } finally {
         setLoading(false);
       }
     };
-    
+
     fetchSegments();
   }, [audienceData.audienceId, selectedSegmentIds]);
-  
-  const isFormValid = questionsText.trim() !== '' && selectedSegmentIds.length > 0;
+
+  const isFormValid =
+    questionsText.trim() !== "" && selectedSegmentIds.length > 0;
 
   // Handle form submission
   const handleSubmit = async () => {
     if (!isFormValid || isSubmitting) return;
-    
+
     setIsSubmitting(true);
-    
+
     try {
       // Parse questions from text area - split by new line
       const parsedQuestions = questionsText
-        .split('\n')
-        .map(q => q.trim())
-        .filter(q => q !== '');
-      
+        .split("\n")
+        .map((q) => q.trim())
+        .filter((q) => q !== "");
+
       // Prepare the simulation data
       const simulationData = {
         audience_id: audienceData.audienceId,
         segment_ids: selectedSegmentIds,
         name: simName,
         persona_filters: personaFilters, // Include persona filters
-        task: 'test_use_case',
+        task: "test_use_case",
         questions: parsedQuestions,
         context: context,
-        goal: goal // Add goal to simulation data
+        goal: goal, // Add goal to simulation data
       };
-      
+
       // Send the request to start a simulation
       const response = await fetch(`${API_URL}/simulations`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json'
+          "Content-Type": "application/json",
         },
-        credentials: 'include',
-        body: JSON.stringify(simulationData)
+        credentials: "include",
+        body: JSON.stringify(simulationData),
       });
-      
+
       if (!response.ok) {
-        throw new Error('Failed to start simulation');
+        throw new Error("Failed to start simulation");
       }
-      
+
       const data = await response.json();
-      
+
       // Call onSubmit with the simulation ID instead of navigating away
       onSubmit(data.simulation_id);
-      
     } catch (err) {
-      console.error('Error starting simulation:', err);
-      setError('Failed to start simulation. Please try again.');
+      console.error("Error starting simulation:", err);
+      setError("Failed to start simulation. Please try again.");
     } finally {
       setIsSubmitting(false);
     }
   };
 
   return (
-    <div className="bg-white rounded-xl shadow-sm p-6">
+    <div className="w-full bg-gray_light rounded-tl-[30px] p-[30px] relative">
+      <div>
+        <h3 className="text-[28px] font-semibold text-black mb-3">
+          Test Use Case
+        </h3>
+        <p className="text-xs font-normal text-[#595E64]">
+          Simulate a test to get insights
+        </p>
+      </div>
       <div className="mb-6">
-        <div className="flex justify-between items-center mb-4">
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={onBack}
-            icon={<ArrowLeft className="w-4 h-4 mr-1" />}
-          >
-            Back to use case selection
-          </Button>
-          <span className="text-sm text-gray-500">{selectedSegmentIds.length} segments selected</span>
-        </div>
-        
         {loading ? (
           <div className="flex justify-center items-center py-6">
             <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-500"></div>
           </div>
-        ) : error ? (
-          <div className="text-sm text-red-600 mb-3">
-            {error}
-          </div>
         ) : (
-          <div className="p-3 bg-blue-50 rounded-md mb-4">
-            <p className="text-sm text-blue-800">Gathering insights with {segments.length} selected segments</p>
-          </div>
+          error && <div className="text-sm text-red-600 mb-3">{error}</div>
         )}
       </div>
+      <div className="flex items-center justify-between gap-5 mt-[30px]">
+        {/* Name your simulation */}
 
-      <div className="mb-6">
-        <label htmlFor="simName" className="block text-sm font-medium text-gray-700 mb-2">
-          Simulation Name
-        </label>
-        <input
+        <CustomInput
           id="simName"
-          type="text"
-          className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
           value={simName}
-          onChange={(e) => handleFieldChange(setSimName, e.target.value)}
-          placeholder="Enter a name for your simulation"
+          onChange={(e: any) => handleFieldChange(setSimName, e.target.value)}
+          placeholder="Simulation Name"
+          icon={<PiUser size={24} />}
         />
-      </div>
-      
-      <div className="mb-6">
-        <label htmlFor="goal" className="block text-sm font-medium text-gray-700 mb-2">
-          Goal
-        </label>
-        <input
+        <CustomInput
           id="goal"
-          type="text"
-          className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
           value={goal}
-          onChange={(e) => handleFieldChange(setGoal, e.target.value)}
-          placeholder="What do you want to achieve with this simulation?"
+          onChange={(e: any) => handleFieldChange(setGoal, e.target.value)}
+          placeholder="Goal"
+          icon={<GoalIcon />}
         />
       </div>
-      
-      <div className="mb-6">
-        <label htmlFor="questionsText" className="block text-sm font-medium text-gray-700 mb-2">
-          Survey or Focus Group Questions
-        </label>
-        <textarea
+      <div className="mt-5">
+        <CustomTextarea
           id="questionsText"
-          className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-          rows={6}
           value={questionsText}
-          onChange={(e) => handleFieldChange(setQuestionsText, e.target.value)}
-          placeholder="Enter your questions here (one per line)"
+          onChange={(e: any) =>
+            handleFieldChange(setQuestionsText, e.target.value)
+          }
+          rows={6}
+          placeholder="Survey or Focus Group Questions"
+          icon={<GroupQuesetionIcon />}
         />
-        <p className="mt-1 text-xs text-gray-500">Add each question on a new line</p>
+
+        <p className="mt-[10px] text-sm font-normal text-[#A3AAB3]">
+          Add each question on a new line
+        </p>
       </div>
-      
-      <div className="mb-6">
-        <label htmlFor="context" className="block text-sm font-medium text-gray-700 mb-2">
-          Context (Optional)
-        </label>
-        <textarea
+      <div className="mt-5">
+        <CustomTextarea
           id="context"
-          className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm 
-                  focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-          rows={3}
           value={context}
-          onChange={(e) => handleFieldChange(setContext, e.target.value)}
-          placeholder="Any additional context about what you're trying to learn"
+          onChange={(e: any) => handleFieldChange(setContext, e.target.value)}
+          rows={3}
+          placeholder="Context (Optional)"
+          icon={<PiNotepadLight size={24} />}
         />
       </div>
-      
-      <div className="flex justify-between items-center">
-        <div>
-          {error && (
-            <p className="text-sm text-red-600">{error}</p>
-          )}
-        </div>
-        <Button
-          variant="primary"
-          size="lg"
+
+      <div>{error && <p className="text-sm text-red-600">{error}</p>}</div>
+      <div className="flex justify-between items-center mt-[100px] ">
+        <BlackButton onClick={onBack}>Back</BlackButton>
+
+        <PrimaryButton
           onClick={handleSubmit}
           disabled={!isFormValid || isSubmitting}
+          icon={<RightWhiteArrow />}
         >
-          {isSubmitting ? 'Starting...' : 'Start Simulation'}
-        </Button>
+          {isSubmitting ? "Starting..." : "Start Simulation"}
+        </PrimaryButton>
       </div>
     </div>
   );

@@ -696,7 +696,7 @@ const renderValueBasedOnType = (value: any): JSX.Element => {
 
   return (
     <StepContainer
-      title="Select Audience Segments (LOVEVERY)"
+      title="Select Audience Segments (LOVEVERY)16"
       subtitle={`Choose which segments of ${audienceData?.audienceName || 'your audience'} to include`}
       className="animate-fadeIn"
     >

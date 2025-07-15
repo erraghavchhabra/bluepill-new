@@ -2,7 +2,20 @@ import React, { useState, useEffect } from "react";
 import Button from "../../../components/Button"; // Assuming this is your custom Button
 import { ArrowLeft } from "lucide-react";
 import { useAudience } from "../../../context/AudienceContext";
-import { PiNotePencilLight, PiSubtitles, PiUser } from "react-icons/pi";
+import {
+  PiNotepadLight,
+  PiNotePencilLight,
+  PiSubtitles,
+  PiUser,
+} from "react-icons/pi";
+import {
+  NetworkBlackIcon,
+  NetworkPrimeIcon,
+  RightWhiteArrow,
+} from "@/icons/simulatePageIcons";
+import BlackButton from "@/components/Buttons/BlackButton";
+import PrimaryButton from "@/components/Buttons/PrimaryButton";
+import CustomInput from "@/components/Buttons/CustomInput";
 
 interface SegmentPersonaFilters {
   industryL1: string[];
@@ -125,15 +138,15 @@ const ContentCreationForm: React.FC<ContentCreationFormProps> = ({
     initialFormData.simulationMode,
   ]);
 
-  const getContentTypePlaceholder = () => {
-    if (contentFormType === "short") {
-      return "e.g., Website Headline, Email subject line, LinkedIn Ad";
-    } else if (contentFormType === "long") {
-      return "e.g., Blog Post, 1-Pager, Whitepaper, Sales Pitch Deck Bullets";
-    } else {
-      return "Select a content form (Short or Long) above first";
-    }
-  };
+  // const getContentTypePlaceholder = () => {
+  //   if (contentFormType === "short") {
+  //     return "e.g., Website Headline, Email subject line, LinkedIn Ad";
+  //   } else if (contentFormType === "long") {
+  //     return "e.g., Blog Post, 1-Pager, Whitepaper, Sales Pitch Deck Bullets";
+  //   } else {
+  //     return "Select a content form (Short or Long) above first";
+  //   }
+  // };
 
   const getContentSubjectPlaceholder = () => {
     // This is for the detailed brief
@@ -205,7 +218,30 @@ const ContentCreationForm: React.FC<ContentCreationFormProps> = ({
       setIsSubmitting(false);
     }
   };
-
+  const options = [
+    {
+      type: "short",
+      title: "Short form content",
+      desc: "e.g., Website Headline, Email subject line, etc.",
+    },
+    {
+      type: "long",
+      title: "Long Form content",
+      desc: "e.g., Blog, 1-Pager, Whitepaper, etc.",
+    },
+  ];
+  const simOptions = [
+    {
+      type: "basic",
+      title: "Run Basic Simulation",
+      desc: "Faster, good for general content outlines and ideas.",
+    },
+    {
+      type: "advanced",
+      title: "Run Advanced Simulation",
+      desc: "More detailed. Explores deeper insights. Takes longer.",
+    },
+  ];
   return (
     <div className="w-full bg-gray_light rounded-tl-[30px] p-[30px] relative">
       <div>
@@ -233,262 +269,262 @@ const ContentCreationForm: React.FC<ContentCreationFormProps> = ({
 
       <div className="flex items-center justify-between gap-5">
         {/* Name your simulation */}
-        <div className="px-4 py-[18px] w-full bg-white rounded-2xl items-center flex gap-[10px] text-primary2">
-          <PiUser size={24} />
-          <input
-            id="simName"
-            type="text"
-            className="w-full text-sm font-normal outline-none border-none"
-            value={simName}
-            onChange={(e) => handleFieldChange(setSimName, e.target.value)}
-            placeholder="Simulation Name"
-          />
-        </div>
-        <div className="px-4 py-[18px] w-full bg-white rounded-2xl items-center flex gap-[10px] text-primary2">
-          <PiNotePencilLight size={24} />
-          <input
-            id="goal"
-            type="text"
-            className="w-full text-sm font-normal outline-none border-none"
-            value={goal}
-            onChange={(e) => handleFieldChange(setGoal, e.target.value)}
-            placeholder="Whats the expected outcome of this simulation?"
-          />
-        </div>
+        <CustomInput
+          id="simName"
+          value={simName}
+          onChange={(e: any) => handleFieldChange(setSimName, e.target.value)}
+          placeholder="Simulation Name"
+          icon={<PiUser size={24} />}
+        />
+
+        <CustomInput
+          id="goal"
+          value={goal}
+          onChange={(e: any) => handleFieldChange(setGoal, e.target.value)}
+          placeholder="What's the expected outcome of this simulation?"
+          icon={<PiNotePencilLight size={24} />}
+        />
       </div>
 
       {/* What type of content are you creating? (Radio Buttons for Form Type) */}
       <div className="mt-5">
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          {/* Short Form Option */}
-          <div
-            onClick={() => handleContentFormTypeChange("short")}
-            className={`px-4 py-3 border rounded-lg cursor-pointer transition-all duration-150 ease-in-out flex items-start justify-between gap-3 ${
-              contentFormType === "short"
-                ? " ring-primary bg-blue-50 "
-                : "border-white "
-            }`}
-          >
-            <PiSubtitles />
-            <div>
-              <label
-                htmlFor="shortForm"
-                className="block text-sm font-semibold text-gray-800 cursor-pointer"
-              >
-                Short form content
-              </label>
-              <p className="text-xs text-gray-500 font-normal mt-1">
-                e.g., Website Headline, Email subject line, etc.
-              </p>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+          {options.map((opt: any, index: number) => (
+            <div
+              key={index}
+              onClick={() => handleContentFormTypeChange(opt.type)}
+              className={`px-4 py-3 rounded-2xl cursor-pointer transition-all duration-150 ease-in-out flex items-center justify-between gap-3 ${
+                contentFormType === opt.type ? "bg-primary" : "bg-white"
+              }`}
+            >
+              <div className="flex items-center gap-3">
+                <div
+                  className={
+                    contentFormType === opt.type
+                      ? "text-black"
+                      : "text-primary2"
+                  }
+                >
+                  <PiSubtitles size={24} />
+                </div>
+                <div>
+                  <label
+                    className={`text-base font-semibold ${
+                      contentFormType === opt.type
+                        ? "text-black"
+                        : "text-[#595E64]"
+                    }`}
+                  >
+                    {opt.title}
+                  </label>
+                  <p
+                    className={`text-sm ${
+                      contentFormType === opt.type
+                        ? "text-black"
+                        : "text-[#595E64]"
+                    } font-normal mt-2`}
+                  >
+                    {opt.desc}
+                  </p>
+                </div>
+              </div>
+
+              <div className="inline-flex items-center">
+                <input
+                  type="radio"
+                  name="contentFormType"
+                  value={opt.type}
+                  checked={contentFormType === opt.type}
+                  onChange={() => {}}
+                  className="sr-only peer"
+                  id={`${opt.type}Form`}
+                />
+                <div
+                  className={`w-5 h-5 rounded-full border  ${
+                    contentFormType === opt.type
+                      ? "border-black"
+                      : "border-[#AEAEB2]"
+                  } relative transition-all duration-200`}
+                >
+                  <div
+                    className={`absolute inset-1 w-[10px] h-[10px] rounded-full bg-black ${
+                      contentFormType === opt.type ? "scale-100" : "scale-0"
+                    } transition-all duration-300`}
+                  ></div>
+                </div>
+              </div>
             </div>
-            <input
-              type="radio"
-              id="shortForm"
-              name="contentFormType"
-              value="short"
-              checked={contentFormType === "short"}
-              onChange={() => {}}
-              className="h-5 w-5 mt-0.5 text-blue-600 border-gray-300 focus:ring-blue-500 shrink-0"
-            />
-          </div>
-          {/* Long Form Option */}
-          <div
-            onClick={() => handleContentFormTypeChange("long")}
-            className={`px-4 py-3 border rounded-lg cursor-pointer transition-all duration-150 ease-in-out flex items-start justify-between gap-3 ${
-              contentFormType === "long"
-                ? " ring-primary bg-blue-50 "
-                : "border-white "
-            }`}
-          >
-            <PiSubtitles />
-            <div>
-              <label
-                htmlFor="longForm"
-                className="block text-sm font-semibold text-gray-800 cursor-pointer"
-              >
-                Long Form content
-              </label>
-              <p className="text-xs text-gray-500 font-normal mt-1">
-                e.g., Blog, 1-Pager, Whitepaper, etc.
-              </p>
-            </div>
-            <input
-              type="radio"
-              id="longForm"
-              name="contentFormType"
-              value="long"
-              checked={contentFormType === "long"}
-              onChange={() => {}}
-              className="h-5 w-5 mt-0.5 text-blue-600 border-gray-300 focus:ring-blue-500 shrink-0"
-            />
-          </div>
+          ))}
         </div>
       </div>
 
       {/* NEW: Specify the content type (Text Input) - Appears after form type selection */}
       {contentFormType && (
-        <div className="mb-6 transition-all duration-300 ease-in-out">
-          <label
-            htmlFor="contentType"
-            className="block text-sm font-medium text-gray-700 mb-2"
-          >
-            Specify the type of{" "}
-            {contentFormType === "short" ? "short-form" : "long-form"} content:
-          </label>
-          <input
-            type="text"
-            id="contentType"
-            className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-            value={contentType}
-            onChange={(e) => handleFieldChange(setContentType, e.target.value)}
-            placeholder={getContentTypePlaceholder()}
-          />
-        </div>
+        <CustomInput
+          id="contentType"
+          value={contentType}
+          onChange={(e: any) =>
+            handleFieldChange(setContentType, e.target.value)
+          }
+          placeholder={`Specify the type of ${
+            contentFormType === "short" ? "short-form" : "long-form"
+          } content:`}
+          icon={<PiSubtitles size={24} />}
+          className="mt-5"
+        />
       )}
 
       {/* CONDITIONAL: Simulation Mode (Basic/Advanced) - Only if Long Form is selected */}
       {contentFormType === "long" && (
-        <div className="mb-6 transition-all duration-300 ease-in-out">
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            Choose simulation depth for long form content:
-          </label>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {/* Basic Simulation Option */}
-            <div
-              onClick={() => handleSimulationModeChange("basic")}
-              className={`p-4 border rounded-lg cursor-pointer transition-all duration-150 ease-in-out flex items-start space-x-3 ${
-                simulationMode === "basic"
-                  ? "border-blue-500 ring-2 ring-blue-500 bg-blue-50 shadow-md"
-                  : "border-gray-300 hover:border-gray-400 hover:bg-gray-50"
-              }`}
-            >
-              <input
-                type="radio"
-                id="basicSim"
-                name="simulationMode"
-                value="basic"
-                checked={simulationMode === "basic"}
-                onChange={() => {}}
-                className="h-5 w-5 mt-0.5 text-blue-600 border-gray-300 focus:ring-blue-500 shrink-0"
-              />
-              <div>
-                <label
-                  htmlFor="basicSim"
-                  className="block text-sm font-semibold text-gray-800 cursor-pointer"
-                >
-                  Run Basic Simulation
-                </label>
-                <p className="text-xs text-gray-500 font-normal mt-1">
-                  Faster, good for general content outlines and ideas.
-                </p>
+        <div className="mt-5 transition-all duration-300 ease-in-out">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+            {simOptions.map((opt: any, index: number) => (
+              <div
+                key={index}
+                onClick={() => handleSimulationModeChange(opt.type)}
+                className={`px-4 py-3 rounded-2xl cursor-pointer transition-all duration-150 ease-in-out flex items-center justify-between gap-3 ${
+                  simulationMode === opt.type ? "bg-primary" : "bg-white"
+                }`}
+              >
+                <div className="flex items-center gap-3">
+                  <div
+                    className={
+                      simulationMode === opt.type
+                        ? "text-black"
+                        : "text-primary2"
+                    }
+                  >
+                    <div className="max-w-6">
+                      {simulationMode === opt.type ? (
+                        <NetworkBlackIcon />
+                      ) : (
+                        <NetworkPrimeIcon />
+                      )}
+                    </div>
+                  </div>
+                  <div>
+                    <label
+                      className={`text-base font-semibold ${
+                        simulationMode === opt.type
+                          ? "text-black"
+                          : "text-[#595E64]"
+                      }`}
+                    >
+                      {opt.title}
+                    </label>
+                    <p
+                      className={`text-sm ${
+                        simulationMode === opt.type
+                          ? "text-black"
+                          : "text-[#595E64]"
+                      } font-normal mt-2`}
+                    >
+                      {opt.desc}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="inline-flex items-center">
+                  <input
+                    type="radio"
+                    name="simulationMode"
+                    value={opt.type}
+                    checked={simulationMode === opt.type}
+                    onChange={() => {}}
+                    className="sr-only peer"
+                    id={`${opt.type}Sim`}
+                  />
+                  <div
+                    className={`w-5 h-5 rounded-full border ${
+                      simulationMode === opt.type
+                        ? "border-black"
+                        : "border-[#AEAEB2]"
+                    } relative transition-all duration-200`}
+                  >
+                    <div
+                      className={`absolute inset-1 w-[10px] h-[10px] rounded-full bg-black ${
+                        simulationMode === opt.type ? "scale-100" : "scale-0"
+                      } transition-all duration-300`}
+                    ></div>
+                  </div>
+                </div>
               </div>
-            </div>
-            {/* Advanced Simulation Option */}
-            <div
-              onClick={() => handleSimulationModeChange("advanced")}
-              className={`p-4 border rounded-lg cursor-pointer transition-all duration-150 ease-in-out flex items-start space-x-3 ${
-                simulationMode === "advanced"
-                  ? "border-blue-500 ring-2 ring-blue-500 bg-blue-50 shadow-md"
-                  : "border-gray-300 hover:border-gray-400 hover:bg-gray-50"
-              }`}
-            >
-              <input
-                type="radio"
-                id="advancedSim"
-                name="simulationMode"
-                value="advanced"
-                checked={simulationMode === "advanced"}
-                onChange={() => {}}
-                className="h-5 w-5 mt-0.5 text-blue-600 border-gray-300 focus:ring-blue-500 shrink-0"
-              />
-              <div>
-                <label
-                  htmlFor="advancedSim"
-                  className="block text-sm font-semibold text-gray-800 cursor-pointer"
-                >
-                  Run Advanced Simulation
-                </label>
-                <p className="text-xs text-gray-500 font-normal mt-1">
-                  More detailed. Explores deeper insights. Takes longer.
-                </p>
-              </div>
-            </div>
+            ))}
           </div>
         </div>
       )}
 
-      {/* What should this content cover? (Detailed Brief Textarea) */}
-      <div className="mb-6">
-        <label
-          htmlFor="contentSubject"
-          className="block text-sm font-medium text-gray-700 mb-2"
-        >
-          What should this {contentType ? contentType.toLowerCase() : "content"}{" "}
-          cover? Provide a detailed brief.
-        </label>
-        <textarea
-          id="contentSubject"
-          rows={5}
-          className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-100 disabled:cursor-not-allowed"
-          value={contentSubject}
-          onChange={(e) => handleFieldChange(setContentSubject, e.target.value)}
-          placeholder={getContentSubjectPlaceholder()}
-          disabled={
-            !contentFormType ||
-            !contentType ||
-            (contentFormType === "long" && !simulationMode)
-          }
-        />
-        <p className="mt-1 text-xs text-gray-500">
-          {contentFormType === "long" && simulationMode === "advanced"
-            ? "For Advanced Simulation, please provide a comprehensive brief for your " +
-              (contentType || "content") +
-              ". The more detail, the better the insights."
-            : contentFormType === "long" && simulationMode === "basic"
-            ? "For Basic Simulation, outline the core topic, key messages, and desired structure for your " +
-              (contentType || "content") +
-              "."
-            : contentFormType === "short"
-            ? "For Short Form, describe the main angle or message for your " +
-              (contentType || "content") +
-              "."
-            : "Select content form, specific type, and simulation mode (if applicable) to enable this field."}
-        </p>
-      </div>
+      <div
+        className={`mt-5 grid ${
+          contentFormType === "long" ? "grid-cols-2" : "grid-cols-1"
+        } transition-all duration-200  gap-5`}
+      >
+        {/* What should this content cover? (Detailed Brief Textarea) */}
+        <div className="">
+          <label htmlFor="contentSubject" className="px-4 py-[18px] w-full bg-white rounded-2xl items-start flex gap-[10px] text-primary2 ">
+            <PiNotepadLight size={24} />
+            <textarea
+              id="contentSubject"
+              rows={5}
+              className="w-full resize-none text-sm font-normal outline-none border-none bg-white"
+              value={contentSubject}
+              onChange={(e) =>
+                handleFieldChange(setContentSubject, e.target.value)
+              }
+              placeholder="What should this content cover? Provide a detailed brief."
+              disabled={
+                !contentFormType ||
+                !contentType ||
+                (contentFormType === "long" && !simulationMode)
+              }
+            />
+          </label>
 
-      {/* Tell us about your brand voice or positioning (Optional) */}
-      <div className="mb-6">
-        <label
-          htmlFor="companyContext"
-          className="block text-sm font-medium text-gray-700 mb-2"
-        >
-          Tell us about your brand voice or positioning (Optional)
-        </label>
-        <textarea
-          id="companyContext"
-          rows={3}
-          className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-          value={companyContext}
-          onChange={(e) => handleFieldChange(setCompanyContext, e.target.value)}
-          placeholder='Describe how your brand should sound. Example: "Tone: confident, clear, consultative"'
-        />
+          <p className="mt-[10px] font-normal text-sm text-[#A3AAB3]">
+            {contentFormType === "long" && simulationMode === "advanced"
+              ? "For Advanced Simulation, please provide a comprehensive brief for your " +
+                (contentType || "content") +
+                ". The more detail, the better the insights."
+              : contentFormType === "long" && simulationMode === "basic"
+              ? "For Basic Simulation, outline the core topic, key messages, and desired structure for your " +
+                (contentType || "content") +
+                "."
+              : contentFormType === "short"
+              ? "For Short Form, describe the main angle or message for your " +
+                (contentType || "content") +
+                "."
+              : "Select content form, specific type, and simulation mode (if applicable) to enable this field."}
+          </p>
+        </div>
+
+        {/* Tell us about your brand voice or positioning (Optional) */}
+        <div className="">
+          <label htmlFor="companyContext" className="px-4 py-[18px]  w-full bg-white rounded-2xl items-start flex gap-[10px] text-primary2 ">
+            <PiNotepadLight size={24} />
+            <textarea
+              id="companyContext"
+              rows={contentFormType === "long" ? 5 : 3}
+              className="w-full text-sm resize-none font-normal outline-none border-none bg-white"
+              value={companyContext}
+              onChange={(e) =>
+                handleFieldChange(setCompanyContext, e.target.value)
+              }
+              placeholder="Tell us about your brand voice or positioning (Optional)"
+            />
+          </label>
+        </div>
       </div>
 
       <div className="flex justify-between items-center mt-[87px]">
-        <button
-          onClick={onBack}
-          className="text-white bg-black p-[14px_30px] text-base font-semibold rounded-full"
-        >
-          Back
-        </button>
-        <Button
-          variant="primary"
+        <BlackButton onClick={onBack}>Back</BlackButton>
+
+        <PrimaryButton
           onClick={handleSubmit}
           disabled={!isFormValid || isSubmitting}
-          withArrow
+          icon={<RightWhiteArrow />}
         >
           {isSubmitting ? "Starting Simulation..." : "Generate Content"}
-        </Button>
+        </PrimaryButton>
       </div>
     </div>
   );

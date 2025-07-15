@@ -48,6 +48,7 @@ import {
   SurveyIcon,
   TestUseCaseIcon,
 } from "@/icons/simulatePageIcons";
+import BlackButton from "@/components/Buttons/BlackButton";
 
 // Interface to track persona filters within each segment
 export interface SegmentPersonaFilters {
@@ -452,7 +453,7 @@ const UseCaseSelector: React.FC<UseCaseSelectorProps> = ({
         );
       case "content-testing":
         return (
-          <div className="mx-auto w-[80vw] max-w-4xl">
+          <div className="w-full">
             {renderEditWarningMessage()}
             <ContentTestingForm
               onSubmit={handleFormSubmit}
@@ -469,7 +470,7 @@ const UseCaseSelector: React.FC<UseCaseSelectorProps> = ({
         );
       case "get-insights":
         return (
-          <div className="mx-auto w-[80vw] max-w-4xl">
+          <div className="w-full">
             {renderEditWarningMessage()}
             <InsightsForm
               onSubmit={handleFormSubmit}
@@ -484,7 +485,7 @@ const UseCaseSelector: React.FC<UseCaseSelectorProps> = ({
         );
       case "pricing-analysis":
         return (
-          <div className="mx-auto w-[80vw] max-w-4xl">
+          <div className="w-full">
             {renderEditWarningMessage()}
             <PricingForm
               onSubmit={handleFormSubmit}
@@ -501,7 +502,7 @@ const UseCaseSelector: React.FC<UseCaseSelectorProps> = ({
         );
       case "channel-strategy":
         return (
-          <div className="mx-auto w-[80vw] max-w-4xl">
+          <div className="w-full">
             {renderEditWarningMessage()}
             <ChannelStrategyForm
               onSubmit={handleFormSubmit}
@@ -518,7 +519,7 @@ const UseCaseSelector: React.FC<UseCaseSelectorProps> = ({
         );
       case "ab-test-creatives-gemini":
         return (
-          <div className="mx-auto w-[80vw] max-w-4xl">
+          <div className="w-full">
             {renderEditWarningMessage()}
             <ABTestCreativesFormGemini
               onSubmit={handleFormSubmit}
@@ -535,7 +536,7 @@ const UseCaseSelector: React.FC<UseCaseSelectorProps> = ({
         );
       case "packaging-review-gemini":
         return (
-          <div className="mx-auto w-[80vw] max-w-4xl">
+          <div className="w-full">
             {renderEditWarningMessage()}
             <ABTestCreativePackagingForm
               onSubmit={handleFormSubmit}
@@ -552,7 +553,7 @@ const UseCaseSelector: React.FC<UseCaseSelectorProps> = ({
         );
       case "attribution":
         return (
-          <div className="mx-auto w-[80vw] max-w-4xl">
+          <div className="w-full">
             {renderEditWarningMessage()}
             <AttributionForm
               onSubmit={handleFormSubmit}
@@ -567,7 +568,7 @@ const UseCaseSelector: React.FC<UseCaseSelectorProps> = ({
         );
       case "buyer-insights-report":
         return (
-          <div className="mx-auto w-[80vw] max-w-4xl">
+          <div className="w-full">
             {renderEditWarningMessage()}
             <BuyerInsightsForm
               onSubmit={handleFormSubmit}
@@ -584,7 +585,7 @@ const UseCaseSelector: React.FC<UseCaseSelectorProps> = ({
         );
       case "survey-and-focus-groups":
         return (
-          <div className="mx-auto w-[80vw] max-w-4xl">
+          <div className="w-full">
             {renderEditWarningMessage()}
             <SurveyAndFocusGroups
               onSubmit={handleFormSubmit}
@@ -601,7 +602,7 @@ const UseCaseSelector: React.FC<UseCaseSelectorProps> = ({
         );
       case "create-campaign-strategy":
         return (
-          <div className="mx-auto w-[80vw] max-w-4xl">
+          <div className="w-full">
             {renderEditWarningMessage()}
             <CreateCampaignStratergy
               onSubmit={handleFormSubmit}
@@ -618,7 +619,7 @@ const UseCaseSelector: React.FC<UseCaseSelectorProps> = ({
         );
       case "test-use-case":
         return (
-          <div className="mx-auto w-[80vw] max-w-4xl">
+          <div className="w-full">
             {renderEditWarningMessage()}
             <TestUseCase
               onSubmit={handleFormSubmit}
@@ -798,12 +799,7 @@ const UseCaseSelector: React.FC<UseCaseSelectorProps> = ({
                 })}
             </div>
             <div className="mt-[51px]">
-              <button
-                onClick={handleBackFromUseCase}
-                className="text-white bg-black p-[14px_30px] text-base font-semibold rounded-full"
-              >
-                Back
-              </button>
+              <BlackButton onClick={handleBackFromUseCase}>Back</BlackButton>
             </div>
           </div>
         );

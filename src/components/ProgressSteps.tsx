@@ -52,7 +52,7 @@ const ProgressSteps: React.FC<ProgressStepsProps> = ({ steps }) => {
                           : step.current
                           ? "text-primary2 bg-[#E6FCFA] border-primary2"
                           : idx <= currentStepIndex
-                          ? "text-red-600"
+                          ? "text-black"
                           : "text-[#595E64] border-transparent bg-[#FAFAFA]"
                       }
                       
