@@ -1,11 +1,20 @@
-import React, { useState, useEffect } from 'react';
-import { Building, Package, User, Globe } from 'lucide-react';
-import Card from '../../components/Card';
-import StepContainer from '../../components/StepContainer';
-import Button from '../../components/Button';
-import { useAudience } from '../../context/AudienceContext';
+import React, { useState, useEffect } from "react";
+import { Building, Package, User, Globe } from "lucide-react";
+import Card from "../../components/Card";
+import StepContainer from "../../components/StepContainer";
+import Button from "../../components/Button";
+import { useAudience } from "../../context/AudienceContext";
+import {
+  PiBuildingOfficeLight,
+  PiLink,
+  PiPackage,
+  PiUserLight,
+} from "react-icons/pi";
+import BlackButton from "@/components/Buttons/BlackButton";
+import PrimaryButton from "@/components/Buttons/PrimaryButton";
+import { RightWhiteArrow } from "@/icons/simulatePageIcons";
 
-export type AudienceType = 'company' | 'product' | 'person';
+export type AudienceType = "company" | "product" | "person";
 
 interface AudienceTypeSelectProps {
   onNext: () => void;
@@ -17,87 +26,95 @@ const AudienceTypeSelect: React.FC<AudienceTypeSelectProps> = ({
   onBack,
 }) => {
   const { audienceData, updateAudienceData } = useAudience();
-  const [validationError, setValidationError] = useState('');
-  const [typeError, setTypeError] = useState('');
+  const [validationError, setValidationError] = useState("");
+  const [typeError, setTypeError] = useState("");
   const [touched, setTouched] = useState({
     type: false,
-    websiteUrl: false
+    websiteUrl: false,
   });
 
   const audienceTypes = [
     {
-      type: 'company' as AudienceType,
-      icon: <Building className="w-6 h-6" />,
-      title: 'A Company',
-      description: 'Simulate how people respond to a brand or organization, you can always test on a segment of the audience later',
+      type: "company" as AudienceType,
+      icon: <PiBuildingOfficeLight size={50} />,
+      title: "A Company",
+      description:
+        "Simulate how people respond to a brand or organization, you can always test on a segment of the audience later",
     },
     {
-      type: 'product' as AudienceType,
-      icon: <Package className="w-6 h-6" />,
-      title: 'A Product',
-      description: 'Simulate reactions to a specific product, feature, or service',
+      type: "product" as AudienceType,
+      icon: <PiPackage size={50} />,
+      title: "A Product",
+      description:
+        "Simulate reactions to a specific product, feature, or service",
     },
     {
-      type: 'person' as AudienceType,
-      icon: <User className="w-6 h-6" />,
-      title: 'A Person',
-      description: 'Simulate how people might react to an influencer, executive, VC or candidate',
+      type: "person" as AudienceType,
+      icon: <PiUserLight size={50} />,
+      title: "A Person",
+      description:
+        "Simulate how people might react to an influencer, executive, VC or candidate",
     },
   ];
 
   useEffect(() => {
     // Validate audience type whenever it changes
     if (touched.type && !audienceData.type) {
-      setTypeError('Please select an audience type');
+      setTypeError("Please select an audience type");
     } else {
-      setTypeError('');
+      setTypeError("");
     }
 
     // Also validate website URL when it changes
     if (touched.websiteUrl) {
       if (!audienceData.websiteUrl || !audienceData.websiteUrl.trim()) {
-        setValidationError('Website URL is required');
+        setValidationError("Website URL is required");
       } else if (!isValidUrl(audienceData.websiteUrl)) {
-        setValidationError('Please enter a valid URL');
+        setValidationError("Please enter a valid URL");
       } else {
-        setValidationError('');
+        setValidationError("");
       }
     }
-  }, [audienceData.type, audienceData.websiteUrl, touched.type, touched.websiteUrl]);
+  }, [
+    audienceData.type,
+    audienceData.websiteUrl,
+    touched.type,
+    touched.websiteUrl,
+  ]);
 
   const handleSelectType = (type: AudienceType) => {
     updateAudienceData({ type });
-    setTouched(prev => ({ ...prev, type: true }));
+    setTouched((prev) => ({ ...prev, type: true }));
   };
 
   const validateForm = (): boolean => {
     // Mark all fields as touched to show validation errors
     setTouched({ type: true, websiteUrl: true });
-    
+
     let isValid = true;
-    
+
     // Validate audience type
     if (!audienceData.type) {
-      setTypeError('Please select an audience type');
+      setTypeError("Please select an audience type");
       isValid = false;
     }
-    
+
     // Validate website URL - now required
     if (!audienceData.websiteUrl || !audienceData.websiteUrl.trim()) {
-      setValidationError('Website URL is required');
+      setValidationError("Website URL is required");
       isValid = false;
     } else if (!isValidUrl(audienceData.websiteUrl)) {
-      setValidationError('Please enter a valid URL');
+      setValidationError("Please enter a valid URL");
       isValid = false;
     }
-    
+
     return isValid;
   };
 
   const handleContinue = () => {
     if (validateForm()) {
-      setValidationError('');
-      setTypeError('');
+      setValidationError("");
+      setTypeError("");
       onNext();
     }
   };
@@ -115,96 +132,117 @@ const AudienceTypeSelect: React.FC<AudienceTypeSelectProps> = ({
   const handleWebsiteChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     updateAudienceData({ websiteUrl: value });
-    setTouched(prev => ({ ...prev, websiteUrl: true }));
-    
+    setTouched((prev) => ({ ...prev, websiteUrl: true }));
+
     if (!value || !value.trim()) {
-      setValidationError('Website URL is required');
+      setValidationError("Website URL is required");
     } else if (!isValidUrl(value)) {
-      setValidationError('Please enter a valid URL');
+      setValidationError("Please enter a valid URL");
     } else {
-      setValidationError('');
+      setValidationError("");
     }
   };
 
   return (
-    <StepContainer
-      title="Who is this audience for?"
-      subtitle="We'll tailor your profiles based on the target of your simulation — is it a company, a product, or a person?"
-      className="animate-fadeIn"
-    >
-      <div className="grid gap-4">
+    <div className="w-full bg-gray_light rounded-tl-[30px] p-[30px] relative">
+      <div>
+        <h3 className="text-[28px] font-semibold text-black mb-3">
+          Who is this audience for?
+        </h3>
+        <p className="text-xs font-normal text-[#595E64]">
+          We'll tailor your profiles based on the target of your simulation — is
+          it a company, a product, or a person?
+        </p>
+      </div>
+      <div className="grid grid-cols-3 gap-5 mt-5 mb-[30px]">
         {typeError && (
           <div className="p-3 bg-red-50 border border-red-200 rounded-md text-red-700 text-sm">
             {typeError}
           </div>
         )}
-        
+
         {audienceTypes.map((option) => (
-          <Card
+          <div
             key={option.type}
             onClick={() => handleSelectType(option.type)}
-            selected={audienceData.type === option.type}
-            className={`p-4 ${touched.type && !audienceData.type ? 'border-red-300' : ''}`}
-            fullWidth
+            className={`${
+              audienceData.type === option.type ? "bg-primary" : "bg-white"
+            } flex h-full items-center gap-3 flex-col p-[30px] rounded-2xl cursor-pointer border border-transparent hover:border-primary transition-all duration-200 `}
           >
-            <div className="flex items-center">
-              <div className={`mr-4 p-2 rounded-full ${audienceData.type === option.type ? 'bg-blue-100 text-blue-600' : 'bg-gray-100 text-gray-600'}`}>
-                {option.icon}
-              </div>
-              <div>
-                <h3 className="text-lg font-medium text-gray-900">{option.title}</h3>
-                <p className="text-sm text-gray-600">{option.description}</p>
-              </div>
+            <div
+              className={`transition-all duration-200  ${
+                audienceData.type === option.type
+                  ? "text-black"
+                  : "text-primary2"
+              }`}
+            >
+              {option.icon}
             </div>
-          </Card>
+            <h3
+              className={`text-xl font-semibold text-center transition-all duration-200  ${
+                audienceData.type === option.type
+                  ? "text-black"
+                  : "text-primary2"
+              }`}
+            >
+              {option.title}
+            </h3>
+            <p
+              className={`text-sm font-medium text-center transition-all duration-200  ${
+                audienceData.type === option.type
+                  ? "text-black"
+                  : "text-[#A3AAB3]"
+              }`}
+            >
+              {option.description}
+            </p>
+          </div>
         ))}
       </div>
-
-      <div className="mt-6 bg-white rounded-lg shadow-sm p-6">
-        <div className="flex items-center mb-4">
-          <Globe className="w-5 h-5 text-primary mr-2" />
-          <h3 className="text-lg font-medium text-gray-900">Add website or social media URL</h3>
-        </div>
-        <p className="text-sm text-gray-600 mb-4">
-          This helps us understand your brand or product better. We'll analyze the content to create more accurate profiles.
+      <div className="pt-[30px]  border-t border-[#E8E8E8]">
+        <h3 className="text-[28px] font-semibold text-black">
+          Add website or social media URL
+        </h3>
+        <p className="mt-3 text-[#595E64] text-sm font-normal">
+          This helps us understand your brand or product better. We'll analyze
+          the content to create more accurate profiles.
         </p>
-        <div>
-          <label htmlFor="website-url" className="block text-sm font-medium text-gray-700 mb-1">
-            Website URL <span className="text-red-500">*</span>
-          </label>
-          <input
-            type="text"
-            id="website-url"
-            className={`w-full px-3 py-2 border ${validationError ? 'border-red-300 focus:ring-red-500 focus:border-red-500' : 'border-gray-300 focus:ring-primary focus:border-primary'} rounded-md shadow-sm focus:outline-none`}
-            placeholder="https://example.com"
-            value={audienceData.websiteUrl}
-            required
-            onChange={handleWebsiteChange}
-            onBlur={() => setTouched(prev => ({ ...prev, websiteUrl: true }))}
-          />
-          {validationError && (
-            <p className="mt-1 text-sm text-red-600">{validationError}</p>
-          )}
-        </div>
       </div>
+      <label htmlFor="website-url" className="mt-5 flex items-center gap-[10px] text-[#595E64] font-medium text-sm rounded-2xl bg-white p-[18px_16px]">
+        <div className="text-primary2">
+          <PiLink size={24} />
+        </div>
+        <input
+          type="text"
+          id="website-url"
+          className="w-full outline-none border-none"
+          placeholder="Website URL *"
+          value={audienceData.websiteUrl}
+          required
+          onChange={handleWebsiteChange}
+          onBlur={() => setTouched((prev) => ({ ...prev, websiteUrl: true }))}
+        />
+      </label>
+      {validationError && (
+        <p className="mt-1 text-sm text-red-600">{validationError}</p>
+      )}
 
-      <div className="mt-8 flex justify-between">
-        <Button 
-          variant="outline" 
-          onClick={onBack}
-        >
-          Back
-        </Button>
-        <Button 
-          variant="primary" 
+      <div className="flex justify-between items-center mt-[100px] ">
+        <BlackButton onClick={onBack}>Back</BlackButton>
+
+        <PrimaryButton
           onClick={handleContinue}
-          withArrow
-          disabled={!audienceData.type || !audienceData.websiteUrl || !isValidUrl(audienceData.websiteUrl)}
+          disabled={
+            !audienceData.type ||
+            !audienceData.websiteUrl ||
+            !isValidUrl(audienceData.websiteUrl)
+          }
+          icon={<RightWhiteArrow />}
         >
           Continue
-        </Button>
+        </PrimaryButton>
       </div>
-    </StepContainer>
+    </div>
   );
 };
 

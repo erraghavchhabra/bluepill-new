@@ -585,3 +585,57 @@ export const SegmentNameIcon = () => (
     />
   </svg>
 );
+
+export const MessageSendButtonIcon = () => (
+  <svg
+    width="28"
+    height="28"
+    viewBox="0 0 28 28"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <g filter="url(#filter0_d_1157_9324)">
+      <path
+        d="M20.1391 4.96004L11.1091 7.96004C5.03914 9.99004 5.03914 13.3 11.1091 15.32L13.7891 16.21L14.6791 18.89C16.6991 24.96 20.0191 24.96 22.0391 18.89L25.0491 9.87004C26.3891 5.82004 24.1891 3.61004 20.1391 4.96004ZM20.4591 10.34L16.6591 14.16C16.5091 14.31 16.3191 14.38 16.1291 14.38C15.9391 14.38 15.7491 14.31 15.5991 14.16C15.3091 13.87 15.3091 13.39 15.5991 13.1L19.3991 9.28004C19.6891 8.99004 20.1691 8.99004 20.4591 9.28004C20.7491 9.57004 20.7491 10.05 20.4591 10.34Z"
+        fill="white"
+      />
+    </g>
+    <defs>
+      <filter
+        id="filter0_d_1157_9324"
+        x="0.556641"
+        y="0.563477"
+        width="26.8848"
+        height="26.8792"
+        filterUnits="userSpaceOnUse"
+        color-interpolation-filters="sRGB"
+      >
+        <feFlood flood-opacity="0" result="BackgroundImageFix" />
+        <feColorMatrix
+          in="SourceAlpha"
+          type="matrix"
+          values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+          result="hardAlpha"
+        />
+        <feOffset dx="-2" />
+        <feGaussianBlur stdDeviation="2" />
+        <feComposite in2="hardAlpha" operator="out" />
+        <feColorMatrix
+          type="matrix"
+          values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.12 0"
+        />
+        <feBlend
+          mode="normal"
+          in2="BackgroundImageFix"
+          result="effect1_dropShadow_1157_9324"
+        />
+        <feBlend
+          mode="normal"
+          in="SourceGraphic"
+          in2="effect1_dropShadow_1157_9324"
+          result="shape"
+        />
+      </filter>
+    </defs>
+  </svg>
+);

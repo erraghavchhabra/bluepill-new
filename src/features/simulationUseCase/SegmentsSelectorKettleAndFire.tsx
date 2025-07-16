@@ -52,6 +52,7 @@ import PrimaryButton from "@/components/Buttons/PrimaryButton.js";
 import {
   BehaviorsIcon,
   BuildingIcon,
+  CloseXIcon,
   EducationPrimeIcon,
   GeographicsIcon,
   GoalPrimeIcon,
@@ -191,11 +192,19 @@ interface PersonaType {
   data?: any;
   [key: string]: any; // For any other fields
 }
-const SectionHeader = ({ icon, title, number }: any) => {
+const SectionHeader = ({
+  icon,
+  title,
+  number,
+  titleColor = "primary2",
+}: any) => {
   return (
     <div className="flex items-center w-full mb-3">
       {/* Icon and Title */}
-      <div className="flex items-center  text-primary2 gap-3 font-medium text-lg">
+      <div
+        style={{ color: titleColor == "primary2" ? "#028B7E" : titleColor }}
+        className={`flex items-center   gap-3 font-medium text-lg`}
+      >
         {icon}
         <span>{title}</span>
       </div>
@@ -1692,32 +1701,30 @@ const SegmentsSelectorKettleAndFire: React.FC<SegmentsSelectorProps> = ({
               "animate-in slide-in-from-right duration-300"
             )}
           >
-            {/* <DialogHeader className="border-b pb-4 pt-5 px-6 bg-gradient-to-r from-blue-50 to-indigo-50">
-              <div className="flex items-center">
-                <div>
-                  <DialogTitle className="text-xl font-semibold text-gray-800 flex items-center">
-                    <User className="w-5 h-5 mr-3 text-blue-600" />
-                    {selectedSegmentForPersonas &&
-                      segments.find((s) => s.id === selectedSegmentForPersonas)
-                        ?.name}
-                  </DialogTitle>
-                  <p className="text-sm text-gray-600 mt-1 ml-8">
-                    Explore detailed profiles for this segment
-                  </p>
-                </div>
-              </div>
-            </DialogHeader> */}
-
             {loadingPersonas || loadingPersonaIds ? (
               <div className="flex flex-col justify-center items-center h-full py-20">
                 <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mb-4"></div>
                 <p className="text-gray-600">Loading profiles...</p>
               </div>
             ) : (
-              <div className="flex flex-col md:flex-row h-full p-[30px] bg-white">
-                {/* Left side: Role accordion with personas */}
-                <div className="md:w-[320px] border-r border-[#EBEBEB] pr-5 overflow-hidden flex flex-col h-full bg-white">
-                  {/* <div className="p-5 border-b">
+              <div className=" bg-white p-[30px] pr-[15px] h-full">
+                <div className="flex items-center justify-between mb-10">
+                  <div className="flex items-start flex-col gap-2">
+                    <h3 className="text-2xl font-semibold text-primary2">
+                      Bone Broth Buyers
+                    </h3>
+                    <p className="text-base font-medium text-black">
+                      Explore detailed profiles for this segment
+                    </p>
+                  </div>
+                  <button onClick={()=>{setIsPersonaModalOpen(false)}}>
+                    <CloseXIcon />
+                  </button>
+                </div>
+                <div className="flex flex-col md:flex-row h-full ">
+                  {/* Left side: Role accordion with personas */}
+                  <div className="md:w-[320px] border-r border-[#EBEBEB] pr-5 overflow-hidden flex flex-col h-full bg-white">
+                    {/* <div className="p-5 border-b">
                     <h3 className="text-sm font-medium text-gray-800 flex items-center">
                       <Users className="w-4 h-4 mr-2 text-blue-600" />
                       Profiles by Role
@@ -1727,443 +1734,453 @@ const SegmentsSelectorKettleAndFire: React.FC<SegmentsSelectorProps> = ({
                     </p>
                   </div> */}
 
-                  <div className="overflow-y-auto h-full scrollbar-hide">
-                    {Object.keys(rolePersonaMap).length > 0 ? (
-                      <div className="flex flex-col gap-3 items-start">
-                        {Object.entries(rolePersonaMap).map(
-                          ([role, personaIds]) => (
-                            <div key={role} className="w-full">
-                              <button
-                                onClick={() => toggleRoleExpansion(role)}
-                                className={cn(
-                                  "w-full bg-[#FAFAFA] text-start border-transparent border-l-4 p-3 pl-5 rounded-xl justify-between text-sm flex gap-[10px] items-center",
-                                  expandedRoles[role]
-                                    ? "bg-[#E6FCFA] border-primary2 font-semibold text-primary2 "
-                                    : "font-medium text-[#595E64]"
-                                )}
-                              >
-                                {role}
-                                <span className="text-primary2">
-                                  {personaIds?.length < 10 ? "0" : ""}
-                                  {personaIds?.length || 0}
-                                </span>
-                              </button>
-                              {expandedRoles[role] && (
-                                <div className="mt-3 flex flex-col gap-3 items-end pl-5 pb-5">
-                                  {getPersonasForRole(role).length > 0 ? (
-                                    getPersonasForRole(role).map((persona) => (
-                                      <button
-                                        key={persona.id}
-                                        onClick={() =>
-                                          setSelectedPersona(persona)
-                                        }
-                                        className={cn(
-                                          "p-[10px] pl-[18px] border-l-4 group flex items-center justify-between max-w-[280px] w-full rounded-xl transition-all duration-200",
-                                          selectedPersona?.id === persona.id
-                                            ? "border-primary2  bg-[#E6FCFA]"
-                                            : "border-transparent bg-[#FAFAFA]"
-                                        )}
-                                      >
-                                        <div className="flex items-center gap-[10px]">
-                                          <div
-                                            className={`p-2 relative rounded-full transition-all duration-200 h-[32px] w-[32px] group-hover:bg-[#E6FCFA]  ${
-                                              selectedPersona?.id ===
-                                                persona.id && "bg-[#E6FCFA]"
-                                            }`}
+                    <div className="overflow-y-auto h-full scrollbar-hide">
+                      {Object.keys(rolePersonaMap).length > 0 ? (
+                        <div className="flex flex-col gap-3 items-start">
+                          {Object.entries(rolePersonaMap).map(
+                            ([role, personaIds]) => (
+                              <div key={role} className="w-full">
+                                <button
+                                  onClick={() => toggleRoleExpansion(role)}
+                                  className={cn(
+                                    "w-full bg-[#FAFAFA] text-start border-transparent border-l-4 p-3 pl-5 rounded-xl justify-between text-sm flex gap-[10px] items-center",
+                                    expandedRoles[role]
+                                      ? "bg-[#E6FCFA] border-primary2 font-semibold text-primary2 "
+                                      : "font-medium text-[#595E64]"
+                                  )}
+                                >
+                                  {role}
+                                  <span className="text-primary2">
+                                    {personaIds?.length < 10 ? "0" : ""}
+                                    {personaIds?.length || 0}
+                                  </span>
+                                </button>
+                                {expandedRoles[role] && (
+                                  <div className="mt-3 flex flex-col gap-3 items-end pl-5 pb-5">
+                                    {getPersonasForRole(role).length > 0 ? (
+                                      getPersonasForRole(role).map(
+                                        (persona) => (
+                                          <button
+                                            key={persona.id}
+                                            onClick={() =>
+                                              setSelectedPersona(persona)
+                                            }
+                                            className={cn(
+                                              "p-[10px] pl-[18px] border-l-4 group flex items-center justify-between max-w-[280px] w-full rounded-xl transition-all duration-200",
+                                              selectedPersona?.id === persona.id
+                                                ? "border-primary2  bg-[#E6FCFA]"
+                                                : "border-transparent bg-[#FAFAFA]"
+                                            )}
                                           >
-                                            <UserIcon className="absolute top-2/4 left-2/4 -translate-x-2/4 -translate-y-2/4 text-gray-600" />
-                                          </div>
-                                          <div className="flex flex-col items-start gap-1">
-                                            <h3
-                                              className={`text-sm text-start${
+                                            <div className="flex items-center gap-[10px]">
+                                              <div
+                                                className={`p-2 relative rounded-full transition-all duration-200 h-[32px] w-[32px] group-hover:bg-[#E6FCFA]  ${
+                                                  selectedPersona?.id ===
+                                                    persona.id && "bg-[#E6FCFA]"
+                                                }`}
+                                              >
+                                                <UserIcon className="absolute top-2/4 left-2/4 -translate-x-2/4 -translate-y-2/4 text-gray-600" />
+                                              </div>
+                                              <div className="flex flex-col items-start gap-1">
+                                                <h3
+                                                  className={`text-sm text-start${
+                                                    selectedPersona?.id ===
+                                                    persona.id
+                                                      ? "text-primary2 font-semibold"
+                                                      : " text-[#595E64] font-medium"
+                                                  }`}
+                                                >
+                                                  {persona.name}
+                                                </h3>
+                                                <p
+                                                  className={`text-xs font-normal text-start${
+                                                    selectedPersona?.id ===
+                                                    persona.id
+                                                      ? "text-black "
+                                                      : " text-[#595E64] "
+                                                  }`}
+                                                >
+                                                  {persona.job_title ||
+                                                    persona.occupation ||
+                                                    "No title"}
+                                                </p>
+                                              </div>
+                                            </div>
+                                            <div
+                                              className={`transition-all duration-200 ${
                                                 selectedPersona?.id ===
                                                 persona.id
-                                                  ? "text-primary2 font-semibold"
-                                                  : " text-[#595E64] font-medium"
+                                                  ? "opacity-100 "
+                                                  : "opacity-0"
                                               }`}
                                             >
-                                              {persona.name}
-                                            </h3>
-                                            <p
-                                              className={`text-xs font-normal text-start${
-                                                selectedPersona?.id ===
-                                                persona.id
-                                                  ? "text-black "
-                                                  : " text-[#595E64] "
-                                              }`}
-                                            >
-                                              {persona.job_title ||
-                                                persona.occupation ||
-                                                "No title"}
-                                            </p>
-                                          </div>
-                                        </div>
-                                        <div
-                                          className={`transition-all duration-200 ${
-                                            selectedPersona?.id === persona.id
-                                              ? "opacity-100 "
-                                              : "opacity-0"
-                                          }`}
-                                        >
-                                          <PlayIcon />
-                                        </div>
-                                        {/* <div className="font-medium text-gray-800"></div>
+                                              <PlayIcon />
+                                            </div>
+                                            {/* <div className="font-medium text-gray-800"></div>
                                         <div className="text-xs text-gray-500 truncate mt-1 flex items-center">
                                           <Briefcase className="w-3 h-3 mr-1.5 text-gray-400" />
 
                                           {persona.company_name &&
                                             ` • ${persona.company_name}`}
                                         </div> */}
-                                      </button>
-                                    ))
-                                  ) : (
-                                    <div className="p-4 text-xs text-gray-500 italic text-center">
-                                      Loading profiles...
-                                    </div>
-                                  )}
-                                </div>
-                              )}
-                            </div>
-                          )
-                        )}
-                      </div>
-                    ) : (
-                      <div className="p-8 text-center text-gray-500 flex flex-col items-center">
-                        <Users className="w-12 h-12 text-gray-300 mb-3" />
-                        <p className="text-sm">
-                          No roles found for the selected filters
-                        </p>
-                      </div>
-                    )}
-                  </div>
-                </div>
-
-                {/* Right side: Persona Details */}
-                <div className="flex-1 overflow-hidden flex flex-col h-[100vh]">
-                  <div className="overflow-y-auto pl-5 bg-white h-full custom-scrollbar">
-                    {selectedPersona ? (
-                      <div className="overflow-hidden animate-fadeIn w-full">
-                        {/* Persona Header */}
-                        <div className="bg-gradient-to-b rounded-2xl drop-shadow-md from-[#E6FCFA] mb-5 to-[#FEFEFE] px-5 py-3 border-[#ECECEC] border-2  justify-between   flex items-center gap-[10px]">
-                          <div className="flex items-center gap-[10px]">
-                            <div
-                              className={`p-3 relative rounded-full transition-all duration-200 h-[50px] w-[50px] bg-primary `}
-                            >
-                              <UserIcon className="absolute top-2/4 left-2/4 -translate-x-2/4 -translate-y-2/4 text-gray-600" />
-                            </div>
-                            <h3 className="text-2xl  font-semibold text-primary2">
-                              {selectedPersona.name}
-                            </h3>
-                          </div>
-                          <div className="flex items-center gap-[10px] text-primary2">
-                            <PiSuitcase size={24} />
-                            <span className="font-medium">
-                              {selectedPersona.job_title ||
-                                "No title available"}
-                              {selectedPersona.company_name &&
-                                ` at ${selectedPersona.company_name}`}
-                            </span>
-                          </div>
+                                          </button>
+                                        )
+                                      )
+                                    ) : (
+                                      <div className="p-4 text-xs text-gray-500 italic text-center">
+                                        Loading profiles...
+                                      </div>
+                                    )}
+                                  </div>
+                                )}
+                              </div>
+                            )
+                          )}
                         </div>
+                      ) : (
+                        <div className="p-8 text-center text-gray-500 flex flex-col items-center">
+                          <Users className="w-12 h-12 text-gray-300 mb-3" />
+                          <p className="text-sm">
+                            No roles found for the selected filters
+                          </p>
+                        </div>
+                      )}
+                    </div>
+                  </div>
 
-                        <div className="bg-white">
-                          {/* Main Info Sections Grid */}
-                          <div className="grid md:grid-cols-2 gap-x-[25px] gap-y-5">
-                            {/* Personal Info Section */}
-                            <div className="">
-                              {/* <h4 className="font-medium text-blue-800 mb-4 flex items-center">
+                  {/* Right side: Persona Details */}
+                  <div className="flex-1 overflow-hidden flex flex-col h-[100vh]">
+                    <div className="overflow-y-auto pl-5 bg-white h-full custom-scrollbar pr-[15px]">
+                      {selectedPersona ? (
+                        <div className="overflow-hidden animate-fadeIn w-full">
+                          {/* Persona Header */}
+                          <div className="bg-gradient-to-b rounded-2xl drop-shadow-md from-[#E6FCFA] mb-5 to-[#FEFEFE] px-5 py-3 border-[#ECECEC] border-2  justify-between   flex items-center gap-[10px]">
+                            <div className="flex items-center gap-[10px]">
+                              <div
+                                className={`p-3 relative rounded-full transition-all duration-200 h-[50px] w-[50px] bg-primary `}
+                              >
+                                <UserIcon className="absolute top-2/4 left-2/4 -translate-x-2/4 -translate-y-2/4 text-gray-600" />
+                              </div>
+                              <h3 className="text-2xl  font-semibold text-primary2">
+                                {selectedPersona.name}
+                              </h3>
+                            </div>
+                            <div className="flex items-center gap-[10px] text-primary2">
+                              <PiSuitcase size={24} />
+                              <span className="font-medium">
+                                {selectedPersona.job_title ||
+                                  "No title available"}
+                                {selectedPersona.company_name &&
+                                  ` at ${selectedPersona.company_name}`}
+                              </span>
+                            </div>
+                          </div>
+
+                          <div className="bg-white">
+                            {/* Main Info Sections Grid */}
+                            <div className="grid md:grid-cols-2 gap-x-[25px] gap-y-5">
+                              {/* Personal Info Section */}
+                              <div className="">
+                                {/* <h4 className="font-medium text-blue-800 mb-4 flex items-center">
                                 <User className="w-4 h-4 mr-2" />
                                 Personal Information
                               </h4> */}
-                              <SectionHeader
-                                icon={<PiUser size={24} />}
-                                title="Personal Information"
-                                number={1}
-                              />
-                              <div className="p-4 border-2 border-[#ECECEC] bg-gradient-to-b from-[#E6FCFA] to-[#FEFEFE] rounded-2xl drop-shadow-md">
-                                <div className="flex flex-col gap-4">
-                                  {[
-                                    {
-                                      key: "age",
-                                      label: "Age",
-                                      icon: <PiPersonArmsSpread size={20} />,
-                                      value: selectedPersona.age,
-                                    },
-                                    {
-                                      key: "gender",
-                                      label: "Gender",
-                                      icon: <PiGenderIntersex size={20} />,
-                                      value: selectedPersona.gender,
-                                    },
-                                    {
-                                      key: "location",
-                                      label: "Location",
-                                      icon: <LocationPrimeIcon />,
-                                      value: selectedPersona.location,
-                                    },
-                                    {
-                                      key: "income",
-                                      label: "Income",
-                                      icon: <IncomePrimeIcon />,
-                                      value: selectedPersona.income,
-                                    },
-                                    {
-                                      key: "education",
-                                      label: "Education",
-                                      icon: <EducationPrimeIcon />,
-                                      value: selectedPersona.education,
-                                    },
-                                  ]
-                                    .filter((field) => field.value)
-                                    .map((field: any, index: number) => (
-                                      <div
-                                        key={index}
-                                        className="flex items-start gap-3"
-                                      >
-                                        <div className="text-primary2 pr-3 border-r border-[#DBDDE0]">
-                                          {field.icon}
+                                <SectionHeader
+                                  icon={<PiUser size={24} />}
+                                  title="Personal Information"
+                                  number={1}
+                                />
+                                <div className="p-4 border-2 border-[#ECECEC] bg-gradient-to-b from-[#E6FCFA] to-[#FEFEFE] rounded-2xl drop-shadow-md">
+                                  <div className="flex flex-col gap-4">
+                                    {[
+                                      {
+                                        key: "age",
+                                        label: "Age",
+                                        icon: <PiPersonArmsSpread size={20} />,
+                                        value: selectedPersona.age,
+                                      },
+                                      {
+                                        key: "gender",
+                                        label: "Gender",
+                                        icon: <PiGenderIntersex size={20} />,
+                                        value: selectedPersona.gender,
+                                      },
+                                      {
+                                        key: "location",
+                                        label: "Location",
+                                        icon: <LocationPrimeIcon />,
+                                        value: selectedPersona.location,
+                                      },
+                                      {
+                                        key: "income",
+                                        label: "Income",
+                                        icon: <IncomePrimeIcon />,
+                                        value: selectedPersona.income,
+                                      },
+                                      {
+                                        key: "education",
+                                        label: "Education",
+                                        icon: <EducationPrimeIcon />,
+                                        value: selectedPersona.education,
+                                      },
+                                    ]
+                                      .filter((field) => field.value)
+                                      .map((field: any, index: number) => (
+                                        <div
+                                          key={index}
+                                          className="flex items-start gap-3"
+                                        >
+                                          <div className="text-primary2 pr-3 border-r border-[#DBDDE0]">
+                                            {field.icon}
+                                          </div>
+                                          <div className="flex items-start justify-between w-full gap-1">
+                                            <h3 className="text-black font-medium text-sm ">
+                                              {field.label}
+                                            </h3>
+                                            <span className="text-primary2 font-semibold text-xs text-right ">
+                                              {field.value}
+                                            </span>
+                                          </div>
                                         </div>
-                                        <div className="flex items-start justify-between w-full gap-1">
-                                          <h3 className="text-black font-medium text-sm ">
-                                            {field.label}
-                                          </h3>
-                                          <span className="text-primary2 font-semibold text-xs text-right ">
-                                            {field.value}
-                                          </span>
-                                        </div>
-                                      </div>
-                                    ))}
+                                      ))}
+                                  </div>
                                 </div>
                               </div>
-                            </div>
 
-                            {/* Professional Info Section - Adjust fields for B2C personas */}
-                            <div className="">
-                              <SectionHeader
-                                icon={<BuildingIcon />}
-                                title="Consumer Details"
-                                number={2}
-                              />
-                              <div className="p-4 border-2 border-[#ECECEC] bg-gradient-to-b from-[#E0E7FF] to-[#FEFEFE] rounded-2xl drop-shadow-md">
-                                <div className="flex flex-col gap-4">
-                                  {[
-                                    {
-                                      key: "age_group",
-                                      label: "Age Group",
-                                      icon: <PiPersonArmsSpread size={20} />,
-                                      value: selectedPersona.data?.age_group,
-                                    },
-                                    {
-                                      key: "household_income",
-                                      label: "Income Range",
-                                      icon: <PiUsersLight />,
-                                      value:
-                                        selectedPersona.data?.household_income,
-                                    },
-                                    {
-                                      key: "geo_location",
-                                      label: "Location Type",
-                                      icon: <LocationIcon />,
-                                      value: selectedPersona.data?.geo_location,
-                                    },
-                                    {
-                                      key: "pets",
-                                      label: "Pets",
-                                      icon: <PetsIcon />,
-                                      value: selectedPersona.data?.pets,
-                                    },
-                                    {
-                                      key: "children",
-                                      label: "Children",
-                                      icon: <PiBabyLight size={20} />,
-                                      value: selectedPersona.data?.children,
-                                    },
-                                  ]
-                                    .filter((field) => field.value)
-                                    .map((field, index) => (
-                                      <div
-                                        key={index}
-                                        className="flex items-start gap-3"
-                                      >
-                                        <div className="text-primary2 pr-3 border-r border-[#DBDDE0]">
-                                          {field.icon}
+                              {/* Professional Info Section - Adjust fields for B2C personas */}
+                              <div className="">
+                                <SectionHeader
+                                  icon={<BuildingIcon />}
+                                  title="Consumer Details"
+                                  number={2}
+                                  titleColor="#4F46E5"
+                                />
+                                <div className="p-4 border-2 border-[#ECECEC] bg-gradient-to-b from-[#E0E7FF] to-[#FEFEFE] rounded-2xl drop-shadow-md">
+                                  <div className="flex flex-col gap-4">
+                                    {[
+                                      {
+                                        key: "age_group",
+                                        label: "Age Group",
+                                        icon: <PiPersonArmsSpread size={20} />,
+                                        value: selectedPersona.data?.age_group,
+                                      },
+                                      {
+                                        key: "household_income",
+                                        label: "Income Range",
+                                        icon: <PiUsersLight />,
+                                        value:
+                                          selectedPersona.data
+                                            ?.household_income,
+                                      },
+                                      {
+                                        key: "geo_location",
+                                        label: "Location Type",
+                                        icon: <LocationIcon />,
+                                        value:
+                                          selectedPersona.data?.geo_location,
+                                      },
+                                      {
+                                        key: "pets",
+                                        label: "Pets",
+                                        icon: <PetsIcon />,
+                                        value: selectedPersona.data?.pets,
+                                      },
+                                      {
+                                        key: "children",
+                                        label: "Children",
+                                        icon: <PiBabyLight size={20} />,
+                                        value: selectedPersona.data?.children,
+                                      },
+                                    ]
+                                      .filter((field) => field.value)
+                                      .map((field, index) => (
+                                        <div
+                                          key={index}
+                                          className="flex items-start gap-3"
+                                        >
+                                          <div className="text-primary2 pr-3 border-r border-[#DBDDE0]">
+                                            {field.icon}
+                                          </div>
+                                          <div className="flex items-start justify-between w-full gap-1">
+                                            <h3 className="text-black font-medium text-sm ">
+                                              {field.label}
+                                            </h3>
+                                            <span className="text-primary2 font-semibold text-xs text-right">
+                                              {field.value}
+                                            </span>
+                                          </div>
                                         </div>
-                                        <div className="flex items-start justify-between w-full gap-1">
-                                          <h3 className="text-black font-medium text-sm ">
-                                            {field.label}
-                                          </h3>
-                                          <span className="text-primary2 font-semibold text-xs text-right">
-                                            {field.value}
-                                          </span>
-                                        </div>
-                                      </div>
-                                    ))}
+                                      ))}
+                                  </div>
                                 </div>
                               </div>
+
+                              {selectedPersona.goals &&
+                                selectedPersona.goals.length > 0 && (
+                                  <div className="">
+                                    <SectionHeader
+                                      icon={<GoalPrimeIcon />}
+                                      title="Goals"
+                                      number={3}
+                                    />
+                                    <div className="p-4 border-2 border-[#ECECEC] bg-gradient-to-b from-[#D1FAE5] to-[#FEFEFE] rounded-2xl drop-shadow-md">
+                                      <div className="flex flex-col gap-4">
+                                        {selectedPersona.goals.map(
+                                          (goal: string, index: number) => (
+                                            <div
+                                              key={index}
+                                              className="flex items-start gap-3"
+                                            >
+                                              <div className="text-primary2 pr-3 border-r border-[#DBDDE0]">
+                                                <GoalsPrimeIcon />
+                                              </div>
+                                              <div className="flex items-start justify-between w-full gap-1">
+                                                <h3 className="text-black font-normal text-xs">
+                                                  {goal}
+                                                </h3>
+                                              </div>
+                                            </div>
+                                          )
+                                        )}
+                                      </div>
+                                    </div>
+                                  </div>
+                                )}
+
+                              {selectedPersona.behaviors &&
+                                selectedPersona.behaviors.length > 0 && (
+                                  <div className="">
+                                    <SectionHeader
+                                      icon={<BehaviorsIcon />}
+                                      title="Behaviors"
+                                      number={4}
+                                      titleColor="#E9BC3B"
+                                    />
+                                    <div className="p-4 border-2 border-[#ECECEC] bg-gradient-to-b from-[#FFF7E0CC] to-[#FEFEFE] rounded-2xl drop-shadow-md">
+                                      <div className="flex flex-col gap-4">
+                                        {selectedPersona.behaviors.map(
+                                          (behavior: string, index: number) => (
+                                            <div
+                                              key={index}
+                                              className="flex items-start gap-3"
+                                            >
+                                              <div className="text-primary2 pr-3 border-r border-[#DBDDE0]">
+                                                <GoalsYellowIcon />
+                                              </div>
+                                              <div className="flex items-start justify-between w-full gap-1">
+                                                <h3 className="text-black font-normal text-xs">
+                                                  {behavior}
+                                                </h3>
+                                              </div>
+                                            </div>
+                                          )
+                                        )}
+                                      </div>
+                                    </div>
+                                  </div>
+                                )}
+
+                              {selectedPersona.interests &&
+                                selectedPersona.interests.length > 0 && (
+                                  <div className="">
+                                    <SectionHeader
+                                      icon={<InterestsIcon />}
+                                      title="Interests"
+                                      number={5}
+                                      titleColor="#8B47C8"
+                                    />
+                                    <div className="p-4 border-2 border-[#ECECEC] bg-gradient-to-b from-[#EEDBFFCC] to-[#FEFEFE] rounded-2xl drop-shadow-md">
+                                      <div className="flex flex-col gap-4">
+                                        {selectedPersona.interests.map(
+                                          (interest: string, index: number) => (
+                                            <div
+                                              key={index}
+                                              className="flex items-start gap-3"
+                                            >
+                                              <div className="text-primary2 pr-3 border-r border-[#DBDDE0]">
+                                                <InterestsPerpleIcon />
+                                              </div>
+                                              <div className="flex items-start justify-between w-full gap-1">
+                                                <h3 className="text-black font-normal text-xs">
+                                                  {interest}
+                                                </h3>
+                                              </div>
+                                            </div>
+                                          )
+                                        )}
+                                      </div>
+                                    </div>
+                                  </div>
+                                )}
+
+                              {selectedPersona.preferred_channels &&
+                                selectedPersona.preferred_channels.length >
+                                  0 && (
+                                  <div className="">
+                                    <SectionHeader
+                                      icon={<PreferredChannelsIcon />}
+                                      title="Preferred Channels"
+                                      number={6}
+                                    />
+                                    <div className="p-4 border-2 border-[#ECECEC] bg-gradient-to-b from-[#E6FCFA] to-[#FEFEFE] rounded-2xl drop-shadow-md">
+                                      <div className="flex flex-col gap-4">
+                                        {selectedPersona.preferred_channels.map(
+                                          (channel: string, index: number) => (
+                                            <div
+                                              key={index}
+                                              className="flex items-start gap-3"
+                                            >
+                                              <div className="text-primary2 pr-3 border-r border-[#DBDDE0]">
+                                                <PreferredChanelIcon />
+                                              </div>
+                                              <div className="flex items-start justify-between w-full gap-1">
+                                                <h3 className="text-black font-normal text-xs">
+                                                  {channel}
+                                                </h3>
+                                              </div>
+                                            </div>
+                                          )
+                                        )}
+                                      </div>
+                                    </div>
+                                  </div>
+                                )}
                             </div>
-
-                            {selectedPersona.goals &&
-                              selectedPersona.goals.length > 0 && (
-                                <div className="">
-                                  <SectionHeader
-                                    icon={<GoalPrimeIcon />}
-                                    title="Goals"
-                                    number={3}
-                                  />
-                                  <div className="p-4 border-2 border-[#ECECEC] bg-gradient-to-b from-[#D1FAE5] to-[#FEFEFE] rounded-2xl drop-shadow-md">
-                                    <div className="flex flex-col gap-4">
-                                      {selectedPersona.goals.map(
-                                        (goal: string, index: number) => (
-                                          <div
-                                            key={index}
-                                            className="flex items-start gap-3"
-                                          >
-                                            <div className="text-primary2 pr-3 border-r border-[#DBDDE0]">
-                                              <GoalsPrimeIcon />
+                            <div className="w-full pt-5">
+                              {selectedPersona.pain_points &&
+                                selectedPersona.pain_points.length > 0 && (
+                                  <div className="">
+                                    <SectionHeader
+                                      icon={<PainPointsIcon />}
+                                      title="Pain Points"
+                                      number={7}
+                                      titleColor="#C84747"
+                                    />
+                                    <div className="p-4 border-2 border-[#ECECEC] bg-gradient-to-b from-[#FFD8D880] to-[#FEFEFE] rounded-2xl drop-shadow-md">
+                                      <div className="flex flex-col gap-4">
+                                        {selectedPersona.pain_points.map(
+                                          (point: string, index: number) => (
+                                            <div
+                                              key={index}
+                                              className="flex items-start gap-3"
+                                            >
+                                              <div className="text-primary2 pr-3 border-r border-[#DBDDE0]">
+                                                <RightUniqueArrowIcon />
+                                              </div>
+                                              <div className="flex items-start justify-between w-full gap-1">
+                                                <h3 className="text-black font-normal text-xs">
+                                                  {point}
+                                                </h3>
+                                              </div>
                                             </div>
-                                            <div className="flex items-start justify-between w-full gap-1">
-                                              <h3 className="text-black font-normal text-xs">
-                                                {goal}
-                                              </h3>
-                                            </div>
-                                          </div>
-                                        )
-                                      )}
+                                          )
+                                        )}
+                                      </div>
                                     </div>
                                   </div>
-                                </div>
-                              )}
+                                )}
 
-                            {selectedPersona.behaviors &&
-                              selectedPersona.behaviors.length > 0 && (
-                                <div className="">
-                                  <SectionHeader
-                                    icon={<BehaviorsIcon />}
-                                    title="Behaviors"
-                                    number={4}
-                                  />
-                                  <div className="p-4 border-2 border-[#ECECEC] bg-gradient-to-b from-[#FFF7E0CC] to-[#FEFEFE] rounded-2xl drop-shadow-md">
-                                    <div className="flex flex-col gap-4">
-                                      {selectedPersona.behaviors.map(
-                                        (behavior: string, index: number) => (
-                                          <div
-                                            key={index}
-                                            className="flex items-start gap-3"
-                                          >
-                                            <div className="text-primary2 pr-3 border-r border-[#DBDDE0]">
-                                              <GoalsYellowIcon />
-                                            </div>
-                                            <div className="flex items-start justify-between w-full gap-1">
-                                              <h3 className="text-black font-normal text-xs">
-                                                {behavior}
-                                              </h3>
-                                            </div>
-                                          </div>
-                                        )
-                                      )}
-                                    </div>
-                                  </div>
-                                </div>
-                              )}
-
-                            {selectedPersona.interests &&
-                              selectedPersona.interests.length > 0 && (
-                                <div className="">
-                                  <SectionHeader
-                                    icon={<InterestsIcon />}
-                                    title="Interests"
-                                    number={5}
-                                  />
-                                  <div className="p-4 border-2 border-[#ECECEC] bg-gradient-to-b from-[#EEDBFFCC] to-[#FEFEFE] rounded-2xl drop-shadow-md">
-                                    <div className="flex flex-col gap-4">
-                                      {selectedPersona.interests.map(
-                                        (interest: string, index: number) => (
-                                          <div
-                                            key={index}
-                                            className="flex items-start gap-3"
-                                          >
-                                            <div className="text-primary2 pr-3 border-r border-[#DBDDE0]">
-                                              <InterestsPerpleIcon />
-                                            </div>
-                                            <div className="flex items-start justify-between w-full gap-1">
-                                              <h3 className="text-black font-normal text-xs">
-                                                {interest}
-                                              </h3>
-                                            </div>
-                                          </div>
-                                        )
-                                      )}
-                                    </div>
-                                  </div>
-                                </div>
-                              )}
-
-                            {selectedPersona.preferred_channels &&
-                              selectedPersona.preferred_channels.length > 0 && (
-                                <div className="">
-                                  <SectionHeader
-                                    icon={<PreferredChannelsIcon />}
-                                    title="Preferred Channels"
-                                    number={6}
-                                  />
-                                  <div className="p-4 border-2 border-[#ECECEC] bg-gradient-to-b from-[#E6FCFA] to-[#FEFEFE] rounded-2xl drop-shadow-md">
-                                    <div className="flex flex-col gap-4">
-                                      {selectedPersona.preferred_channels.map(
-                                        (channel: string, index: number) => (
-                                          <div
-                                            key={index}
-                                            className="flex items-start gap-3"
-                                          >
-                                            <div className="text-primary2 pr-3 border-r border-[#DBDDE0]">
-                                              <PreferredChanelIcon />
-                                            </div>
-                                            <div className="flex items-start justify-between w-full gap-1">
-                                              <h3 className="text-black font-normal text-xs">
-                                                {channel}
-                                              </h3>
-                                            </div>
-                                          </div>
-                                        )
-                                      )}
-                                    </div>
-                                  </div>
-                                </div>
-                              )}
-                          </div>
-                          <div className="w-full pt-5">
-                            {selectedPersona.pain_points &&
-                              selectedPersona.pain_points.length > 0 && (
-                                <div className="">
-                                  <SectionHeader
-                                    icon={<PainPointsIcon />}
-                                    title="Pain Points"
-                                    number={7}
-                                  />
-                                  <div className="p-4 border-2 border-[#ECECEC] bg-gradient-to-b from-[#FFD8D880] to-[#FEFEFE] rounded-2xl drop-shadow-md">
-                                    <div className="flex flex-col gap-4">
-                                      {selectedPersona.pain_points.map(
-                                        (point: string, index: number) => (
-                                          <div
-                                            key={index}
-                                            className="flex items-start gap-3"
-                                          >
-                                            <div className="text-primary2 pr-3 border-r border-[#DBDDE0]">
-                                              <RightUniqueArrowIcon />
-                                            </div>
-                                            <div className="flex items-start justify-between w-full gap-1">
-                                              <h3 className="text-black font-normal text-xs">
-                                                {point}
-                                              </h3>
-                                            </div>
-                                          </div>
-                                        )
-                                      )}
-                                    </div>
-                                  </div>
-                                </div>
-                              )}
-
-                            {/* {selectedPersona.values &&
+                              {/* {selectedPersona.values &&
                               selectedPersona.values.length > 0 && (
                                 <div className="bg-green-50 p-5 rounded-lg border border-green-100">
                                   <h4 className="font-medium text-green-800 mb-3 flex items-center">
@@ -2196,242 +2213,244 @@ const SegmentsSelectorKettleAndFire: React.FC<SegmentsSelectorProps> = ({
                                   </ul>
                                 </div>
                               )} */}
-                          </div>
-                          {/* Replace the hardcoded sections with dynamic rendering */}
-                          <div className="space-y-6 mt-4">
-                            {/* Dynamic rendering of additional data (excluding basic fields already shown) */}
-                            <div className="mt-10">
-                              <h3 className="text-2xl  font-semibold text-black mb-5">
-                                Additional Details
-                              </h3>
-                              {selectedPersona?.children && (
-                                <div className="p-4 border-2 border-[#ECECEC] bg-gradient-to-b from-[#E6FCFA] to-[#FEFEFE] rounded-2xl drop-shadow-md">
-                                  <div className="flex items-start gap-3">
-                                    <div className="text-primary2 pr-3 border-r border-[#DBDDE0]">
-                                      <PiBabyLight size={24} />
-                                    </div>
-                                    <div className="flex items-center justify-between w-full gap-1">
-                                      <h3 className="text-black font-medium text-sm ">
-                                        Children
-                                      </h3>
-                                      <span className="text-primary2 font-semibold text-xs text-right ">
-                                        {selectedPersona?.children?.toUpperCase()}
-                                      </span>
-                                    </div>
-                                  </div>
-                                </div>
-                              )}
-                              <div className=" border-2 border-[#ECECEC] bg-gradient-to-b from-[#F8F8F8] to-[#FEFEFE] rounded-2xl drop-shadow-md mt-5">
-                                <h3 className="p-4 text-xl font-semibold text-black">
-                                  Customer Profile Insights
+                            </div>
+                            {/* Replace the hardcoded sections with dynamic rendering */}
+                            <div className="space-y-6 mt-4">
+                              {/* Dynamic rendering of additional data (excluding basic fields already shown) */}
+                              <div className="mt-10">
+                                <h3 className="text-2xl  font-semibold text-black mb-5">
+                                  Additional Details
                                 </h3>
-                                <AdvancedDataContent
-                                  title="Concerns And Obstacles:"
-                                  data={
-                                    selectedPersona?.customer_profile_insights
-                                      ?.concerns_and_obstacles
-                                  }
-                                />
-                                <AdvancedDataContent
-                                  title="Decision Criteria:"
-                                  data={
-                                    selectedPersona?.customer_profile_insights
-                                      ?.decision_criteria
-                                  }
-                                />
-                                <AdvancedDataContent
-                                  title="Expected Outcomes:"
-                                  data={
-                                    selectedPersona?.customer_profile_insights
-                                      ?.expected_outcomes
-                                  }
-                                />
-                                <AdvancedDataContent
-                                  title="Path To Purchase:"
-                                  data={
-                                    selectedPersona?.customer_profile_insights
-                                      ?.path_to_purchase
-                                  }
-                                />
-                                <AdvancedDataContent
-                                  title="Triggers And Motivations:"
-                                  data={
-                                    selectedPersona?.customer_profile_insights
-                                      ?.triggers_and_motivations
-                                  }
-                                />
-                              </div>
-                              <div className="grid grid-cols-3 gap-5 items-center mt-5">
-                                {selectedPersona?.geographics && (
+                                {selectedPersona?.children && (
                                   <div className="p-4 border-2 border-[#ECECEC] bg-gradient-to-b from-[#E6FCFA] to-[#FEFEFE] rounded-2xl drop-shadow-md">
                                     <div className="flex items-start gap-3">
                                       <div className="text-primary2 pr-3 border-r border-[#DBDDE0]">
-                                        <GeographicsIcon />
+                                        <PiBabyLight size={24} />
                                       </div>
-                                      <div className="flex items-start flex-col justify-between w-full gap-2">
-                                        <h3 className="text-black text-start font-medium text-sm ">
-                                          Geographics
+                                      <div className="flex items-center justify-between w-full gap-1">
+                                        <h3 className="text-black font-medium text-sm ">
+                                          Children
                                         </h3>
-                                        <span className="text-primary2 text-start font-semibold text-xs ">
-                                          {selectedPersona?.geographics?.toUpperCase()}
+                                        <span className="text-primary2 font-semibold text-xs text-right ">
+                                          {selectedPersona?.children?.toUpperCase()}
                                         </span>
                                       </div>
                                     </div>
                                   </div>
                                 )}
-                                {selectedPersona?.married && (
-                                  <div className="p-4 border-2 border-[#ECECEC] bg-gradient-to-b from-[#E6FCFA] to-[#FEFEFE] rounded-2xl drop-shadow-md">
-                                    <div className="flex items-start gap-3">
-                                      <div className="text-primary2 pr-3 border-r border-[#DBDDE0]">
-                                        <MarriedIcon />
-                                      </div>
-                                      <div className="flex items-start flex-col justify-between w-full gap-2">
-                                        <h3 className="text-black text-start font-medium text-sm ">
-                                          Married
-                                        </h3>
-                                        <span className="text-primary2 text-start font-semibold text-xs  ">
-                                          {selectedPersona?.married?.toUpperCase()}
-                                        </span>
-                                      </div>
-                                    </div>
-                                  </div>
-                                )}
-                                {selectedPersona?.pets && (
-                                  <div className="p-4 border-2 border-[#ECECEC] bg-gradient-to-b from-[#E6FCFA] to-[#FEFEFE] rounded-2xl drop-shadow-md">
-                                    <div className="flex items-start gap-3">
-                                      <div className="text-primary2 pr-3 border-r border-[#DBDDE0]">
-                                        <PetsPrimeIcon />
-                                      </div>
-                                      <div className="flex items-start flex-col justify-between w-full gap-2">
-                                        <h3 className="text-black text-start font-medium text-sm ">
-                                          Pets
-                                        </h3>
-                                        <span className="text-primary2 text-start font-semibold text-xs  ">
-                                          {selectedPersona?.pets?.toUpperCase()}
-                                        </span>
-                                      </div>
-                                    </div>
-                                  </div>
-                                )}
-                              </div>
-                              <div className="grid grid-cols-2 gap-5 items-center mt-5">
-                                {selectedPersona?.life_stage && (
-                                  <div className="p-4 border-2 border-[#ECECEC] bg-gradient-to-b from-[#E6FCFA] to-[#FEFEFE] rounded-2xl drop-shadow-md">
-                                    <div className="flex items-start gap-3">
-                                      <div className="text-primary2 pr-3 border-r border-[#DBDDE0]">
-                                        <LifeStageIcon />
-                                      </div>
-                                      <div className="flex items-start flex-col justify-between w-full gap-2">
-                                        <h3 className="text-black text-start font-medium text-sm ">
-                                          Life Stage
-                                        </h3>
-                                        <span className="text-primary2 text-start font-semibold text-xs ">
-                                          {selectedPersona?.life_stage?.toUpperCase()}
-                                        </span>
-                                      </div>
-                                    </div>
-                                  </div>
-                                )}
-                                {selectedPersona?.persona_segment && (
-                                  <div className="p-4 border-2 border-[#ECECEC] bg-gradient-to-b from-[#E6FCFA] to-[#FEFEFE] rounded-2xl drop-shadow-md">
-                                    <div className="flex items-start gap-3">
-                                      <div className="text-primary2 pr-3 border-r border-[#DBDDE0]">
-                                        <PersonaSegmentIcon />
-                                      </div>
-                                      <div className="flex items-start flex-col justify-between w-full gap-2">
-                                        <h3 className="text-black text-start font-medium text-sm ">
-                                          Persona Segment
-                                        </h3>
-                                        <span className="text-primary2 text-start font-semibold text-xs  ">
-                                          {selectedPersona?.persona_segment?.toUpperCase()}
-                                        </span>
-                                      </div>
-                                    </div>
-                                  </div>
-                                )}
-                              </div>
-                              {selectedPersona?.psychographics && (
-                                <div className="p-4 border-2 border-[#ECECEC] bg-gradient-to-b from-[#F8F8F8] to-[#FEFEFE] rounded-2xl drop-shadow-md mt-5">
-                                  <div className="flex items-start gap-3">
-                                    <div className="text-primary2 pr-3 border-r border-[#DBDDE0]">
-                                      <PsychographicsIcon />
-                                    </div>
-                                    <div className="flex items-start flex-col justify-between w-full gap-2">
-                                      <h3 className="text-black text-start font-medium text-sm ">
-                                        Psychographics
-                                      </h3>
-                                      <span className="text-[#595E64] text-start font-normal text-xs ">
-                                        {selectedPersona?.psychographics}
-                                      </span>
-                                    </div>
-                                  </div>
+                                <div className=" border-2 border-[#ECECEC] bg-gradient-to-b from-[#F8F8F8] to-[#FEFEFE] rounded-2xl drop-shadow-md mt-5">
+                                  <h3 className="p-4 text-xl font-semibold text-black">
+                                    Customer Profile Insights
+                                  </h3>
+                                  <AdvancedDataContent
+                                    title="Concerns And Obstacles:"
+                                    data={
+                                      selectedPersona?.customer_profile_insights
+                                        ?.concerns_and_obstacles
+                                    }
+                                  />
+                                  <AdvancedDataContent
+                                    title="Decision Criteria:"
+                                    data={
+                                      selectedPersona?.customer_profile_insights
+                                        ?.decision_criteria
+                                    }
+                                  />
+                                  <AdvancedDataContent
+                                    title="Expected Outcomes:"
+                                    data={
+                                      selectedPersona?.customer_profile_insights
+                                        ?.expected_outcomes
+                                    }
+                                  />
+                                  <AdvancedDataContent
+                                    title="Path To Purchase:"
+                                    data={
+                                      selectedPersona?.customer_profile_insights
+                                        ?.path_to_purchase
+                                    }
+                                  />
+                                  <AdvancedDataContent
+                                    title="Triggers And Motivations:"
+                                    data={
+                                      selectedPersona?.customer_profile_insights
+                                        ?.triggers_and_motivations
+                                    }
+                                  />
                                 </div>
-                              )}
-                              <div className="grid grid-cols-2 gap-5 items-center mt-5">
-                                <HabitsDataContent
-                                  title="Purchasing Habits"
-                                  icon={<PurchasingHabitsIcon />}
-                                  fromColor="#F8F8F8"
-                                  data={selectedPersona?.purchasing_habits}
-                                />
-                                <HabitsDataContent
-                                  title="Sales Marketing Hooks"
-                                  icon={<SalesMarketingHooksIcon />}
-                                  fromColor="#F8F8F8"
-                                  data={selectedPersona?.sales_marketing_hooks}
-                                />
-                              </div>
-                              <div className="grid grid-cols-2 gap-5 items-center mt-5">
-                                {selectedPersona?.segment_name && (
-                                  <div className="p-4 border-2 border-[#ECECEC] bg-gradient-to-b from-[#E6FCFA] to-[#FEFEFE] rounded-2xl drop-shadow-md">
+                                <div className="grid grid-cols-3 gap-5 items-center mt-5">
+                                  {selectedPersona?.geographics && (
+                                    <div className="p-4 border-2 border-[#ECECEC] bg-gradient-to-b from-[#E6FCFA] to-[#FEFEFE] rounded-2xl drop-shadow-md">
+                                      <div className="flex items-start gap-3">
+                                        <div className="text-primary2 pr-3 border-r border-[#DBDDE0]">
+                                          <GeographicsIcon />
+                                        </div>
+                                        <div className="flex items-start flex-col justify-between w-full gap-2">
+                                          <h3 className="text-black text-start font-medium text-sm ">
+                                            Geographics
+                                          </h3>
+                                          <span className="text-primary2 text-start font-semibold text-xs ">
+                                            {selectedPersona?.geographics?.toUpperCase()}
+                                          </span>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  )}
+                                  {selectedPersona?.married && (
+                                    <div className="p-4 border-2 border-[#ECECEC] bg-gradient-to-b from-[#E6FCFA] to-[#FEFEFE] rounded-2xl drop-shadow-md">
+                                      <div className="flex items-start gap-3">
+                                        <div className="text-primary2 pr-3 border-r border-[#DBDDE0]">
+                                          <MarriedIcon />
+                                        </div>
+                                        <div className="flex items-start flex-col justify-between w-full gap-2">
+                                          <h3 className="text-black text-start font-medium text-sm ">
+                                            Married
+                                          </h3>
+                                          <span className="text-primary2 text-start font-semibold text-xs  ">
+                                            {selectedPersona?.married?.toUpperCase()}
+                                          </span>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  )}
+                                  {selectedPersona?.pets && (
+                                    <div className="p-4 border-2 border-[#ECECEC] bg-gradient-to-b from-[#E6FCFA] to-[#FEFEFE] rounded-2xl drop-shadow-md">
+                                      <div className="flex items-start gap-3">
+                                        <div className="text-primary2 pr-3 border-r border-[#DBDDE0]">
+                                          <PetsPrimeIcon />
+                                        </div>
+                                        <div className="flex items-start flex-col justify-between w-full gap-2">
+                                          <h3 className="text-black text-start font-medium text-sm ">
+                                            Pets
+                                          </h3>
+                                          <span className="text-primary2 text-start font-semibold text-xs  ">
+                                            {selectedPersona?.pets?.toUpperCase()}
+                                          </span>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  )}
+                                </div>
+                                <div className="grid grid-cols-2 gap-5 items-center mt-5">
+                                  {selectedPersona?.life_stage && (
+                                    <div className="p-4 border-2 border-[#ECECEC] bg-gradient-to-b from-[#E6FCFA] to-[#FEFEFE] rounded-2xl drop-shadow-md">
+                                      <div className="flex items-start gap-3">
+                                        <div className="text-primary2 pr-3 border-r border-[#DBDDE0]">
+                                          <LifeStageIcon />
+                                        </div>
+                                        <div className="flex items-start flex-col justify-between w-full gap-2">
+                                          <h3 className="text-black text-start font-medium text-sm ">
+                                            Life Stage
+                                          </h3>
+                                          <span className="text-primary2 text-start font-semibold text-xs ">
+                                            {selectedPersona?.life_stage?.toUpperCase()}
+                                          </span>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  )}
+                                  {selectedPersona?.persona_segment && (
+                                    <div className="p-4 border-2 border-[#ECECEC] bg-gradient-to-b from-[#E6FCFA] to-[#FEFEFE] rounded-2xl drop-shadow-md">
+                                      <div className="flex items-start gap-3">
+                                        <div className="text-primary2 pr-3 border-r border-[#DBDDE0]">
+                                          <PersonaSegmentIcon />
+                                        </div>
+                                        <div className="flex items-start flex-col justify-between w-full gap-2">
+                                          <h3 className="text-black text-start font-medium text-sm ">
+                                            Persona Segment
+                                          </h3>
+                                          <span className="text-primary2 text-start font-semibold text-xs  ">
+                                            {selectedPersona?.persona_segment?.toUpperCase()}
+                                          </span>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  )}
+                                </div>
+                                {selectedPersona?.psychographics && (
+                                  <div className="p-4 border-2 border-[#ECECEC] bg-gradient-to-b from-[#F8F8F8] to-[#FEFEFE] rounded-2xl drop-shadow-md mt-5">
                                     <div className="flex items-start gap-3">
                                       <div className="text-primary2 pr-3 border-r border-[#DBDDE0]">
-                                        <SegmentNameIcon />
+                                        <PsychographicsIcon />
                                       </div>
                                       <div className="flex items-start flex-col justify-between w-full gap-2">
                                         <h3 className="text-black text-start font-medium text-sm ">
-                                          Segment Name
+                                          Psychographics
                                         </h3>
-                                        <span className="text-primary2 text-start font-semibold text-xs ">
-                                          {selectedPersona?.segment_name?.toUpperCase()}
+                                        <span className="text-[#595E64] text-start font-normal text-xs ">
+                                          {selectedPersona?.psychographics}
                                         </span>
                                       </div>
                                     </div>
                                   </div>
                                 )}
-                                {selectedPersona?.subsegment && (
-                                  <div className="p-4 border-2 border-[#ECECEC] bg-gradient-to-b from-[#E6FCFA] to-[#FEFEFE] rounded-2xl drop-shadow-md">
-                                    <div className="flex items-start gap-3">
-                                      <div className="text-primary2 pr-3 border-r border-[#DBDDE0]">
-                                        <SubsegmentIcon />
-                                      </div>
-                                      <div className="flex items-start flex-col justify-between w-full gap-2">
-                                        <h3 className="text-black text-start font-medium text-sm ">
-                                          Subsegment
-                                        </h3>
-                                        <span className="text-primary2 text-start font-semibold text-xs  ">
-                                          {selectedPersona?.subsegment?.toUpperCase()}
-                                        </span>
+                                <div className="grid grid-cols-2 gap-5 items-center mt-5">
+                                  <HabitsDataContent
+                                    title="Purchasing Habits"
+                                    icon={<PurchasingHabitsIcon />}
+                                    fromColor="#F8F8F8"
+                                    data={selectedPersona?.purchasing_habits}
+                                  />
+                                  <HabitsDataContent
+                                    title="Sales Marketing Hooks"
+                                    icon={<SalesMarketingHooksIcon />}
+                                    fromColor="#F8F8F8"
+                                    data={
+                                      selectedPersona?.sales_marketing_hooks
+                                    }
+                                  />
+                                </div>
+                                <div className="grid grid-cols-2 gap-5 items-center mt-5">
+                                  {selectedPersona?.segment_name && (
+                                    <div className="p-4 border-2 border-[#ECECEC] bg-gradient-to-b from-[#E6FCFA] to-[#FEFEFE] rounded-2xl drop-shadow-md">
+                                      <div className="flex items-start gap-3">
+                                        <div className="text-primary2 pr-3 border-r border-[#DBDDE0]">
+                                          <SegmentNameIcon />
+                                        </div>
+                                        <div className="flex items-start flex-col justify-between w-full gap-2">
+                                          <h3 className="text-black text-start font-medium text-sm ">
+                                            Segment Name
+                                          </h3>
+                                          <span className="text-primary2 text-start font-semibold text-xs ">
+                                            {selectedPersona?.segment_name?.toUpperCase()}
+                                          </span>
+                                        </div>
                                       </div>
                                     </div>
-                                  </div>
-                                )}
-                              </div>
-                              <div className="grid grid-cols-2 gap-5 items-center mt-5 mb-16">
-                                <HabitsDataContent
-                                  title="Trusted Sources"
-                                  icon={<TrustedSourcesIcon />}
-                                  fromColor="#F8F8F8"
-                                  data={selectedPersona?.trusted_sources}
-                                />
-                                <HabitsDataContent
-                                  title="Value Drivers"
-                                  icon={<ValueDriversIcon />}
-                                  fromColor="#F8F8F8"
-                                  data={selectedPersona?.value_drivers}
-                                />
-                              </div>
-                              {/* {selectedPersona.data &&
+                                  )}
+                                  {selectedPersona?.subsegment && (
+                                    <div className="p-4 border-2 border-[#ECECEC] bg-gradient-to-b from-[#E6FCFA] to-[#FEFEFE] rounded-2xl drop-shadow-md">
+                                      <div className="flex items-start gap-3">
+                                        <div className="text-primary2 pr-3 border-r border-[#DBDDE0]">
+                                          <SubsegmentIcon />
+                                        </div>
+                                        <div className="flex items-start flex-col justify-between w-full gap-2">
+                                          <h3 className="text-black text-start font-medium text-sm ">
+                                            Subsegment
+                                          </h3>
+                                          <span className="text-primary2 text-start font-semibold text-xs  ">
+                                            {selectedPersona?.subsegment?.toUpperCase()}
+                                          </span>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  )}
+                                </div>
+                                <div className="grid grid-cols-2 gap-5 items-center mt-5 mb-16">
+                                  <HabitsDataContent
+                                    title="Trusted Sources"
+                                    icon={<TrustedSourcesIcon />}
+                                    fromColor="#F8F8F8"
+                                    data={selectedPersona?.trusted_sources}
+                                  />
+                                  <HabitsDataContent
+                                    title="Value Drivers"
+                                    icon={<ValueDriversIcon />}
+                                    fromColor="#F8F8F8"
+                                    data={selectedPersona?.value_drivers}
+                                  />
+                                </div>
+                                {/* {selectedPersona.data &&
                                 renderDynamicPersonaData(selectedPersona.data, [
                                   "age_group",
                                   "household_income",
@@ -2439,8 +2458,8 @@ const SegmentsSelectorKettleAndFire: React.FC<SegmentsSelectorProps> = ({
                                   "pets",
                                   "children",
                                 ])} */}
-                              {/* Also render any top-level persona fields we haven't explicitly handled */}
-                              {/* {renderDynamicPersonaData(
+                                {/* Also render any top-level persona fields we haven't explicitly handled */}
+                                {/* {renderDynamicPersonaData(
                                 Object.entries(selectedPersona)
                                   .filter(
                                     ([key]) =>
@@ -2474,24 +2493,25 @@ const SegmentsSelectorKettleAndFire: React.FC<SegmentsSelectorProps> = ({
                                     {}
                                   )
                               )} */}
+                              </div>
                             </div>
                           </div>
                         </div>
-                      </div>
-                    ) : (
-                      <div className="flex flex-col items-center justify-center h-full text-gray-500">
-                        <div className="bg-blue-50 p-6 rounded-full mb-4 border border-blue-100">
-                          <User className="w-12 h-12 text-blue-400" />
+                      ) : (
+                        <div className="flex flex-col items-center justify-center h-full text-gray-500">
+                          <div className="bg-blue-50 p-6 rounded-full mb-4 border border-blue-100">
+                            <User className="w-12 h-12 text-blue-400" />
+                          </div>
+                          <p className="text-lg text-gray-600 mb-2">
+                            Select a profile
+                          </p>
+                          <p className="text-sm text-gray-500">
+                            Choose from the list on the left to view detailed
+                            information
+                          </p>
                         </div>
-                        <p className="text-lg text-gray-600 mb-2">
-                          Select a profile
-                        </p>
-                        <p className="text-sm text-gray-500">
-                          Choose from the list on the left to view detailed
-                          information
-                        </p>
-                      </div>
-                    )}
+                      )}
+                    </div>
                   </div>
                 </div>
               </div>

@@ -75,12 +75,12 @@ const Header = () => {
             {isAuthenticated ? (
               <>
                 {/* Settings + Notifications */}
-                <button className="p-3 h-[50px] w-[50px] rounded-full hover:bg-primary bg-gray_light hidden md:block">
+                {/* <button className="p-3 h-[50px] w-[50px] rounded-full hover:bg-primary bg-gray_light hidden md:block">
                   <Settings className="h-6 w-6 text-gray-600" />
                 </button>
                 <button className="p-3 rounded-full h-[50px] w-[50px] hover:bg-primary bg-gray_light hidden md:block">
                   <Bell className="h-6 w-6 text-gray-600" />
-                </button>
+                </button> */}
 
                 {/* Profile Dropdown */}
                 <div className="relative">

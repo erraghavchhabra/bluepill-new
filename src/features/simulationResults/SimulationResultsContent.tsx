@@ -78,6 +78,7 @@ import ChannelEventStrategyDesign from "./ChannelEventStrategyDesign";
 import BuyerInsightsREportB2C from "./BuyerInsightsREportB2C";
 import ImageSurvey from "./ImageSurvey";
 import AB_estMessaging from "./AB_estMessaging";
+import BlackButton from "@/components/Buttons/BlackButton";
 
 const API_URL = import.meta.env.VITE_API_URL || "";
 
@@ -116,6 +117,7 @@ interface SimulationResultsContentProps {
   onError?: (error: string) => void;
   isListCollapsed?: string;
   setIsListCollapsed?: (collapsed: boolean) => void;
+  onBack?: () => void;
 }
 
 // Update TableData interface to include horizontal chart type
@@ -188,6 +190,7 @@ const SimulationResultsContent: React.FC<SimulationResultsContentProps> = ({
   onError,
   isListCollapsed,
   setIsListCollapsed,
+  onBack,
 }): React.ReactElement => {
   const { state } = useLocation();
   const [simulation, setSimulation] = useState<SimulationData | null>(null);
@@ -1690,7 +1693,7 @@ const SimulationResultsContent: React.FC<SimulationResultsContentProps> = ({
       </div> */}
 
       <div
-        className="flex-1 overflow-auto p-4 scrollbar-hide bg-white rounded-t-2xl"
+        className="flex-1 overflow-auto p-5 pb-0 scrollbar-hide bg-white rounded-t-2xl"
         ref={chatContainerRef}
       >
         <div className="space-y-4 relative">
@@ -1723,6 +1726,14 @@ const SimulationResultsContent: React.FC<SimulationResultsContentProps> = ({
 
               // Skip rendering messages that don't belong in this tab
               if (!isValidMessage) return null;
+              function formatTo12HourTime(isoString: any) {
+                const date = new Date(isoString);
+                return date.toLocaleTimeString("en-US", {
+                  hour: "2-digit",
+                  minute: "2-digit",
+                  hour12: true,
+                });
+              }
 
               return (
                 <div
@@ -1735,15 +1746,15 @@ const SimulationResultsContent: React.FC<SimulationResultsContentProps> = ({
                   } /* Use data attribute instead of inline style */
                 >
                   <div
-                    className={`max-w-[80%] px-4 py-2 border-[1.5px] rounded-lg ${
+                    className={`max-w-[80%] p-3 rounded-2xl border-[1.5px] text-xs  ${
                       isUserMessage
-                        ? " text-black rounded-br  font-medium text-xs border-cyan-100 animate-slideInRight"
-                        : "bg-white border border-[#F5F5F5] font-medium text-xs text-gray-400 rounded-bl-none animate-slideInLeft"
+                        ? " text-black rounded-br-none border-[#E6FCFA]"
+                        : "text-[#595E64] rounded-bl-none border-[#F5F5F5]"
                     }`}
                   >
                     <div
                       className={
-                        `${
+                        `flex flex-col items-end gap-3 ${
                           isUserMessage
                             ? "prose prose-invert prose-sm max-w-none"
                             : "prose prose-sm max-w-none"
@@ -1756,6 +1767,11 @@ const SimulationResultsContent: React.FC<SimulationResultsContentProps> = ({
                       >
                         {msg.content}
                       </ReactMarkdown>
+                      {msg?.timestamp && (
+                        <p className="text-primary2 text-xs font-medium text-end">
+                          {formatTo12HourTime(msg?.timestamp)}
+                        </p>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -1763,20 +1779,25 @@ const SimulationResultsContent: React.FC<SimulationResultsContentProps> = ({
             })
           )}
           {sendingMessage && (
-            <div className="flex justify-start animate-pulse">
-              <div className="bg-white border border-gray-200 text-gray-500 px-4 py-2 rounded-lg rounded-bl-none max-w-[80%]">
-                <div className="flex space-x-2">
-                  <div className="h-2 w-2 bg-gray-400 rounded-full animate-bounce delay-0"></div>
-                  <div className="h-2 w-2 bg-gray-400 rounded-full animate-bounce delay-200"></div>
-                  <div className="h-2 w-2 bg-gray-400 rounded-full animate-bounce delay-500"></div>
-                </div>
-              </div>
+            <div className=" rounded-bl-none border-[#F5F5F5] max-w-[95px] p-3 pl-[22px] rounded-2xl border-[1.5px] text-xs ">
+              <span className="flex items-center space-x-[1px] text-transparent bg-clip-text bg-gradient-to-r from-[#07E5D1] via-[#07E5D1] to-[#E6FCFA] ">
+                <span>Typing</span>
+                <span className="animate-beep text-primary2 text-lg mb-[5px] [animation-delay:0ms]">
+                  .
+                </span>
+                <span className="animate-beep text-primary2  text-lg mb-[5px] [animation-delay:200ms]">
+                  .
+                </span>
+                <span className="animate-beep text-primary2  text-lg mb-[5px] [animation-delay:400ms]">
+                  .
+                </span>
+              </span>
             </div>
           )}
         </div>
       </div>
 
-      <div className="p-4 border-t border-gray-200 bg-white rounded-b-2xl">
+      <div className="p-5 bg-white rounded-b-2xl">
         <div className="flex bg-gray-100 height-[60px] rounded-full items-center  gap-2 relative">
           <textarea
             ref={textareaRef}
@@ -1793,7 +1814,7 @@ const SimulationResultsContent: React.FC<SimulationResultsContentProps> = ({
                   })()
                 : "the simulation"
             }...`}
-            className="flex-1 px-3 py-2 pt-[17px] pl-3 text-[14px] h-[60px] bg-transparent rounded-full resize-none focus:outline-none"
+            className="flex-1 scrollbar-hide px-3 py-2 pt-[17px] pl-3 text-[14px] h-[60px] bg-transparent rounded-full resize-none focus:outline-none"
             rows={2}
           />
           <button
@@ -2413,47 +2434,50 @@ const SimulationResultsContent: React.FC<SimulationResultsContentProps> = ({
 
   return (
     <div className="bg-gray_light p-[30px] ">
-      <div className="flex items-center justify-between gap-3 pb-5 border-b border-[#E8E8E8]">
-        {/* Tab group with animated background */}
-        <div className="relative flex w-fit p-1 bg-cyan-50 rounded-full transition-all duration-300">
-          {/* Animated background slider */}
-          <div
-            className="absolute top-0 left-0 h-full rounded-full bg-primary transition-all duration-300"
-            style={sliderStyle}
-          />
+      <div className="flex items-center gap-[22px] pb-5 border-b border-[#E8E8E8]">
+        {onBack && <BlackButton onClick={onBack}>Back</BlackButton>}
+        <div className="flex items-center w-full justify-between gap-3 ">
+          {/* Tab group with animated background */}
+          <div className="relative flex w-fit p-1 bg-cyan-50 rounded-full transition-all duration-300">
+            {/* Animated background slider */}
+            <div
+              className="absolute top-0 left-0 h-full rounded-full bg-primary transition-all duration-300"
+              style={sliderStyle}
+            />
 
-          {/* Tabs */}
-          <div className="relative z-10 flex">
-            <div
-              ref={chatRef}
-              onClick={() => {
-                setActiveChatTab("chat");
-                setIsListCollapsed?.(true);
-                setIsChatCollapsed(false);
-              }}
-              className={`px-4 py-2 w-[74px] cursor-pointer rounded-full font-medium text-sm transition-all duration-300 ${
-                activeChatTab === "chat" ? "text-white" : "text-black"
-              }`}
-            >
-              Chat
-            </div>
-            <div
-              ref={simulationRef}
-              onClick={() => {
-                setActiveChatTab("simulation");
-                setIsChatCollapsed(true);
-              }}
-              className={`px-4 py-2 w-[172px] cursor-pointer rounded-full  text-sm transition-all duration-300 ${
-                activeChatTab === "simulation"
-                  ? "text-white font-semibold"
-                  : "text-black font-medium"
-              }`}
-            >
-              Simulation Analysis
+            {/* Tabs */}
+            <div className="relative z-10 flex">
+              <div
+                ref={chatRef}
+                onClick={() => {
+                  setActiveChatTab("chat");
+                  setIsListCollapsed?.(true);
+                  setIsChatCollapsed(false);
+                }}
+                className={`px-4 py-2 w-[74px] cursor-pointer rounded-full font-medium text-sm transition-all duration-300 ${
+                  activeChatTab === "chat" ? "text-white" : "text-black"
+                }`}
+              >
+                Chat
+              </div>
+              <div
+                ref={simulationRef}
+                onClick={() => {
+                  setActiveChatTab("simulation");
+                  setIsChatCollapsed(true);
+                }}
+                className={`px-4 py-2 w-[172px] cursor-pointer rounded-full  text-sm transition-all duration-300 ${
+                  activeChatTab === "simulation"
+                    ? "text-white font-semibold"
+                    : "text-black font-medium"
+                }`}
+              >
+                Simulation Analysis
+              </div>
             </div>
           </div>
+          <h3 className="text-[28px] font-semibold">Analysis Dashboard</h3>
         </div>
-        <h3 className="text-[28px] font-semibold">Analysis Dashboard</h3>
       </div>
       <style>{`
         .markdown-body table {

@@ -28,11 +28,15 @@ import { ArrowLeft, icons, LucideNetwork } from "lucide-react";
 import ChatWithPersona from "./features/chatWithPersonas/ChatWithPersona";
 
 import {
+  PiBuildingOfficeLight,
   PiChartDonut,
+  PiEyeglasses,
   PiEyeLight,
+  PiLineSegments,
   PiNotebook,
   PiUsersThree,
 } from "react-icons/pi";
+import SimulationResultsContent from "./features/simulationResults/SimulationResultsContent";
 
 type Step =
   | "landing"
@@ -214,6 +218,7 @@ const AppContent: React.FC = () => {
             ? `Type: ${audienceData.type}`
             : "Audience Type",
           completed: currentStep > 1,
+          icons: <PiBuildingOfficeLight size={24}  /> ,
           current: currentStep === 1,
           onClick:
             currentStep > 1
@@ -229,6 +234,7 @@ const AppContent: React.FC = () => {
             : "Define Segments",
           completed: currentStep > 2,
           current: currentStep === 2,
+          icons: <PiLineSegments size={24}  />,
           onClick:
             currentStep > 2
               ? () => {
@@ -241,6 +247,7 @@ const AppContent: React.FC = () => {
           label: "Preview & Save",
           completed: false,
           current: currentStep === 3,
+          icons: <PiEyeglasses size={24}   />,
           onClick: undefined,
         },
       ];
@@ -415,7 +422,7 @@ const AppContent: React.FC = () => {
           >
             {currentSimulationId ? (
               <div className="h-full flex flex-col">
-                <div className="mb-4 flex-shrink-0">
+                {/* <div className="mb-4 flex-shrink-0">
                   <Button
                     variant="ghost"
                     size="sm"
@@ -427,11 +434,18 @@ const AppContent: React.FC = () => {
                   >
                     Back to form
                   </Button>
-                </div>
-                <div className="flex-grow overflow-hidden">
-                  <SimulationResults
+                </div> */}
+                <div className="flex-grow overflow-hidden rounded-tl-[30px]">
+                  {/* <SimulationResults
                     simulationId={currentSimulationId}
                     embedded={true}
+                  /> */}
+                  <SimulationResultsContent
+                    simulationId={currentSimulationId}
+                    onBack={() => {
+                      setStepMapping("simulation-use-case");
+                      setCurrentStepInUseCase("form-filling");
+                    }}
                   />
                 </div>
               </div>
