@@ -1,23 +1,29 @@
-import React from 'react';
-import { Building, Package, Users } from 'lucide-react';
-import OptionCard from '../../components/OptionCard';
-import StepContainer from '../../components/StepContainer';
+import React from "react";
+import { Building, Package, Users } from "lucide-react";
+import OptionCard from "../../components/OptionCard";
+import StepContainer from "../../components/StepContainer";
 
 interface LandingScreenProps {
-  onBuildAudience: () => void;
-  onSelectExisting: () => void;
+  onBuildAudience?: () => void;
+  onSelectExisting?: () => void;
 }
 
-const LandingScreen: React.FC<LandingScreenProps> = ({ 
-  onBuildAudience, 
-  onSelectExisting 
+const LandingScreen: React.FC<LandingScreenProps> = ({
+  onBuildAudience,
+  onSelectExisting,
 }) => {
   return (
-    <StepContainer
-      title="What would you like to do today?"
-      className="animate-fadeIn"
-    >
-      <div className="grid md:grid-cols-2 gap-6">
+    <div className="w-full bg-gray_light rounded-tl-[30px] p-[30px] relative h-[87vh]">
+      <div>
+        <h3 className="text-[28px] font-semibold text-black mb-3">
+          What would you like to do today?
+        </h3>
+        <p className="text-xs font-normal text-[#595E64]">
+          We'll tailor your profiles based on the target of your simulation — is
+          it a company, a product, or a person?
+        </p>
+      </div>
+      <div className="grid gap-5 mt-[30px]">
         {/* <OptionCard
           icon={<Building className="w-10 h-10" />}
           title="Build a New Audience"
@@ -26,7 +32,7 @@ const LandingScreen: React.FC<LandingScreenProps> = ({
           onClick={onBuildAudience}
           
         /> */}
-        
+
         <OptionCard
           icon={<Users className="w-10 h-10" />}
           title="Simulation Playground"
@@ -35,7 +41,7 @@ const LandingScreen: React.FC<LandingScreenProps> = ({
           onClick={onSelectExisting}
         />
       </div>
-    </StepContainer>
+    </div>
   );
 };
 

@@ -5,6 +5,7 @@ import {
   Route,
   useLocation,
   Navigate,
+  useNavigate,
 } from "react-router-dom";
 import Layout from "./components/Layout";
 import ProgressSteps from "./components/ProgressSteps";
@@ -55,6 +56,7 @@ type FlowStep =
 
 // Main application content component
 const AppContent: React.FC = () => {
+  const navigate = useNavigate();
   const location = useLocation();
   const { isAuthenticated } = useAuth();
   const { currentStep, setCurrentStep, audienceData, updateAudienceData } =
@@ -218,7 +220,7 @@ const AppContent: React.FC = () => {
             ? `Type: ${audienceData.type}`
             : "Audience Type",
           completed: currentStep > 1,
-          icons: <PiBuildingOfficeLight size={24}  /> ,
+          icons: <PiBuildingOfficeLight size={24} />,
           current: currentStep === 1,
           onClick:
             currentStep > 1
@@ -234,7 +236,7 @@ const AppContent: React.FC = () => {
             : "Define Segments",
           completed: currentStep > 2,
           current: currentStep === 2,
-          icons: <PiLineSegments size={24}  />,
+          icons: <PiLineSegments size={24} />,
           onClick:
             currentStep > 2
               ? () => {
@@ -247,7 +249,7 @@ const AppContent: React.FC = () => {
           label: "Preview & Save",
           completed: false,
           current: currentStep === 3,
-          icons: <PiEyeglasses size={24}   />,
+          icons: <PiEyeglasses size={24} />,
           onClick: undefined,
         },
       ];
@@ -481,6 +483,15 @@ const AppContent: React.FC = () => {
   // If authenticated, show main app content
   return (
     <Layout noContainer={true}>
+      {location.pathname === "/" && (
+        <div className="pl-[30px]">
+          <LandingScreen
+            onSelectExisting={() => {
+              navigate("/simulate");
+            }}
+          />
+        </div>
+      )}
       {stepMapping !== "landing" && (
         <div className="flex items-start gap-[30px] relative">
           <ProgressSteps steps={getProgressSteps()} />
