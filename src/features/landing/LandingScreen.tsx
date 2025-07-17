@@ -2,6 +2,7 @@ import React from "react";
 import { Building, Package, Users } from "lucide-react";
 import OptionCard from "../../components/OptionCard";
 import StepContainer from "../../components/StepContainer";
+import { PiUsersThree } from "react-icons/pi";
 
 interface LandingScreenProps {
   onBuildAudience?: () => void;
@@ -34,7 +35,7 @@ const LandingScreen: React.FC<LandingScreenProps> = ({
         /> */}
 
         <OptionCard
-          icon={<Users className="w-10 h-10" />}
+          icon={<PiUsersThree size={60} />}
           title="Simulation Playground"
           description="Use an existing audience to simulate customer behavior, test ideas, and gain valuable insights."
           buttonText="Select Existing Audience"

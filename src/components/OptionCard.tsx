@@ -9,7 +9,7 @@ interface OptionCardProps {
   title: string;
   description: string;
   buttonText: string;
-  onClick: () => void;
+  onClick?: () => void;
   selected?: boolean;
 }
 
@@ -38,7 +38,7 @@ const OptionCard: React.FC<OptionCardProps> = ({
         icon={<RightWhiteArrow />}
         className="w-full"
       >
-        Select Existing Audience
+        {buttonText}
       </PrimaryButton>
     </Card>
   );
