@@ -1932,7 +1932,13 @@ const SimulationResultsContent: React.FC<SimulationResultsContentProps> = ({
         const personaFilters = value as Record<string, Record<string, unknown>>;
 
         return (
-          <div className="mt-3 space-y-4">
+          <div
+            className={`mt-3 grid items-start ${
+              Object.keys(personaFilters).length > 1
+                ? "grid-cols-2"
+                : "grid-cols-1"
+            } gap-3`}
+          >
             {Object.entries(personaFilters).length === 0 ? (
               <div className="text-sm text-gray-500 italic text-center p-3">
                 No filters have been applied
@@ -1957,11 +1963,7 @@ const SimulationResultsContent: React.FC<SimulationResultsContentProps> = ({
                   return (
                     <div
                       key={segmentId}
-                      className={`bg-[#FAFAFA] p-4 rounded-[20px] w-full ${
-                        Object.keys(personaFilters).length === 2
-                          ? "md:w-[48%]"
-                          : "w-full"
-                      }`}
+                      className={`bg-[#FAFAFA] p-4 rounded-[20px] w-full h-full `}
                     >
                       <h3 className="text-base font-semibold text-gray-900 mb-4">
                         {segmentName}
@@ -1990,7 +1992,7 @@ const SimulationResultsContent: React.FC<SimulationResultsContentProps> = ({
                                       ${
                                         key === "age_group"
                                           ? "flex flex-col items-end space-y-1"
-                                          : "flex flex-row flex-wrap items-end gap-2"
+                                          : "flex flex-row flex-wrap justify-end items-end gap-2"
                                       }
                                     `}
                             >
@@ -2008,7 +2010,9 @@ const SimulationResultsContent: React.FC<SimulationResultsContentProps> = ({
                                       </span>
                                     ))
                                 : (values as string[]).map((val, i) => (
-                                    <span key={i}>{val}</span>
+                                    <span key={i} className="">
+                                      {val}
+                                    </span>
                                   ))}
                             </div>
                           </div>
@@ -2061,6 +2065,7 @@ const SimulationResultsContent: React.FC<SimulationResultsContentProps> = ({
           transition-transform duration-500 ease-in-out overflow-auto scrollbar-hide  
           ${isDetailsDropdownOpen ? "translate-x-0" : "translate-x-full"}
         `}
+          onClick={(e) => e.stopPropagation()}
         >
           {/* Summary section - Header */}
           {/* Header */}
