@@ -489,6 +489,9 @@ const AppContent: React.FC = () => {
             onSelectExisting={() => {
               navigate("/simulate");
             }}
+            onBuildAudience={() => {
+              navigate("/build-audience");
+            }}
           />
         </div>
       )}

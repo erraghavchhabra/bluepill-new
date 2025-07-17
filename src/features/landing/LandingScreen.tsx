@@ -2,7 +2,7 @@ import React from "react";
 import { Building, Package, Users } from "lucide-react";
 import OptionCard from "../../components/OptionCard";
 import StepContainer from "../../components/StepContainer";
-import { PiUsersThree } from "react-icons/pi";
+import { PiBuildings, PiUsersThree } from "react-icons/pi";
 
 interface LandingScreenProps {
   onBuildAudience?: () => void;
@@ -24,15 +24,15 @@ const LandingScreen: React.FC<LandingScreenProps> = ({
           it a company, a product, or a person?
         </p>
       </div>
-      <div className="grid gap-5 mt-[30px]">
-        {/* <OptionCard
-          icon={<Building className="w-10 h-10" />}
+      <div className="flex items-center gap-5 mt-[30px]">
+        <OptionCard
+          icon={<PiBuildings size={60} />}
           title="Build a New Audience"
           description="Create a new set of customer profiles tailored to your specific needs. Build detailed profiles for simulation."
           buttonText="Build Audience"
           onClick={onBuildAudience}
           
-        /> */}
+        />
 
         <OptionCard
           icon={<PiUsersThree size={60} />}
