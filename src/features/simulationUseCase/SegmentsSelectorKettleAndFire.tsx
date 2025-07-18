@@ -79,6 +79,7 @@ import {
   TrustedSourcesIcon,
   ValueDriversIcon,
 } from "@/icons/Other.js";
+import TooltipBox from "@/components/Buttons/TooltipBox.js";
 
 interface SegmentsSelectorProps {
   btn_text?: string; // Optional prop with default value "Continue to Use Cases"
@@ -303,6 +304,7 @@ const SegmentsSelectorKettleAndFire: React.FC<SegmentsSelectorProps> = ({
   const [initialSelectedSegments, setInitialSelectedSegments] = useState<
     number[]
   >([]);
+
   const [initialPersonaFilters, setInitialPersonaFilters] = useState<
     Record<number, any>
   >({});
@@ -1075,47 +1077,48 @@ const SegmentsSelectorKettleAndFire: React.FC<SegmentsSelectorProps> = ({
                         </h3>
                       </div>
                       <div className="flex items-center text-xs mt-1">
-                        <div
-                          className={`flex items-center ${
-                            selectedSegments.includes(segment.id)
-                              ? "text-white"
-                              : "text-primary2"
-                          } gap-2 cursor-pointer`}
-                        >
-                          <PiUsersLight size={20} />
-                          {loadingCounts[segment.id] ? (
-                            <span className="font-medium text-blue-600 flex items-center">
-                              <div className="flex space-x-1 items-center ml-1">
-                                <div className="w-1.5 h-1.5 bg-blue-600 rounded-full animate-pulse"></div>
-                                <div
-                                  className="w-1.5 h-1.5 bg-blue-600 rounded-full animate-pulse"
-                                  style={{ animationDelay: "0.2s" }}
-                                ></div>
-                                <div
-                                  className="w-1.5 h-1.5 bg-blue-600 rounded-full animate-pulse"
-                                  style={{ animationDelay: "0.4s" }}
-                                ></div>
-                              </div>
-                            </span>
-                          ) : (
-                            <span
-                              className="underline text-sm font-medium text-black"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleViewPersonas(segment.id);
-                              }}
-                            >
-                              {segmentPersonaCounts[segment.id] !== undefined
-                                ? segmentPersonaCounts[segment.id]
-                                : segment.len}{" "}
-                              profiles
-                              {segmentPersonaCounts[segment.id] !== undefined &&
-                                segmentPersonaCounts[segment.id] !==
-                                  segment.len &&
-                                " (filtered)"}
-                            </span>
-                          )}
-                        </div>
+                        <TooltipBox text="View profiles">
+                          <div
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleViewPersonas(segment.id);
+                            }}
+                            className={`flex items-center cursor-pointer ${
+                              selectedSegments.includes(segment.id)
+                                ? "text-white"
+                                : "text-primary2"
+                            } gap-2 cursor-pointer`}
+                          >
+                            <PiUsersLight size={20} />
+                            {loadingCounts[segment.id] ? (
+                              <span className="font-medium text-blue-600 flex items-center">
+                                <div className="flex space-x-1 items-center ml-1">
+                                  <div className="w-1.5 h-1.5 bg-blue-600 rounded-full animate-pulse"></div>
+                                  <div
+                                    className="w-1.5 h-1.5 bg-blue-600 rounded-full animate-pulse"
+                                    style={{ animationDelay: "0.2s" }}
+                                  ></div>
+                                  <div
+                                    className="w-1.5 h-1.5 bg-blue-600 rounded-full animate-pulse"
+                                    style={{ animationDelay: "0.4s" }}
+                                  ></div>
+                                </div>
+                              </span>
+                            ) : (
+                              <span className="underline text-sm font-medium text-black">
+                                {segmentPersonaCounts[segment.id] !== undefined
+                                  ? segmentPersonaCounts[segment.id]
+                                  : segment.len}{" "}
+                                profiles
+                                {segmentPersonaCounts[segment.id] !==
+                                  undefined &&
+                                  segmentPersonaCounts[segment.id] !==
+                                    segment.len &&
+                                  " (filtered)"}
+                              </span>
+                            )}
+                          </div>
+                        </TooltipBox>
                       </div>
                     </div>
                   </div>
@@ -1717,7 +1720,11 @@ const SegmentsSelectorKettleAndFire: React.FC<SegmentsSelectorProps> = ({
                       Explore detailed profiles for this segment
                     </p>
                   </div>
-                  <button onClick={()=>{setIsPersonaModalOpen(false)}}>
+                  <button
+                    onClick={() => {
+                      setIsPersonaModalOpen(false);
+                    }}
+                  >
                     <CloseXIcon />
                   </button>
                 </div>

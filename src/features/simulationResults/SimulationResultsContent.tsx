@@ -79,6 +79,7 @@ import BuyerInsightsREportB2C from "./BuyerInsightsREportB2C";
 import ImageSurvey from "./ImageSurvey";
 import AB_estMessaging from "./AB_estMessaging";
 import BlackButton from "@/components/Buttons/BlackButton";
+import TooltipBox from "@/components/Buttons/TooltipBox";
 
 const API_URL = import.meta.env.VITE_API_URL || "";
 
@@ -2544,117 +2545,101 @@ const SimulationResultsContent: React.FC<SimulationResultsContentProps> = ({
                   Simulation Analysis
                 </h3>
                 <div className="flex items-center  space-x-2">
+                  {/* Export Button */}
+                  <TooltipBox text="Click to export as PDF">
+                    <div className="">
+                      <button
+                        onClick={() => setShowExportModal(true)}
+                        className="flex items-center justify-center w-[50px] h-[50px] rounded-full bg-white hover:bg-[#07E5D1] transition-all duration-300 hover:shadow-lg"
+                        aria-label="Export simulation analysis"
+                      >
+                        <DownloadIcon className="h-5 w-5 text-black" />
+                      </button>
+                      {showTooltip === "export" && (
+                        <div className="absolute left-1/2 -translate-x-1/2 mt-2 bg-gray-800 text-white text-xs px-2 py-1 rounded whitespace-nowrap z-20"></div>
+                      )}
+                    </div>
+                  </TooltipBox>
                   {/* Copy Output Button */}
-                  <div className="relative">
-                    <button
-                      onMouseEnter={() => setShowTooltip("copy")}
-                      onMouseLeave={() => setShowTooltip("")}
-                      onClick={async () => {
-                        if (!simulation?.simulation_response) return;
-                        const parsed = parseSimulationResponse(
-                          simulation.simulation_response
-                        );
-                        await navigator.clipboard.writeText(
-                          parsed.output || ""
-                        );
-                        setCopied(true);
-                        setTimeout(() => setCopied(false), 1200);
-                      }}
-                      className="flex items-center justify-center w-[50px] h-[50px] rounded-full bg-white hover:bg-[#07E5D1] transition-all duration-300 hover:shadow-lg"
-                      title="Copy simulation output"
-                      aria-label="Copy simulation output"
-                    >
-                      <CopyIcon className="h-5 w-5 text-black" />
-                    </button>
-                    {showTooltip === "copy" && (
-                      <div className="absolute left-1/2 -translate-x-1/2 mt-2 bg-gray-800 text-white text-xs px-2 py-1 rounded whitespace-nowrap z-20">
-                        Click to copy output
-                      </div>
-                    )}
-                  </div>
+                  <TooltipBox text="Click to copy output">
+                    <div className="relative">
+                      <button
+                        onClick={async () => {
+                          if (!simulation?.simulation_response) return;
+                          const parsed = parseSimulationResponse(
+                            simulation.simulation_response
+                          );
+                          await navigator.clipboard.writeText(
+                            parsed.output || ""
+                          );
+                          setCopied(true);
+                          setTimeout(() => setCopied(false), 1200);
+                        }}
+                        className="flex items-center justify-center w-[50px] h-[50px] rounded-full bg-white hover:bg-[#07E5D1] transition-all duration-300 hover:shadow-lg"
+                        aria-label="Copy simulation output"
+                      >
+                        <CopyIcon className="h-5 w-5 text-black" />
+                      </button>
+                    </div>
+                  </TooltipBox>
                   {copied && (
                     <span className="text-green-600 text-xs ml-1 transition-opacity duration-200">
                       Copied!
                     </span>
                   )}
-                  {/* Export Button */}
-                  <div className="relative">
-                    <button
-                      onMouseEnter={() => setShowTooltip("export")}
-                      onMouseLeave={() => setShowTooltip("")}
-                      onClick={() => setShowExportModal(true)}
-                      className="flex items-center justify-center w-[50px] h-[50px] rounded-full bg-white hover:bg-[#07E5D1] transition-all duration-300 hover:shadow-lg"
-                      title="Export simulation analysis"
-                      aria-label="Export simulation analysis"
-                    >
-                      <DownloadIcon className="h-5 w-5 text-black" />
-                    </button>
-                    {showTooltip === "export" && (
-                      <div className="absolute left-1/2 -translate-x-1/2 mt-2 bg-gray-800 text-white text-xs px-2 py-1 rounded whitespace-nowrap z-20">
-                        Click to export as PDF
-                      </div>
-                    )}
-                  </div>
+
                   {/* Rerun Button */}
-                  <div className="relative">
-                    <button
-                      onMouseEnter={() => setShowTooltip("rerun")}
-                      onMouseLeave={() => setShowTooltip("")}
-                      onClick={async () => {
-                        if (!simulation?.id) return;
-                        setRerunLoading(true);
-                        setRerunError("");
-                        try {
-                          const res = await fetch(
-                            `${API_URL}/simulations/${simulation.id}/rerun`,
-                            {
-                              method: "POST",
-                              headers: { "Content-Type": "application/json" },
-                              credentials: "include",
-                              signal: AbortSignal.timeout(300000), // 5 minute timeout
-                            }
-                          );
-                          if (!res.ok)
-                            throw new Error("Failed to rerun simulation");
-                          const data = await res.json();
-                          if (!data.simulation_id)
-                            throw new Error("No new simulation id returned");
-                          navigate(`/simulation-results/${data.simulation_id}`);
-                        } catch (err: any) {
-                          setRerunError(
-                            err?.message || "Failed to rerun simulation"
-                          );
-                        } finally {
-                          setRerunLoading(false);
-                        }
-                      }}
-                      className="flex items-center justify-center w-[50px] h-[50px] rounded-full bg-white hover:bg-[#07E5D1] transition-all duration-300 hover:shadow-lg"
-                      disabled={rerunLoading}
-                    >
-                      <ReloadIcon className="h-5 w-5 text-black" />
-                    </button>
-                    {showTooltip === "rerun" && (
-                      <div className="absolute left-1/2 -translate-x-1/2 mt-2 bg-gray-800 text-white text-xs px-2 py-1 rounded whitespace-nowrap z-20">
-                        Click to rerun simulation
-                      </div>
-                    )}
-                  </div>
+                  <TooltipBox text="Click to rerun simulation">
+                    <div className="relative">
+                      <button
+                        onClick={async () => {
+                          if (!simulation?.id) return;
+                          setLoading(true);
+                          setRerunError("");
+                          try {
+                            const res = await fetch(
+                              `${API_URL}/simulations/${simulation.id}/rerun`,
+                              {
+                                method: "POST",
+                                headers: { "Content-Type": "application/json" },
+                                credentials: "include",
+                                signal: AbortSignal.timeout(300000), // 5 minute timeout
+                              }
+                            );
+                            if (!res.ok)
+                              throw new Error("Failed to rerun simulation");
+                            const data = await res.json();
+                            if (!data.simulation_id)
+                              throw new Error("No new simulation id returned");
+                            navigate(
+                              `/analysis/${data.simulation_id}`
+                            );
+                          } catch (err: any) {
+                            setRerunError(
+                              err?.message || "Failed to rerun simulation"
+                            );
+                          } finally {
+                            setLoading(false);
+                          }
+                        }}
+                        className="flex items-center justify-center w-[50px] h-[50px] rounded-full bg-white hover:bg-[#07E5D1] transition-all duration-300 hover:shadow-lg"
+                        disabled={rerunLoading}
+                      >
+                        <ReloadIcon className="h-5 w-5 text-black" />
+                      </button>
+                    </div>
+                  </TooltipBox>
                   {/* Simulation Inputs Button */}
-                  <div className="relative">
-                    <button
-                      onMouseEnter={() => setShowTooltip("inputs")}
-                      onMouseLeave={() => setShowTooltip("")}
-                      onClick={() => setIsDetailsDropdownOpen(true)}
-                      className="flex items-center justify-center w-[50px] h-[50px] rounded-full bg-white hover:bg-[#07E5D1] transition-all duration-300 hover:shadow-lg"
-                    >
-                      <SimulationInputIcon className="h-5 w-5 text-black" />
-                    </button>
-                    {showTooltip === "inputs" && (
-                      <div className="absolute left-1/2 -translate-x-[95%] mt-2 bg-gray-800 text-white text-xs px-2 py-1 rounded whitespace-nowrap z-20">
-                        Click to view simulation inputs
-                      </div>
-                    )}
-                  </div>
+                  <TooltipBox text="Click to view simulation inputs" position="bottomLeft">
+                    <div className="relative">
+                      <button
+                        onClick={() => setIsDetailsDropdownOpen(true)}
+                        className="flex items-center justify-center w-[50px] h-[50px] rounded-full bg-white hover:bg-[#07E5D1] transition-all duration-300 hover:shadow-lg"
+                      >
+                        <SimulationInputIcon className="h-5 w-5 text-black" />
+                      </button>
+                    </div>
+                  </TooltipBox>
                   {rerunError && (
                     <span className="text-red-600 text-xs ml-2">
                       {rerunError}

@@ -236,6 +236,27 @@ const AudienceSegmentSelect: React.FC<AudienceSegmentSelectProps> = ({
           </div>
         ))}
       </div>
+      {audienceData.segmentType === "specific" && (
+        <label
+          htmlFor="segment"
+          className="bg-white rounded-2xl  flex items-start gap-[10px] p-[18px_20px] mb-[30px]"
+        >
+          <div className="text-primary2">
+            <PiNotepad size={24} />
+          </div>
+          <textarea
+            className="outline-none w-full border-none resize-none"
+            placeholder="Describe the segment you have in mind *"
+            value={audienceData.specificSegment}
+            onChange={handleSpecificSegmentChange}
+            onBlur={() =>
+              setTouched((prev) => ({ ...prev, specificSegment: true }))
+            }
+            id="segment"
+            rows={3}
+          />
+        </label>
+      )}
       <div className="pt-[30px]  border-t border-[#E8E8E8]">
         <h3 className="text-[28px] font-semibold text-black">
           Optional data input
@@ -310,8 +331,13 @@ const AudienceSegmentSelect: React.FC<AudienceSegmentSelectProps> = ({
           )}
         </div>
 
-        <label htmlFor="textariaId" className="bg-white flex items-start gap-[10px] p-[18px_20px]">
-          <PiNotepad size={24} />
+        <label
+          htmlFor="textariaId"
+          className="bg-white  rounded-2xl  flex items-start gap-[10px] p-[18px_20px]"
+        >
+          <div className="text-primary2">
+            <PiNotepad size={24} />
+          </div>
           <textarea
             className="outline-none w-full border-none resize-none"
             placeholder="Add any qualitative information about your customers..."

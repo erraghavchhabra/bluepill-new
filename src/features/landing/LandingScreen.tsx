@@ -24,23 +24,24 @@ const LandingScreen: React.FC<LandingScreenProps> = ({
           it a company, a product, or a person?
         </p>
       </div>
-      <div className="flex items-center gap-5 mt-[30px]">
-        <OptionCard
-          icon={<PiBuildings size={60} />}
-          title="Build a New Audience"
-          description="Create a new set of customer profiles tailored to your specific needs. Build detailed profiles for simulation."
-          buttonText="Build Audience"
-          onClick={onBuildAudience}
-          
-        />
+      <div className="flex items-center justify-center">
+        <div className="grid md:grid-cols-2 items-center flex-wrap gap-5 mt-[110px] max-w-[1110px]">
+          <OptionCard
+            icon={<PiBuildings size={60} />}
+            title="Build a New Audience"
+            description="Create a new set of customer profiles tailored to your specific needs. Build detailed profiles for simulation."
+            buttonText="Build Audience"
+            onClick={onBuildAudience}
+          />
 
-        <OptionCard
-          icon={<PiUsersThree size={60} />}
-          title="Simulation Playground"
-          description="Use an existing audience to simulate customer behavior, test ideas, and gain valuable insights."
-          buttonText="Select Existing Audience"
-          onClick={onSelectExisting}
-        />
+          <OptionCard
+            icon={<PiUsersThree size={60} />}
+            title="Simulation Playground"
+            description="Use an existing audience to simulate customer behavior, test ideas, and gain valuable insights."
+            buttonText="Select Existing Audience"
+            onClick={onSelectExisting}
+          />
+        </div>
       </div>
     </div>
   );

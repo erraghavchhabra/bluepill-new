@@ -244,7 +244,8 @@ const ChatUI: React.FC<ChatUIProps> = ({ personaIds, onBlack }) => {
   const [loadingPersonasCount, setLoadingPersonasCount] = useState(0);
   const [aiTyping, setAiTyping] = useState(false);
   const chatContainerRef = useRef<HTMLDivElement>(null);
-  console.log(156161, selectedPersona);
+  const [showAll, setShowAll] = useState(false);
+  const visiblePersonas = showAll ? personas : personas.slice(0, 5);
   // Progressive persona loading
   useEffect(() => {
     setPersonas([]);
@@ -313,7 +314,9 @@ const ChatUI: React.FC<ChatUIProps> = ({ personaIds, onBlack }) => {
     };
     fetchHistory();
   }, [chatHistoryId]);
-
+  useEffect(() => {
+    setMessages([]);
+  }, [selectedPersonaIds]);
   // Scroll to bottom on new message
   useEffect(() => {
     if (chatContainerRef.current) {
@@ -395,25 +398,23 @@ const ChatUI: React.FC<ChatUIProps> = ({ personaIds, onBlack }) => {
         <div className=" bg-white rounded-2xl p-5 flex flex-col h-[83.5%]">
           <div className="flex items-center justify-between gap-2">
             <h3 className="text-lg font-semibold text-black">Personas</h3>
-            <div className="flex items-center gap-2">
+            <button
+              className="text-primary2 text-xs font-medium flex items-center gap-2"
+              disabled={visiblePersonas.length === 0}
+              onClick={() => {
+                if (selectedPersonaIds.length === visiblePersonas.length) {
+                  setSelectedPersonaIds([]);
+                } else {
+                  setSelectedPersonaIds(visiblePersonas.map((p) => p.id));
+                }
+              }}
+            >
               <SelectAllIcon />
-              <button
-                className="text-primary2 text-xs font-medium"
-                disabled={personas.length === 0}
-                onClick={() => {
-                  if (selectedPersonaIds.length === personas.length) {
-                    setSelectedPersonaIds([]);
-                  } else {
-                    setSelectedPersonaIds(personas.map((p) => p.id));
-                  }
-                }}
-              >
-                {selectedPersonaIds.length === personas.length &&
-                personas.length > 0
-                  ? "Deselect All"
-                  : "Select All"}
-              </button>
-            </div>
+              {selectedPersonaIds.length === visiblePersonas.length &&
+              visiblePersonas.length > 0
+                ? "Deselect All"
+                : "Select All"}
+            </button>
             {/* {loadingPersonasCount > 0 && (
             <span className="ml-2">
               <svg
@@ -439,7 +440,7 @@ const ChatUI: React.FC<ChatUIProps> = ({ personaIds, onBlack }) => {
           )} */}
           </div>
           <div className="flex items-start flex-col overflow-y-auto scrollbar-hide gap-3 mt-5 ">
-            {loading && personas.length === 0 && (
+            {loading && visiblePersonas.length === 0 && (
               <div className="flex flex-col justify-center items-center h-full py-8 text-gray-400">
                 <svg
                   className="animate-spin h-8 w-8 text-blue-500 mb-2"
@@ -463,11 +464,11 @@ const ChatUI: React.FC<ChatUIProps> = ({ personaIds, onBlack }) => {
                 <div>Loading personas...</div>
               </div>
             )}
-            {!loading && personas.length === 0 && (
+            {!loading && visiblePersonas.length === 0 && (
               <div className="text-gray-400 text-sm">No personas found.</div>
             )}
-            {personas.length > 0 &&
-              personas.map((p) => (
+            {visiblePersonas.length > 0 &&
+              visiblePersonas.map((p) => (
                 <div
                   key={p.id}
                   className={`w-full flex items-center justify-between gap-[10px]  border-l-4 rounded-xl p-[10px] pl-[18px] ${
@@ -534,28 +535,17 @@ const ChatUI: React.FC<ChatUIProps> = ({ personaIds, onBlack }) => {
                       )}
                     </label>
                   </div>
-                  {/* <input
-                  type="checkbox"
-                  checked={selectedPersonaIds.includes(p.id)}
-                  onChange={(e) => handlePersonaSelect(p.id, e.target.checked)}
-                  className="accent-blue-600 w-4 h-4 mr-2"
-                  id={`persona-checkbox-${p.id}`}
-                />
-                <label
-                  htmlFor={`persona-checkbox-${p.id}`}
-                  className="text-sm font-medium text-gray-800 cursor-pointer select-none flex-1 truncate"
-                >
-                  {p.name}
-                </label>
-                <button
-                  className="ml-2 text-blue-500 hover:text-blue-700 focus:outline-none"
-                  title="Show details"
-                  type="button"
-                >
-                  
-                </button> */}
                 </div>
               ))}
+            {/* Show More / Show Less Button */}
+            {personas.length > 6 && (
+              <button
+                onClick={() => setShowAll((prev) => !prev)}
+                className="text-sm underline text-primary2 mt-2 self-start"
+              >
+                {showAll ? "Show Less" : "Show More"}
+              </button>
+            )}
           </div>
         </div>
         <BlackButton onClick={onBlack} className="w-full">
@@ -564,7 +554,7 @@ const ChatUI: React.FC<ChatUIProps> = ({ personaIds, onBlack }) => {
       </div>
 
       {/* Main chat area */}
-      <div className="flex-1 flex flex-col h-full bg-white rounded-2xl p-[30px] pt-0">
+      <div className="flex-1 flex flex-col h-full bg-white rounded-2xl p-[30px]">
         {/* Chat area */}
         <div
           className="flex-1 overflow-y-auto scrollbar-hide"

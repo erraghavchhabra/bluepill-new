@@ -80,7 +80,19 @@ const AppContent: React.FC = () => {
   const [currentSimulationId, setCurrentSimulationId] = useState<number | null>(
     null
   ); // Add state to store the simulation ID that was generated
-
+  useEffect(() => {
+    updateAudienceData({
+      segmentType: null,
+      specificSegment: "",
+      qualitativeInfo: "",
+      uploadedFile: null,
+      audienceId: null,
+      audienceName: "",
+      selectedUseCase: null,
+      selectedSegments: [],
+      personaFilters: {},
+    });
+  }, [audienceData.type ,audienceData.websiteUrl ]);
   // Map numeric currentStep to string step type
   const updateStepMapping = useCallback((step: number) => {
     switch (step) {
@@ -376,10 +388,25 @@ const AppContent: React.FC = () => {
           />
         );
       case "audience-type":
-        return <AudienceTypeSelect onNext={handleNext} onBack={handleBack} />;
+        return (
+          <AudienceTypeSelect
+            onNext={handleNext}
+            onBack={() => {
+              handleBack();
+              handleReset();
+              navigate("/");
+            }}
+          />
+        );
       case "audience-segment":
         return (
-          <AudienceSegmentSelect onNext={handleNext} onBack={handleBack} />
+          <AudienceSegmentSelect
+            onNext={handleNext}
+            onBack={() => {
+              handleBack();
+              
+            }}
+          />
         );
       case "audience-preview":
         return <AudiencePreview onSave={handleReset} onBack={handleBack} />;
@@ -387,7 +414,10 @@ const AppContent: React.FC = () => {
         return (
           <ExistingAudiences
             onSelectAudience={handleSelectAudience}
-            onBack={handleReset}
+            onBack={() => {
+              handleReset();
+              navigate("/");
+            }}
           />
         );
       case "simulation-use-case":
@@ -404,6 +434,7 @@ const AppContent: React.FC = () => {
             onBack={() => {
               setStepMapping("existing-audiences");
               setHasEditedStep(false); // Reset edit flag when going back to audiences
+              
             }}
             audienceId={selectedAudienceId || 0}
             onStepChange={handleUseCaseStepChange}
@@ -424,19 +455,7 @@ const AppContent: React.FC = () => {
           >
             {currentSimulationId ? (
               <div className="h-full flex flex-col">
-                {/* <div className="mb-4 flex-shrink-0">
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => {
-                      setStepMapping("simulation-use-case");
-                      setCurrentStepInUseCase("form-filling");
-                    }}
-                    icon={<ArrowLeft className="w-4 h-4 mr-1" />}
-                  >
-                    Back to form
-                  </Button>
-                </div> */}
+                
                 <div className="flex-grow overflow-hidden rounded-tl-[30px]">
                   {/* <SimulationResults
                     simulationId={currentSimulationId}

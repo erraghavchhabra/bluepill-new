@@ -679,7 +679,12 @@ const UseCaseSelector: React.FC<UseCaseSelectorProps> = ({
           return (
             <SegmentsSelectorKettleAndFire
               audienceId={audienceId}
-              onBack={onBack}
+              onBack={() => {
+                onBack();
+                updateAudienceData({
+                  selectedSegments: [],
+                });
+              }}
               onNext={handleSegmentSelect}
               onEditStep={handleFormEdit}
             />

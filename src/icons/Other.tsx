@@ -639,3 +639,226 @@ export const MessageSendButtonIcon = () => (
     </defs>
   </svg>
 );
+export const CopyCheckIcon = () => (
+  <svg
+    width="20"
+    height="20"
+    viewBox="0 0 20 20"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M18 9.28V5.92C18 3.12 16.88 2 14.08 2H10.72C7.92005 2 6.80005 3.12 6.80005 5.92V6.8H9.28005C12.08 6.8 13.2 7.92 13.2 10.72V13.2H14.08C16.88 13.2 18 12.08 18 9.28Z"
+      stroke="black"
+      stroke-width="1.2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+    <path
+      d="M18 9.28V5.92C18 3.12 16.88 2 14.08 2H10.72C7.92005 2 6.80005 3.12 6.80005 5.92V6.8H9.28005C12.08 6.8 13.2 7.92 13.2 10.72V13.2H14.08C16.88 13.2 18 12.08 18 9.28Z"
+      stroke="black"
+      stroke-opacity="0.2"
+      stroke-width="1.2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+    <path
+      d="M18 9.28V5.92C18 3.12 16.88 2 14.08 2H10.72C7.92005 2 6.80005 3.12 6.80005 5.92V6.8H9.28005C12.08 6.8 13.2 7.92 13.2 10.72V13.2H14.08C16.88 13.2 18 12.08 18 9.28Z"
+      stroke="black"
+      stroke-opacity="0.2"
+      stroke-width="1.2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+    <path
+      d="M18 9.28V5.92C18 3.12 16.88 2 14.08 2H10.72C7.92005 2 6.80005 3.12 6.80005 5.92V6.8H9.28005C12.08 6.8 13.2 7.92 13.2 10.72V13.2H14.08C16.88 13.2 18 12.08 18 9.28Z"
+      stroke="black"
+      stroke-opacity="0.2"
+      stroke-width="1.2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+    <path
+      d="M18 9.28V5.92C18 3.12 16.88 2 14.08 2H10.72C7.92005 2 6.80005 3.12 6.80005 5.92V6.8H9.28005C12.08 6.8 13.2 7.92 13.2 10.72V13.2H14.08C16.88 13.2 18 12.08 18 9.28Z"
+      stroke="black"
+      stroke-opacity="0.2"
+      stroke-width="1.2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+    <path
+      d="M18 9.28V5.92C18 3.12 16.88 2 14.08 2H10.72C7.92005 2 6.80005 3.12 6.80005 5.92V6.8H9.28005C12.08 6.8 13.2 7.92 13.2 10.72V13.2H14.08C16.88 13.2 18 12.08 18 9.28Z"
+      stroke="black"
+      stroke-opacity="0.2"
+      stroke-width="1.2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+    <path
+      d="M18 9.28V5.92C18 3.12 16.88 2 14.08 2H10.72C7.92005 2 6.80005 3.12 6.80005 5.92V6.8H9.28005C12.08 6.8 13.2 7.92 13.2 10.72V13.2H14.08C16.88 13.2 18 12.08 18 9.28Z"
+      stroke="black"
+      stroke-opacity="0.2"
+      stroke-width="1.2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+    <path
+      d="M18 9.28V5.92C18 3.12 16.88 2 14.08 2H10.72C7.92005 2 6.80005 3.12 6.80005 5.92V6.8H9.28005C12.08 6.8 13.2 7.92 13.2 10.72V13.2H14.08C16.88 13.2 18 12.08 18 9.28Z"
+      stroke="black"
+      stroke-opacity="0.2"
+      stroke-width="1.2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+    <path
+      d="M18 9.28V5.92C18 3.12 16.88 2 14.08 2H10.72C7.92005 2 6.80005 3.12 6.80005 5.92V6.8H9.28005C12.08 6.8 13.2 7.92 13.2 10.72V13.2H14.08C16.88 13.2 18 12.08 18 9.28Z"
+      stroke="black"
+      stroke-opacity="0.2"
+      stroke-width="1.2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+    <path
+      d="M13.2 14.08V10.72C13.2 7.91999 12.08 6.79999 9.28 6.79999H5.92C3.12 6.79999 2 7.91999 2 10.72V14.08C2 16.88 3.12 18 5.92 18H9.28C12.08 18 13.2 16.88 13.2 14.08Z"
+      stroke="black"
+      stroke-width="1.2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+    <path
+      d="M13.2 14.08V10.72C13.2 7.91999 12.08 6.79999 9.28 6.79999H5.92C3.12 6.79999 2 7.91999 2 10.72V14.08C2 16.88 3.12 18 5.92 18H9.28C12.08 18 13.2 16.88 13.2 14.08Z"
+      stroke="black"
+      stroke-opacity="0.2"
+      stroke-width="1.2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+    <path
+      d="M13.2 14.08V10.72C13.2 7.91999 12.08 6.79999 9.28 6.79999H5.92C3.12 6.79999 2 7.91999 2 10.72V14.08C2 16.88 3.12 18 5.92 18H9.28C12.08 18 13.2 16.88 13.2 14.08Z"
+      stroke="black"
+      stroke-opacity="0.2"
+      stroke-width="1.2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+    <path
+      d="M13.2 14.08V10.72C13.2 7.91999 12.08 6.79999 9.28 6.79999H5.92C3.12 6.79999 2 7.91999 2 10.72V14.08C2 16.88 3.12 18 5.92 18H9.28C12.08 18 13.2 16.88 13.2 14.08Z"
+      stroke="black"
+      stroke-opacity="0.2"
+      stroke-width="1.2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+    <path
+      d="M13.2 14.08V10.72C13.2 7.91999 12.08 6.79999 9.28 6.79999H5.92C3.12 6.79999 2 7.91999 2 10.72V14.08C2 16.88 3.12 18 5.92 18H9.28C12.08 18 13.2 16.88 13.2 14.08Z"
+      stroke="black"
+      stroke-opacity="0.2"
+      stroke-width="1.2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+    <path
+      d="M13.2 14.08V10.72C13.2 7.91999 12.08 6.79999 9.28 6.79999H5.92C3.12 6.79999 2 7.91999 2 10.72V14.08C2 16.88 3.12 18 5.92 18H9.28C12.08 18 13.2 16.88 13.2 14.08Z"
+      stroke="black"
+      stroke-opacity="0.2"
+      stroke-width="1.2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+    <path
+      d="M13.2 14.08V10.72C13.2 7.91999 12.08 6.79999 9.28 6.79999H5.92C3.12 6.79999 2 7.91999 2 10.72V14.08C2 16.88 3.12 18 5.92 18H9.28C12.08 18 13.2 16.88 13.2 14.08Z"
+      stroke="black"
+      stroke-opacity="0.2"
+      stroke-width="1.2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+    <path
+      d="M13.2 14.08V10.72C13.2 7.91999 12.08 6.79999 9.28 6.79999H5.92C3.12 6.79999 2 7.91999 2 10.72V14.08C2 16.88 3.12 18 5.92 18H9.28C12.08 18 13.2 16.88 13.2 14.08Z"
+      stroke="black"
+      stroke-opacity="0.2"
+      stroke-width="1.2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+    <path
+      d="M13.2 14.08V10.72C13.2 7.91999 12.08 6.79999 9.28 6.79999H5.92C3.12 6.79999 2 7.91999 2 10.72V14.08C2 16.88 3.12 18 5.92 18H9.28C12.08 18 13.2 16.88 13.2 14.08Z"
+      stroke="black"
+      stroke-opacity="0.2"
+      stroke-width="1.2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+    <path
+      d="M5.26392 12.4L6.82392 13.96L9.93592 10.84"
+      stroke="black"
+      stroke-width="1.2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+    <path
+      d="M5.26392 12.4L6.82392 13.96L9.93592 10.84"
+      stroke="black"
+      stroke-opacity="0.2"
+      stroke-width="1.2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+    <path
+      d="M5.26392 12.4L6.82392 13.96L9.93592 10.84"
+      stroke="black"
+      stroke-opacity="0.2"
+      stroke-width="1.2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+    <path
+      d="M5.26392 12.4L6.82392 13.96L9.93592 10.84"
+      stroke="black"
+      stroke-opacity="0.2"
+      stroke-width="1.2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+    <path
+      d="M5.26392 12.4L6.82392 13.96L9.93592 10.84"
+      stroke="black"
+      stroke-opacity="0.2"
+      stroke-width="1.2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+    <path
+      d="M5.26392 12.4L6.82392 13.96L9.93592 10.84"
+      stroke="black"
+      stroke-opacity="0.2"
+      stroke-width="1.2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+    <path
+      d="M5.26392 12.4L6.82392 13.96L9.93592 10.84"
+      stroke="black"
+      stroke-opacity="0.2"
+      stroke-width="1.2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+    <path
+      d="M5.26392 12.4L6.82392 13.96L9.93592 10.84"
+      stroke="black"
+      stroke-opacity="0.2"
+      stroke-width="1.2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+    <path
+      d="M5.26392 12.4L6.82392 13.96L9.93592 10.84"
+      stroke="black"
+      stroke-opacity="0.2"
+      stroke-width="1.2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+  </svg>
+);

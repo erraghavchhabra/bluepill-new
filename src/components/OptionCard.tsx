@@ -23,7 +23,7 @@ const OptionCard: React.FC<OptionCardProps> = ({
 }) => {
   return (
     <Card
-      className="p-5 flex gap-5 items-start flex-col h-full bg-white rounded-[20px] transition-all duration-200 max-w-[545px]"
+      className="p-5 flex gap-5 items-start flex-col h-full bg-white rounded-[20px] transition-all duration-200"
       selected={selected}
       hoverable={true}
     >
