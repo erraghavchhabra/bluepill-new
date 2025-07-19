@@ -164,7 +164,7 @@ const AnalysisPage: React.FC = () => {
               onClick={() => setIsAudienceDropdownOpen(!isAudienceDropdownOpen)}
               className="w-full flex items-center justify-between h-[50px]  rounded-[12px] px-3 py-2 text-sm  bg-gray-100 hover:bg-gray-50"
             >
-              <span className='font-medium'>
+              <span className="font-medium">
                 {selectedAudienceId
                   ? audiences.find((a) => a.id === selectedAudienceId)?.name
                   : "All Audiences"}
@@ -202,7 +202,6 @@ const AnalysisPage: React.FC = () => {
           </div>
         </div>
 
-        
         <div className="relative">
           <input
             type="text"
@@ -293,7 +292,9 @@ const AnalysisPage: React.FC = () => {
     <div className="flex flex-col items-center justify-center h-full text-gray-500">
       <img src="/images/selectSimulationImage.png" alt="select" />
       <p className="text-[28px] font-semibold mb-2">Select a simulation</p>
-      <p className="font-medium text-sm text-black">Choose a simulation from the list to view its analysis</p>
+      <p className="font-medium text-sm text-black">
+        Choose a simulation from the list to view its analysis
+      </p>
     </div>
   );
 
@@ -323,36 +324,19 @@ const AnalysisPage: React.FC = () => {
 
           <div className="flex flex-row items-start h-[calc(100vh)]">
             <div
-              className="relative h-full transition-[width] duration-700   ease-in-out flex-shrink-0"
+              className="relative h-full transition-[width] duration-700 ease-in-out flex-shrink-0"
               style={{
                 width: isListCollapsed ? "5.5rem" : "26%",
+                minWidth: isListCollapsed ? "5.5rem" : "26%", // Prevent layout jump
+                maxWidth: isListCollapsed ? "5.5rem" : "26%", // Optional: Force consistency
               }}
             >
-              <div>
-                <div className="absolute top-7 right-[30px] z-10">
-                  <button
-                    className=""
-                    onClick={() => setIsListCollapsed((prev) => !prev)}
-                    title={
-                      isListCollapsed
-                        ? "Show Simulation List"
-                        : "Collapse Simulation List"
-                    }
-                  >
-                    <HiOutlineChevronDoubleLeft
-                      className={` transition-all duration-300 h-7 w-7 ${
-                        isListCollapsed ? "rotate-180" : "rotate-0"
-                      }`}
-                    />
-                  </button>
-                </div>
-              </div>
               <div
-                className={`h-full rounded-xl overflow-hidden transition-colors duration-700 ease-in-out ${
-                  isListCollapsed
-                    ? "bg-transparent shadow-none"
-                    : "bg-white "
-                }`}
+                className={`
+                  h-full rounded-xl overflow-hidden 
+                  transition-all duration-700 ease-in-out 
+                  ${isListCollapsed ? "bg-transparent shadow-none" : "bg-white shadow-md"}
+                `}
               >
                 {loading && !urlSimId
                   ? renderLoadingAnimation()
@@ -360,17 +344,36 @@ const AnalysisPage: React.FC = () => {
               </div>
             </div>
 
-            <div className="flex-1 bg-gray_light shadow-sm rounded-tl-[30px] overflow-hidden h-full">
-              {urlSimId ? (
-                <SimulationResultsContent
-                  simulationId={urlSimId}
-                  onError={handleSimulationError}
-                  setIsListCollapsed={setIsListCollapsed}
-                  isListCollapsed={isListCollapsed ? "chat" : "simulation"}
-                />
-              ) : (
-                renderNoSimulationSelectedState()
-              )}
+            <div className="relative w-full">
+              <div className="absolute top-7 left-[-58px] z-10">
+                <button
+                  className=""
+                  onClick={() => setIsListCollapsed((prev) => !prev)}
+                  title={
+                    isListCollapsed
+                      ? "Show Simulation List"
+                      : "Collapse Simulation List"
+                  }
+                >
+                  <HiOutlineChevronDoubleLeft
+                    className={` transition-all duration-300 h-7 w-7 ${
+                      isListCollapsed ? "rotate-180" : "rotate-0"
+                    }`}
+                  />
+                </button>
+              </div>
+              <div className="flex-1 bg-gray_light relative shadow-sm rounded-tl-[30px] overflow-hidden h-full">
+                {urlSimId ? (
+                  <SimulationResultsContent
+                    simulationId={urlSimId}
+                    onError={handleSimulationError}
+                    setIsListCollapsed={setIsListCollapsed}
+                    isListCollapsed={isListCollapsed ? "chat" : "simulation"}
+                  />
+                ) : (
+                  renderNoSimulationSelectedState()
+                )}
+              </div>
             </div>
           </div>
         </div>

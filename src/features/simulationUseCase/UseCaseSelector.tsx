@@ -338,6 +338,7 @@ const UseCaseSelector: React.FC<UseCaseSelectorProps> = ({
     updateAudienceData({
       selectedSegments: segments,
       personaFilters: filters,
+      selectedUseCase: null,
     });
 
     // Move to use case selection step using both local state and parent notification
@@ -374,12 +375,11 @@ const UseCaseSelector: React.FC<UseCaseSelectorProps> = ({
   const handleUseCaseSelect = (useCase: UseCaseType) => {
     // Check if this is one of the "coming soon" use cases
     const isComingSoon = COMING_SOON_USE_CASES.includes(useCase);
-
     // Don't proceed if it's a coming soon use case
     if (isComingSoon) {
       return;
     }
-
+    setFormState({});
     setSelectedUseCase(useCase);
 
     // Update context with selected use case

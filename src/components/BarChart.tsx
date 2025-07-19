@@ -1,10 +1,4 @@
-import React, {
-  useRef,
-  useState,
-  useEffect,
-  useMemo,
-  useCallback,
-} from "react";
+import React, { useRef, useState, useMemo } from "react";
 import html2canvas from "html2canvas";
 import { PiDownload } from "react-icons/pi";
 import { CopyCheckIcon } from "@/icons/Other";
@@ -17,6 +11,7 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
+import TooltipBox from "./Buttons/TooltipBox";
 
 interface BarChartProps {
   data: any[];
@@ -25,41 +20,32 @@ interface BarChartProps {
   title?: string;
 }
 
-const CustomTooltip = React.memo(
-  ({
-    active,
-    payload,
-    yAxis,
-    xAxis,
-    total,
-  }: {
-    active?: boolean;
-    payload?: any[];
-    yAxis: string;
-    xAxis: string;
-    total: number;
-  }) => {
-    if (active && payload && payload.length > 0) {
-      const item = payload[0]?.payload;
-
-      return (
-        <div className="relative bg-white p-3 rounded-xl whitespace-nowrap shadow-md text-xs text-black flex flex-col gap-1 z-50 border border-gray-200">
-          <p>
-            <span className="font-medium text-primary2">Option:</span>{" "}
-            {item?.[xAxis] ?? "N/A"}
-          </p>
-          <p>
-            <span className="font-medium text-primary2">Score:</span>{" "}
-            {item?.[yAxis] ?? 0}/{total} (
-            {(item?.[`${yAxis}Percent`] ?? 0).toFixed(2)}%)
-          </p>
-        </div>
-      );
-    }
-
-    return null;
+const CustomTooltip = ({
+  active,
+  payload,
+  yAxis,
+  xAxis,
+  total,
+}: {
+  active?: boolean;
+  payload?: any[];
+  yAxis: string;
+  xAxis: string;
+  total: number;
+}) => {
+  if (active && payload?.length) {
+    const item = payload[0].payload;
+    return (
+      <div className="bg-white p-[10px]  rounded-xl text-xs text-black min-w-[256px] max-h-[60px] min-h-[60px] border border-[#F5F5F5]">
+        <span className="font-medium text-primary2">Option:</span> {item[xAxis]}{" "}
+        <br className="h-[5px]" />{" "}
+        <span className="font-medium text-primary2">Score:</span> {item[yAxis]}/
+        {total} ({item[`${yAxis}Percent`].toFixed(2)}%)
+      </div>
+    );
   }
-);
+  return null;
+};
 
 const BarEndLabel = ({ x, y, width, value }: any) => (
   <text
@@ -78,7 +64,7 @@ const CustomBarShape = ({ x, y, width, height, fill }: any) => {
   const highlightWidth = 2;
   return (
     <g>
-      <rect x={x} y={y} width={highlightWidth} height={height} fill="#000" />
+      {/* <rect x={x} y={y} width={highlightWidth} height={height} fill="#000" /> */}
       <rect
         x={x + highlightWidth}
         y={y}
@@ -92,13 +78,8 @@ const CustomBarShape = ({ x, y, width, height, fill }: any) => {
 };
 
 const BarChart: React.FC<BarChartProps> = ({ data, xAxis, yAxis, title }) => {
-  console.log(15155 , data);
-  
   const chartRef = useRef<HTMLDivElement>(null);
   const [copied, setCopied] = useState(false);
-  const [cachedImage, setCachedImage] = useState<string | null>(null);
-  const [cachedBlob, setCachedBlob] = useState<Blob | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
 
   const processedData = useMemo(() => {
     return data.map((item) => {
@@ -123,125 +104,139 @@ const BarChart: React.FC<BarChartProps> = ({ data, xAxis, yAxis, title }) => {
     }));
   }, [processedData, total, yAxis]);
 
-  const renderImage = useCallback(async () => {
+  const handleDownload = async () => {
     if (chartRef.current) {
-      setIsLoading(true);
       const canvas = await html2canvas(chartRef.current, {
         backgroundColor: "#fff",
         scale: 2,
       });
-      setCachedImage(canvas.toDataURL("image/png"));
-      canvas.toBlob((blob) => blob && setCachedBlob(blob), "image/png");
-      setIsLoading(false);
+      const link = document.createElement("a");
+      link.download = "chart.png";
+      link.href = canvas.toDataURL("image/png");
+      link.click();
     }
-  }, []);
-
-  useEffect(() => {
-    const debounce = setTimeout(() => {
-      renderImage();
-    }, 300);
-    return () => clearTimeout(debounce);
-  }, [chartData, renderImage]);
-
-  const handleDownload = () => {
-    if (!cachedImage) return;
-    const link = document.createElement("a");
-    link.download = "chart.png";
-    link.href = cachedImage;
-    link.click();
   };
 
   const handleCopy = async () => {
-    if (!cachedBlob) return;
-    await navigator.clipboard.write([
-      new window.ClipboardItem({ "image/png": cachedBlob }),
-    ]);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 1000);
+    if (chartRef.current) {
+      const canvas = await html2canvas(chartRef.current, {
+        backgroundColor: "#fff",
+        scale: 2,
+      });
+      canvas.toBlob(async (blob) => {
+        if (blob) {
+          await navigator.clipboard.write([
+            new ClipboardItem({ "image/png": blob }),
+          ]);
+          setCopied(true);
+          setTimeout(() => setCopied(false), 1000);
+        }
+      });
+    }
   };
 
   return (
-    <div className="p-[15px]">
+    <div className="p-4">
       <div className="flex justify-between items-center mb-4">
         {title && (
           <h2 className="text-xl font-semibold text-primary2">{title}</h2>
         )}
         <div className="flex gap-2">
-          <button
-            onClick={handleDownload}
-            title="Download"
-            className="rounded-full bg-gray_light p-[10px] hover:bg-primary transition-all duration-200"
-          >
-            <PiDownload size={20} />
-          </button>
-          <button
-            onClick={handleCopy}
-            title="Copy"
-            className="rounded-full bg-gray_light p-[10px] hover:bg-primary transition-all duration-200"
-          >
-            <CopyCheckIcon />
-          </button>
+          <TooltipBox text="Download">
+            <button
+              onClick={handleDownload}
+              className="rounded-full bg-gray_light p-2 hover:bg-[#E6FCFA] transition-all"
+            >
+              <PiDownload size={20} />
+            </button>
+          </TooltipBox>
+          <TooltipBox text="Copy">
+            <button
+              onClick={handleCopy}
+              className="rounded-full bg-gray_light p-2 hover:bg-[#E6FCFA] transition-all"
+            >
+              <CopyCheckIcon />
+            </button>
+          </TooltipBox>
           {copied && (
             <span className="text-xs text-green-600 font-medium">Copied!</span>
           )}
         </div>
       </div>
 
-      <div className="relative h-[420px]">
-        {isLoading && (
-          <div className="absolute inset-0 z-10 flex items-center justify-center bg-white/60 backdrop-blur-sm">
-            <div className="w-10 h-10 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
-          </div>
-        )}
-        <div ref={chartRef} className="h-full">
-          <ResponsiveContainer width="100%" height="100%">
-            <RechartsBarChart
-              layout="vertical"
-              data={chartData}
-              margin={{ top: 10, right: 50, left: 0, bottom: 0 }}
-            >
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis
-                type="number"
-                domain={[0, 100]}
-                tickFormatter={(val) => `${val}%`}
-                fontSize={12}
-              />
-              <YAxis
-                type="category"
-                dataKey={xAxis}
-                width={200}
-                fontSize={12}
-                tick={({ x, y, payload }) => {
-                  const text =
-                    payload.value.length > 24
-                      ? payload.value.slice(0, 24) + "..."
-                      : payload.value;
-                  return (
-                    <g transform={`translate(${x},${y})`}>
-                      <foreignObject x={-180} y={-10} width={200} height={32}>
-                        <div className="text-xs text-gray-700">{text}</div>
-                      </foreignObject>
-                    </g>
-                  );
-                }}
-              />
-              <Tooltip
-                wrapperStyle={{ pointerEvents: "auto" }}
-                content={
-                  <CustomTooltip yAxis={yAxis} xAxis={xAxis} total={total} />
-                }
-              />
-              <Bar
-                dataKey={`${yAxis}Percent`}
-                fill="#03e8d3"
-                barSize={32}
-                label={<BarEndLabel />}
-                shape={<CustomBarShape />}
-              />
-            </RechartsBarChart>
-          </ResponsiveContainer>
-        </div>
+      <div ref={chartRef} className="h-[300px]">
+        <ResponsiveContainer width="100%" height="100%">
+          <RechartsBarChart
+            layout="vertical"
+            data={chartData}
+            margin={{ top: 10, right: 50, left: 0, bottom: 0 }}
+          >
+            {/* ✅ Vertical grid lines only */}
+            <CartesianGrid
+              strokeDasharray="1 1"
+              horizontal={false}
+              vertical={true}
+              color="#E3E3E8"
+            />
+
+            {/* ✅ X Axis with percentage ticks */}
+            <XAxis
+              type="number"
+              domain={[0, 100]}
+              ticks={[0, 25, 50, 75, 100]}
+              tickFormatter={(val) => `${val}%`}
+              fontSize={12.8}
+              fontWeight={400}
+              color="black"
+              axisLine={false}
+              tickLine={false}
+            />
+
+            {/* ✅ Y Axis with truncated label support (already good) */}
+            <YAxis
+              type="category"
+              dataKey={xAxis}
+              width={200}
+              fontSize={10}
+              fontWeight={400}
+              color="black"
+              axisLine={false}
+              tickLine={false}
+              tick={({ x, y, payload }) => {
+                const text =
+                  payload.value.length > 24
+                    ? payload.value.slice(0, 24) + "..."
+                    : payload.value;
+                return (
+                  <g transform={`translate(${x},${y})`}>
+                    <foreignObject x={-180} y={-10} width={200} height={32}>
+                      <div className="text-[10px] font-normal text-black">
+                        {text}
+                      </div>
+                    </foreignObject>
+                  </g>
+                );
+              }}
+            />
+
+            {/* Tooltip and Bars (unchanged) */}
+            <Tooltip
+              cursor={{ fill: "transparent" }}
+              content={
+                <CustomTooltip xAxis={xAxis} yAxis={yAxis} total={total} />
+              }
+            />
+
+            <Bar
+              dataKey={`${yAxis}Percent`}
+              fill="#03e8d3"
+              radius={[0, 10, 10, 0]}
+              barSize={40}
+              label={<BarEndLabel />}
+              shape={<CustomBarShape />}
+            />
+          </RechartsBarChart>
+        </ResponsiveContainer>
       </div>
     </div>
   );

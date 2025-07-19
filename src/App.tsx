@@ -92,7 +92,7 @@ const AppContent: React.FC = () => {
       selectedSegments: [],
       personaFilters: {},
     });
-  }, [audienceData.type ,audienceData.websiteUrl ]);
+  }, [audienceData.type, audienceData.websiteUrl]);
   // Map numeric currentStep to string step type
   const updateStepMapping = useCallback((step: number) => {
     switch (step) {
@@ -176,7 +176,15 @@ const AppContent: React.FC = () => {
       audienceName: audienceName,
       selectedSegments: [], // Initialize with empty segments
       personaFilters: {}, // Initialize with empty filters
+      type: null,
+      websiteUrl: "",
+      segmentType: null,
+      specificSegment: "",
+      qualitativeInfo: "",
+      uploadedFile: null,
+      selectedUseCase: null,
     });
+
     setStepMapping("simulation-use-case");
     setCurrentStepInUseCase("segment-selection"); // Always go to step 2 after selection
     // Reset edit tracking when selecting a new audience
@@ -394,7 +402,7 @@ const AppContent: React.FC = () => {
             onBack={() => {
               handleBack();
               handleReset();
-              navigate("/");
+              window.location.href = "/";
             }}
           />
         );
@@ -404,7 +412,6 @@ const AppContent: React.FC = () => {
             onNext={handleNext}
             onBack={() => {
               handleBack();
-              
             }}
           />
         );
@@ -416,7 +423,7 @@ const AppContent: React.FC = () => {
             onSelectAudience={handleSelectAudience}
             onBack={() => {
               handleReset();
-              navigate("/");
+              window.location.href = "/";
             }}
           />
         );
@@ -434,7 +441,6 @@ const AppContent: React.FC = () => {
             onBack={() => {
               setStepMapping("existing-audiences");
               setHasEditedStep(false); // Reset edit flag when going back to audiences
-              
             }}
             audienceId={selectedAudienceId || 0}
             onStepChange={handleUseCaseStepChange}
@@ -455,7 +461,6 @@ const AppContent: React.FC = () => {
           >
             {currentSimulationId ? (
               <div className="h-full flex flex-col">
-                
                 <div className="flex-grow overflow-hidden rounded-tl-[30px]">
                   {/* <SimulationResults
                     simulationId={currentSimulationId}

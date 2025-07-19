@@ -23,10 +23,10 @@ export default defineConfig(({ mode }) => {
       host: true,
       port: 4000,
       hmr: {
-      host: 'dev.blue-pill.ai',
-      port: 5003,
+      host: 'sim.blue-pill.ai',
+      port: 5005,
       protocol: 'ai',
-      clientPort: 5003,
+      clientPort: 5005,
     },
     },
   };

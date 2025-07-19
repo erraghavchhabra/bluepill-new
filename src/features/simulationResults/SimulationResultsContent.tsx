@@ -8,18 +8,13 @@ import {
   Brain,
   User,
   Loader2,
-  Send,
   ChevronDown,
   HelpCircle,
   FileText,
   Target,
   Briefcase,
-  Building,
   Users,
-  Settings,
-  Tag,
   Calendar,
-  Clock,
   Filter,
   Layers,
   Bookmark,
@@ -203,6 +198,7 @@ const SimulationResultsContent: React.FC<SimulationResultsContentProps> = ({
   const [chatTab, setChatTab] = useState<"simulation" | "persona">(
     "simulation"
   );
+  
   const [selectedPersona, setSelectedPersona] = useState<number | null>(null);
   const [chatHistory, setChatHistory] = useState<ChatMessage[]>([]);
   const [chatMessage, setChatMessage] = useState("");
