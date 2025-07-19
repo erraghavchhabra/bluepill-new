@@ -54,10 +54,10 @@ const AnalysisPage: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
-  const [isListCollapsed, setIsListCollapsed] = useState(true);
+  const [isListCollapsed, setIsListCollapsed] = useState(false);
   const [hasAnimated, setHasAnimated] = useState(false);
   const [isSimulationsLoaded, setIsSimulationsLoaded] = useState(false);
-
+  const [simulationLoading, setSimulationLoading] = useState(true);
   // Fetch audiences on component mount
   useEffect(() => {
     fetchAudiences();
@@ -109,6 +109,8 @@ const AnalysisPage: React.FC = () => {
       let url = `${API_URL}/simulations`;
       if (audienceId) {
         url += `?audience_id=${audienceId}`;
+      } else {
+        setSimulationLoading(true);
       }
 
       const response = await fetch(url, {
@@ -123,8 +125,10 @@ const AnalysisPage: React.FC = () => {
       setSimulations(data);
       setLoading(false);
       setIsSimulationsLoaded(true);
+      setSimulationLoading(false);
     } catch (err) {
       console.error("Error fetching simulations:", err);
+      setSimulationLoading(false);
     }
   };
 
@@ -217,10 +221,17 @@ const AnalysisPage: React.FC = () => {
 
         <div className="flex-1 overflow-y-auto scrollbar-hide mt-4 -mx-2 px-2">
           {filteredSimulations.length === 0 ? (
-            <div className="text-center text-gray-500 py-8">
-              <List className="h-12 w-12 mx-auto opacity-30 mb-3" />
-              <p>No simulations found</p>
-            </div>
+            simulationLoading ? (
+              <div className="flex flex-col items-center justify-center text-gray-400 py-8">
+                <div className="w-8 h-8 border-4 border-gray-300 border-t-primary2 rounded-full animate-spin mb-3"></div>
+                <p className="text-sm">Loading simulations...</p>
+              </div>
+            ) : (
+              <div className="text-center text-gray-500 py-8">
+                <List className="h-12 w-12 mx-auto opacity-30 mb-3" />
+                <p>No simulations found</p>
+              </div>
+            )
           ) : (
             <div className="space-y-2 ">
               {filteredSimulations.map((simulation) => (
@@ -333,9 +344,9 @@ const AnalysisPage: React.FC = () => {
             >
               <div
                 className={`
-                  h-full rounded-xl overflow-hidden 
+                  h-full  overflow-hidden 
                   transition-all duration-700 ease-in-out 
-                  ${isListCollapsed ? "bg-transparent shadow-none" : "bg-white shadow-md"}
+                  ${isListCollapsed ? "bg-transparent shadow-none" : "bg-white"}
                 `}
               >
                 {loading && !urlSimId
@@ -344,7 +355,7 @@ const AnalysisPage: React.FC = () => {
               </div>
             </div>
 
-            <div className="relative w-full">
+            <div className="relative w-full h-full">
               <div className="absolute top-7 left-[-58px] z-10">
                 <button
                   className=""
