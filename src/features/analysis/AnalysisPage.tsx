@@ -223,8 +223,7 @@ const AnalysisPage: React.FC = () => {
           {filteredSimulations.length === 0 ? (
             simulationLoading ? (
               <div className="flex flex-col items-center justify-center text-gray-400 py-8">
-                <div className="w-8 h-8 border-4 border-gray-300 border-t-primary2 rounded-full animate-spin mb-3"></div>
-                <p className="text-sm">Loading simulations...</p>
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
               </div>
             ) : (
               <div className="text-center text-gray-500 py-8">
