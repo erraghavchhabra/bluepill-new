@@ -8,6 +8,7 @@ import BlackButton from "@/components/Buttons/BlackButton";
 import PrimaryButton from "@/components/Buttons/PrimaryButton";
 import { RightWhiteArrow, UploadIcon } from "@/icons/simulatePageIcons";
 import { PiBuildingOfficeLight, PiNotepad, PiPackage } from "react-icons/pi";
+import CustomTextarea from "@/components/Buttons/CustomTextarea";
 
 interface AudienceSegmentSelectProps {
   onNext: () => void;
@@ -237,25 +238,18 @@ const AudienceSegmentSelect: React.FC<AudienceSegmentSelectProps> = ({
         ))}
       </div>
       {audienceData.segmentType === "specific" && (
-        <label
-          htmlFor="segment"
-          className="bg-white rounded-2xl  flex items-start gap-[10px] p-[18px_20px] mb-[30px]"
-        >
-          <div className="text-primary2">
-            <PiNotepad size={24} />
-          </div>
-          <textarea
-            className="outline-none w-full border-none resize-none"
-            placeholder="Describe the segment you have in mind *"
-            value={audienceData.specificSegment}
-            onChange={handleSpecificSegmentChange}
-            onBlur={() =>
-              setTouched((prev) => ({ ...prev, specificSegment: true }))
-            }
-            id="segment"
-            rows={3}
-          />
-        </label>
+        <CustomTextarea
+          placeholder="Describe the segment you have in mind *"
+          value={audienceData.specificSegment}
+          onChange={handleSpecificSegmentChange}
+          className="mb-[30px]"
+          onBlur={() =>
+            setTouched((prev) => ({ ...prev, specificSegment: true }))
+          }
+          id="segment"
+          rows={3}
+          icon={<PiNotepad size={24} />}
+        />
       )}
       <div className="pt-[30px]  border-t border-[#E8E8E8]">
         <h3 className="text-[28px] font-semibold text-black">
@@ -266,7 +260,7 @@ const AudienceSegmentSelect: React.FC<AudienceSegmentSelectProps> = ({
           build a lifelike audience.
         </p>
       </div>
-      <div className="grid grid-cols-2 gap-5">
+      <div className="grid grid-cols-2 gap-5 mt-5">
         <div className="flex-1">
           <input
             type="file"
@@ -331,21 +325,15 @@ const AudienceSegmentSelect: React.FC<AudienceSegmentSelectProps> = ({
           )}
         </div>
 
-        <label
-          htmlFor="textariaId"
-          className="bg-white  rounded-2xl  flex items-start gap-[10px] p-[18px_20px]"
-        >
-          <div className="text-primary2">
-            <PiNotepad size={24} />
-          </div>
-          <textarea
-            className="outline-none w-full border-none resize-none"
-            placeholder="Add any qualitative information about your customers..."
-            value={audienceData.qualitativeInfo}
-            onChange={handleQualitativeInfoChange}
-            id="textariaId"
-          />
-        </label>
+        <CustomTextarea
+          placeholder="Add any qualitative information about your customers..."
+          value={audienceData.qualitativeInfo}
+          className="h-full"
+          onChange={handleQualitativeInfoChange}
+          id="textariaId"
+          rows={9}
+          icon={<PiNotepad size={24} />}
+        />
       </div>
 
       <div className="flex justify-between items-center mt-[100px] ">

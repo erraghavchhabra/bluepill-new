@@ -13,6 +13,7 @@ import {
 import BlackButton from "@/components/Buttons/BlackButton";
 import PrimaryButton from "@/components/Buttons/PrimaryButton";
 import { RightWhiteArrow } from "@/icons/simulatePageIcons";
+import CustomInput from "@/components/Buttons/CustomInput";
 
 export type AudienceType = "company" | "product" | "person";
 
@@ -208,21 +209,17 @@ const AudienceTypeSelect: React.FC<AudienceTypeSelectProps> = ({
           the content to create more accurate profiles.
         </p>
       </div>
-      <label htmlFor="website-url" className="mt-5 flex items-center gap-[10px] text-[#595E64] font-medium text-sm rounded-2xl bg-white p-[18px_16px]">
-        <div className="text-primary2">
-          <PiLink size={24} />
-        </div>
-        <input
-          type="text"
+      <div className="mt-5">
+        <CustomInput
           id="website-url"
-          className="w-full outline-none border-none"
           placeholder="Website URL *"
           value={audienceData.websiteUrl}
           required
           onChange={handleWebsiteChange}
           onBlur={() => setTouched((prev) => ({ ...prev, websiteUrl: true }))}
+          icon={<PiLink size={24} />}
         />
-      </label>
+      </div>
       {validationError && (
         <p className="mt-1 text-sm text-red-600">{validationError}</p>
       )}

@@ -87,7 +87,7 @@ const TableView: React.FC<TableViewProps> = ({
   const visibleRows = !showAll && data.length > 5 ? data.slice(0, 5) : data;
 
   return (
-    <div className="overflow-x-auto relative">
+    <div className="  w-full relative">
       <div className="flex items-center justify-between gap-2 p-5">
         {title && (
           <h3
@@ -119,37 +119,41 @@ const TableView: React.FC<TableViewProps> = ({
           )}
         </div>
       </div>
-      <table className="min-w-full divide-y divide-gray-200">
-        <thead className="bg-gray-50">
-          <tr>
-            {headers.map((header, i) => (
-              <th
-                key={i}
-                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-              >
-                {header}
-              </th>
-            ))}
-          </tr>
-        </thead>
-        <tbody className="bg-white divide-y divide-gray-200">
-          {visibleRows.map((row, rowIndex) => (
-            <tr key={rowIndex}>
-              {headers.map((header, cellIndex) => {
-                const cell = Array.isArray(row) ? row[cellIndex] : row[header];
-                return (
-                  <td
-                    key={cellIndex}
-                    className="px-6 py-4 align-top text-sm text-gray-500 break-words max-w-[300px]"
-                  >
-                    {typeof cell === "number" ? cell.toFixed(1) : cell}
-                  </td>
-                );
-              })}
+      <div className="max-w-full overflow-x-auto w-full custom-scrollbar">
+        <table className="min-w-full divide-y divide-gray-200">
+          <thead className="bg-gray-50">
+            <tr>
+              {headers.map((header, i) => (
+                <th
+                  key={i}
+                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
+                  {header}
+                </th>
+              ))}
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody className="bg-white divide-y divide-gray-200">
+            {visibleRows.map((row, rowIndex) => (
+              <tr key={rowIndex}>
+                {headers.map((header, cellIndex) => {
+                  const cell = Array.isArray(row)
+                    ? row[cellIndex]
+                    : row[header];
+                  return (
+                    <td
+                      key={cellIndex}
+                      className="px-6 py-4 align-top text-sm text-gray-500 break-words max-w-[300px]"
+                    >
+                      {typeof cell === "number" ? cell.toFixed(1) : cell}
+                    </td>
+                  );
+                })}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
 
       {data.length > 5 && (
         <div className="text-center my-4">

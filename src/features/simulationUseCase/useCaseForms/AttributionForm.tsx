@@ -252,11 +252,11 @@ const AttributionForm: React.FC<AttributionFormProps> = ({
             )}
           </label>
         ))}
-        {/* {marketingCopies.length < 2 && (
-          <p className="text-sm text-amber-600 mt-2">
+        {marketingCopies.length < 2 && (
+          <p className="text-sm text-[#595E64] ">
             Please add at least 2 marketing copies for A/B testing
           </p>
-        )} */}
+        )}
       </div>
       <div className="mt-5">
         <PrimaryButton

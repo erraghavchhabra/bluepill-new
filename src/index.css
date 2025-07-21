@@ -189,7 +189,7 @@ body {
 
 .table-scroll::-webkit-scrollbar-track {
   /* border-radius: 20px; */
-  background-color: #FCFCFC;
+  background-color: #fcfcfc;
 }
 
 .table-scroll::-webkit-scrollbar-thumb {

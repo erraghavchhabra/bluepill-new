@@ -16,6 +16,7 @@ import {
 import BlackButton from "@/components/Buttons/BlackButton";
 import PrimaryButton from "@/components/Buttons/PrimaryButton";
 import CustomInput from "@/components/Buttons/CustomInput";
+import CustomTextarea from "@/components/Buttons/CustomTextarea";
 
 interface SegmentPersonaFilters {
   industryL1: string[];
@@ -461,24 +462,22 @@ const ContentCreationForm: React.FC<ContentCreationFormProps> = ({
       >
         {/* What should this content cover? (Detailed Brief Textarea) */}
         <div className="">
-          <label htmlFor="contentSubject" className="px-4 py-[18px] w-full bg-white rounded-2xl items-start flex gap-[10px] text-primary2 ">
-            <PiNotepadLight size={24} />
-            <textarea
-              id="contentSubject"
-              rows={5}
-              className="w-full resize-none text-sm font-normal outline-none border-none bg-white"
-              value={contentSubject}
-              onChange={(e) =>
-                handleFieldChange(setContentSubject, e.target.value)
-              }
-              placeholder="What should this content cover? Provide a detailed brief."
-              disabled={
-                !contentFormType ||
-                !contentType ||
-                (contentFormType === "long" && !simulationMode)
-              }
-            />
-          </label>
+          
+          <CustomTextarea
+            id="contentSubject"
+            rows={5}
+            value={contentSubject}
+            onChange={(e: any) =>
+              handleFieldChange(setContentSubject, e.target.value)
+            }
+            placeholder="What should this content cover? Provide a detailed brief."
+            disabled={
+              !contentFormType ||
+              !contentType ||
+              (contentFormType === "long" && !simulationMode)
+            }
+            icon={<PiNotepadLight size={24} />}
+          />
 
           <p className="mt-[10px] font-normal text-sm text-[#A3AAB3]">
             {contentFormType === "long" && simulationMode === "advanced"
@@ -498,21 +497,17 @@ const ContentCreationForm: React.FC<ContentCreationFormProps> = ({
         </div>
 
         {/* Tell us about your brand voice or positioning (Optional) */}
-        <div className="">
-          <label htmlFor="companyContext" className="px-4 py-[18px]  w-full bg-white rounded-2xl items-start flex gap-[10px] text-primary2 ">
-            <PiNotepadLight size={24} />
-            <textarea
-              id="companyContext"
-              rows={contentFormType === "long" ? 5 : 3}
-              className="w-full text-sm resize-none font-normal outline-none border-none bg-white"
-              value={companyContext}
-              onChange={(e) =>
-                handleFieldChange(setCompanyContext, e.target.value)
-              }
-              placeholder="Tell us about your brand voice or positioning (Optional)"
-            />
-          </label>
-        </div>
+        
+        <CustomTextarea
+          id="companyContext"
+          rows={contentFormType === "long" ? 5 : 3}
+          value={companyContext}
+          onChange={(e: any) =>
+            handleFieldChange(setCompanyContext, e.target.value)
+          }
+          placeholder="Tell us about your brand voice or positioning (Optional)"
+          icon={<PiNotepadLight size={24} />}
+        />
       </div>
 
       <div className="flex justify-between items-center mt-[87px]">

@@ -17,6 +17,7 @@ import {
   PiUser,
   PiUsersThree,
 } from "react-icons/pi";
+import CustomTextarea from "@/components/Buttons/CustomTextarea";
 
 interface SegmentPersonaFilters {
   industryL1: string[];
@@ -214,7 +215,7 @@ const BuyerInsightsForm: React.FC<BuyerInsightsFormProps> = ({
             handleFormChange();
           }}
           placeholder="Enter a name for your simulation"
-          icon={<PiUser />}
+          icon={<PiUser size={24} />}
           label="Simulation Name"
         />
       </div>
@@ -337,23 +338,17 @@ const BuyerInsightsForm: React.FC<BuyerInsightsFormProps> = ({
       </div>
 
       <div className="mt-5">
-        <label
-          htmlFor="context"
-          className="px-4 py-[18px] w-full bg-white rounded-2xl items-start flex gap-[10px] text-primary2 "
-        >
-          <PiNotepadLight size={24} />
-          <textarea
-            id="context"
-            className="w-full resize-none text-sm font-normal outline-none border-none bg-white"
-            rows={4}
-            value={context}
-            onChange={(e) => {
-              setContext(e.target.value);
-              handleFormChange();
-            }}
-            placeholder="Context (Optional)"
-          />
-        </label>
+        <CustomTextarea
+          id="context"
+          rows={4}
+          value={context}
+          onChange={(e: any) => {
+            setContext(e.target.value);
+            handleFormChange();
+          }}
+          placeholder="Context (Optional)"
+          icon={<PiNotepadLight size={24} />}
+        />
       </div>
       <div className="flex justify-between items-center mt-[100px] ">
         <BlackButton onClick={onBack}>Back</BlackButton>
