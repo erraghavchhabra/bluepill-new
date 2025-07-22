@@ -12,6 +12,7 @@ import CustomInput from "@/components/Buttons/CustomInput";
 import { PiNotepadLight, PiPlus, PiUser } from "react-icons/pi";
 import CustomTextarea from "@/components/Buttons/CustomTextarea";
 import { CloseXIcon } from "@/icons/Other";
+import CustomTextareaWithCloseButton from "@/components/Buttons/CustomTextareaWithCloseButton";
 
 interface SegmentPersonaFilters {
   industryL1: string[];
@@ -228,29 +229,44 @@ const AttributionForm: React.FC<AttributionFormProps> = ({
 
       <div className="mt-5 flex flex-col gap-5 items-start">
         {marketingCopies.map((copy, index) => (
-          <label
-            htmlFor={`Copies_${index + 1}`}
-            key={index}
-            className="px-4 py-[18px] w-full bg-white rounded-2xl items-start flex gap-[10px] text-primary2 "
-          >
-            <MarketingSpeakerIcon />
+          // <label
+          //   htmlFor={`Copies_${index + 1}`}
+          //   key={index}
+          //   className="px-4 py-[18px] w-full bg-white rounded-2xl items-start flex gap-[10px] text-primary2 "
+          // >
+          //   <MarketingSpeakerIcon />
 
-            <textarea
-              id={`Copies_${index + 1}`}
-              rows={5}
-              className="w-full resize-none text-sm font-normal outline-none border-none bg-white"
-              value={copy}
-              onChange={(e) => handleMarketingCopyChange(index, e.target.value)}
-              placeholder={`Marketing Copies to Test ${
-                index + 1 > 1 ? `- ${index + 1}` : ""
-              } `}
-            />
-            {marketingCopies.length > 1 && (
-              <button onClick={() => removeMarketingCopy(index)}>
-                <CloseXIcon size={24} color="#595E64" />
-              </button>
-            )}
-          </label>
+          //   <textarea
+          //     id={`Copies_${index + 1}`}
+          //     rows={5}
+          //     className="w-full resize-none text-sm font-normal outline-none border-none bg-white"
+          //     value={copy}
+          //     onChange={(e) => handleMarketingCopyChange(index, e.target.value)}
+          //     placeholder={`Marketing Copies to Test ${
+          //       index + 1 > 1 ? `- ${index + 1}` : ""
+          //     } `}
+          //   />
+          //   {marketingCopies.length > 1 && (
+          //     <button onClick={() => removeMarketingCopy(index)}>
+          //       <CloseXIcon size={24} color="#595E64" />
+          //     </button>
+          //   )}
+          // </label>
+          <CustomTextareaWithCloseButton
+            key={index}
+            id={`Copies_${index + 1}`}
+            value={copy}
+            onChange={(e) => handleMarketingCopyChange(index, e.target.value)}
+            placeholder={`Marketing Copies to Test ${
+              index + 1 > 1 ? `- ${index + 1}` : ""
+            }`}
+            icon={<MarketingSpeakerIcon />}
+            onRemove={
+              marketingCopies.length > 1
+                ? () => removeMarketingCopy(index)
+                : undefined
+            }
+          />
         ))}
         {marketingCopies.length < 2 && (
           <p className="text-sm text-[#595E64] ">

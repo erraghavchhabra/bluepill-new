@@ -198,7 +198,7 @@ const SimulationResultsContent: React.FC<SimulationResultsContentProps> = ({
   const [chatTab, setChatTab] = useState<"simulation" | "persona">(
     "simulation"
   );
-  
+
   const [selectedPersona, setSelectedPersona] = useState<number | null>(null);
   const [chatHistory, setChatHistory] = useState<ChatMessage[]>([]);
   const [chatMessage, setChatMessage] = useState("");
@@ -211,7 +211,7 @@ const SimulationResultsContent: React.FC<SimulationResultsContentProps> = ({
   const [optimizationStatus, setOptimizationStatus] = useState<
     "pending" | "running" | "completed"
   >("pending");
-  const [currentStep, setCurrentStep] = useState<string>("Loading");
+  const [currentStep, setCurrentStep] = useState<string>("Loading simulation");
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [showTooltip, setShowTooltip] = useState("");
   const [copied, setCopied] = useState(false);
@@ -957,6 +957,8 @@ const SimulationResultsContent: React.FC<SimulationResultsContentProps> = ({
       <p className="text-gray-500 text-center max-w-md">
         {simulationStatus === "pending"
           ? "We are initializing your simulation..."
+          : currentStep == "Loading simulation"
+          ? "Please wait for some time"
           : "This process typically takes 2-5 minutes. Please wait while we run your simulation."}
       </p>
     </div>
@@ -2607,9 +2609,7 @@ const SimulationResultsContent: React.FC<SimulationResultsContentProps> = ({
                             const data = await res.json();
                             if (!data.simulation_id)
                               throw new Error("No new simulation id returned");
-                            navigate(
-                              `/analysis/${data.simulation_id}`
-                            );
+                            navigate(`/analysis/${data.simulation_id}`);
                           } catch (err: any) {
                             setRerunError(
                               err?.message || "Failed to rerun simulation"
@@ -2626,7 +2626,10 @@ const SimulationResultsContent: React.FC<SimulationResultsContentProps> = ({
                     </div>
                   </TooltipBox>
                   {/* Simulation Inputs Button */}
-                  <TooltipBox text="Click to view simulation inputs" position="bottomLeft">
+                  <TooltipBox
+                    text="Click to view simulation inputs"
+                    position="bottomLeft"
+                  >
                     <div className="relative">
                       <button
                         onClick={() => setIsDetailsDropdownOpen(true)}
