@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Calendar, Users, ArrowLeft } from "lucide-react";
 import StepContainer from "../../components/StepContainer";
 import Card from "../../components/Card";
@@ -15,7 +15,8 @@ import {
 } from "@/icons/simulatePageIcons";
 import { PiSelectionBackground } from "react-icons/pi";
 import BlackButton from "@/components/Buttons/BlackButton";
-
+import axios from "axios";
+type AudienceId = number;
 interface Segment {
   id: number;
   name: string;
@@ -58,33 +59,66 @@ const ExistingAudiences: React.FC<ExistingAudiencesProps> = ({
   const [audiences, setAudiences] = useState<Audience[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [expandedAudiences, setExpandedAudiences] = useState<number[]>([]);
-
+  const [expandedAudiences, setExpandedAudiences] = useState<
+    (number | string)[]
+  >([]);
+  const [loadingAudiences, setLoadingAudiences] = useState<Set<number>>(
+    new Set()
+  );
+  const didFetchRef = useRef(false);
   useEffect(() => {
-    const fetchAudiences = async () => {
+    if (didFetchRef.current) return;
+    didFetchRef.current = true;
+
+    const fetchAudienceIds = async () => {
       setLoading(true);
       try {
-        const response = await fetch(`${API_URL}/audience`, {
-          credentials: "include",
+        const res = await axios.get<AudienceId[]>(`${API_URL}/audience/ids`, {
+          withCredentials: true,
         });
 
-        if (!response.ok) {
-          throw new Error("Failed to fetch audiences");
-        }
+        const rawIds = res.data;
+        const uniqueIds = [...new Set(rawIds)];
 
-        const data = await response.json();
-        setAudiences(data);
         setError(null);
+        if (uniqueIds.length > 0) {
+          await loadAudiencesSequentially(uniqueIds);
+        }
       } catch (err) {
-        console.error("Error fetching audiences:", err);
+        console.error("Error fetching audience IDs:", err);
         setError("Failed to load audiences. Please try again.");
       } finally {
         setLoading(false);
       }
     };
 
-    fetchAudiences();
+    fetchAudienceIds();
   }, []);
+
+  const loadAudiencesSequentially = async (audienceIds: AudienceId[]) => {
+    for (const audienceId of audienceIds) {
+      try {
+        setLoadingAudiences((prev) => new Set(prev).add(audienceId));
+
+        const res = await axios.get<Audience>(
+          `${API_URL}/audience/${audienceId}`,
+          {
+            withCredentials: true,
+          }
+        );
+
+        setAudiences((prev) => [...prev, res.data]);
+      } catch (err) {
+        console.error(`Error fetching audience ${audienceId}:`, err);
+      } finally {
+        setLoadingAudiences((prev) => {
+          const updated = new Set(prev);
+          updated.delete(audienceId);
+          return updated;
+        });
+      }
+    }
+  };
 
   const handleSelectAudience = (audience: Audience) => {
     setSelectedAudience(audience.id);
@@ -102,6 +136,7 @@ const ExistingAudiences: React.FC<ExistingAudiencesProps> = ({
         : [...prev, audienceId]
     );
   };
+  console.log(51515, audiences);
 
   return (
     <div className="w-full bg-gray_light rounded-tl-[30px] p-[30px] relative">
@@ -135,7 +170,7 @@ const ExistingAudiences: React.FC<ExistingAudiencesProps> = ({
       )}
 
       <div className="grid grid-cols-2 gap-[19px] mt-[30px]">
-        {audiences.map((audience) => (
+        {audiences.map((audience: any) => (
           <div className="bg-[#E6FCFA] rounded-2xl overflow-hidden">
             <div className="  mx-4 mt-2 mb-[7px] flex items-center gap-2 justify-between">
               <h3 className="text-base font-semibold text-black">
@@ -198,7 +233,7 @@ const ExistingAudiences: React.FC<ExistingAudiencesProps> = ({
                                       ? industries.length
                                       : 4
                                   )
-                                  .map((ind, i) => (
+                                  .map((ind: any, i: number) => (
                                     <span key={i}>
                                       {ind.trim().replace(/_/g, " ")}
                                       {i <
@@ -269,8 +304,11 @@ const ExistingAudiences: React.FC<ExistingAudiencesProps> = ({
                         ? audience.segments.length
                         : 3
                     )
-                    .map((segment) => (
-                      <div className="flex items-center gap-2 justify-between w-full">
+                    .map((segment: any, idx: number) => (
+                      <div
+                        key={idx}
+                        className="flex items-center gap-2 justify-between w-full"
+                      >
                         <div className="flex items-center gap-2">
                           <span className="text-primary2 pr-2 border-r border-[#E8E8E8]">
                             {segment.name == "Bone Broth Buyers" ? (
