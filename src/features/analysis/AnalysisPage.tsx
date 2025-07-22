@@ -354,7 +354,7 @@ const AnalysisPage: React.FC = () => {
               </div>
             </div>
 
-            <div className="relative w-full h-full">
+            <div className="relative w-full h-full  max-w-[74%]">
               <div className="absolute top-7 left-[-58px] z-10">
                 <button
                   className=""
