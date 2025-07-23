@@ -15,6 +15,10 @@ import {
   LucideCheck,
   BoneIcon,
   UserIcon,
+  Shield,
+  ArrowBigRight,
+  FunctionSquare,
+  RollerCoaster,
 } from "lucide-react";
 import Button from "../../components/Button";
 import StepContainer from "../../components/StepContainer";
@@ -32,6 +36,7 @@ import {
 } from "../../components/ui/dialog-custom.jsx";
 import { cn } from "../../lib/utils";
 import {
+  IndustryIcon,
   LocationIcon,
   PetsIcon,
   RightWhiteArrow,
@@ -273,7 +278,7 @@ const HabitsDataContent = ({
         </div>
       </div>
       <ul className="list-disc pl-[34px] mt-[6px] mb-4">
-        {data.map((point: any, idx: number) => (
+        {data?.map((point: any, idx: number) => (
           <li
             key={idx}
             className="text-[#595E64] text-[12px] leading-[23px] font-normal"
@@ -1122,40 +1127,6 @@ const SegmentsSelectorKettleAndFire: React.FC<SegmentsSelectorProps> = ({
                       </div>
                     </div>
                   </div>
-                  {/* <div
-                    className="flex justify-between mb-4 cursor-pointer"
-                    onClick={() => toggleSegment(segment.id)}
-                  >
-                    <div className="relative">
-                      <Info
-                        className="w-4 h-4 text-gray-400 flex-shrink-0 cursor-pointer hover:text-gray-600 mt-1"
-                        onMouseEnter={(e) => handleInfoHover(e, segment)}
-                        onMouseLeave={handleInfoLeave}
-                      />
-                      {showInfoTooltip.segmentId === segment.id && (
-                        <div
-                          className="absolute z-50 bg-white rounded-lg shadow-lg border border-gray-200 p-4 max-w-md animate-fadeIn tooltip-container"
-                          style={{
-                            left: "50%",
-                            top: "100%",
-                            transform: "translateX(-50%)",
-                            marginTop: "8px",
-                          }}
-                          onMouseEnter={(e) => e.stopPropagation()}
-                          onMouseLeave={handleInfoLeave}
-                        >
-                          <div className="flex justify-between items-start mb-2">
-                            <h3 className="font-semibold text-gray-900">
-                              {segment.name}
-                            </h3>
-                          </div>
-                          <p className="text-sm text-gray-600">
-                            {segment.description}
-                          </p>
-                        </div>
-                      )}
-                    </div>
-                  </div> */}
 
                   {!selectedSegments.includes(segment.id) && (
                     <div
@@ -1358,11 +1329,7 @@ const SegmentsSelectorKettleAndFire: React.FC<SegmentsSelectorProps> = ({
                                 />
                                 <label
                                   htmlFor={`subSegment-${segment.id}-${i}`}
-                                  // className="inline-block px-3 py-1 cursor-pointer select-none
-                                  //           peer-checked:bg-teal-100 peer-checked:text-teal-800 peer-checked:border-teal-300
-                                  //           peer-not-checked:bg-gray-50 peer-not-checked:text-gray-600 peer-not-checked:border-gray-200
-                                  //           text-xs font-medium rounded-full border transition-colors"
-                                  className="text-xs font-medium rounded-full p-[6px_16px]  border-white border bg-gradient-to-b shadow-2xl from-[#E6FCFACC]  to-[#FEFEFE] peer-checked:to-[#81fef4]"
+                                  className="text-xs cursor-pointer font-medium rounded-full p-[6px_16px]  border-white border bg-gradient-to-b shadow-2xl from-[#E6FCFACC]  to-[#FEFEFE] peer-checked:to-[#81fef4]"
                                 >
                                   {subSegment}
                                 </label>
@@ -1408,7 +1375,7 @@ const SegmentsSelectorKettleAndFire: React.FC<SegmentsSelectorProps> = ({
                               />
                               <label
                                 htmlFor={`age-${segment.id}-${i}`}
-                                className="text-xs font-medium rounded-full p-[6px_16px]  border-white border bg-gradient-to-b shadow-2xl from-[#FFF7E0CC]  to-[#FEFEFE] peer-checked:to-[#ebdcae]"
+                                className="text-xs font-medium cursor-pointer rounded-full p-[6px_16px]  border-white border bg-gradient-to-b shadow-2xl from-[#FFF7E0CC]  to-[#FEFEFE] peer-checked:to-[#ebdcae]"
                               >
                                 {age}
                               </label>
@@ -1452,7 +1419,7 @@ const SegmentsSelectorKettleAndFire: React.FC<SegmentsSelectorProps> = ({
                               />
                               <label
                                 htmlFor={`income-${segment.id}-${i}`}
-                                className="text-xs font-medium rounded-full p-[6px_16px]  border-white border bg-gradient-to-b shadow-2xl from-[#E0E7FFCC]  to-[#FEFEFE] peer-checked:to-[#beccfa]"
+                                className="text-xs font-medium cursor-pointer rounded-full p-[6px_16px]  border-white border bg-gradient-to-b shadow-2xl from-[#E0E7FFCC]  to-[#FEFEFE] peer-checked:to-[#beccfa]"
                               >
                                 {income}
                               </label>
@@ -1497,7 +1464,7 @@ const SegmentsSelectorKettleAndFire: React.FC<SegmentsSelectorProps> = ({
                               />
                               <label
                                 htmlFor={`location-${segment.id}-${i}`}
-                                className="text-xs font-medium rounded-full p-[6px_16px]  border-white border bg-gradient-to-b shadow-2xl from-[#D1FAE5CC]  to-[#FEFEFE] peer-checked:to-[#96ecbf]"
+                                className="text-xs font-medium cursor-pointer rounded-full p-[6px_16px]  border-white border bg-gradient-to-b shadow-2xl from-[#D1FAE5CC]  to-[#FEFEFE] peer-checked:to-[#96ecbf]"
                               >
                                 {location}
                               </label>
@@ -1542,7 +1509,7 @@ const SegmentsSelectorKettleAndFire: React.FC<SegmentsSelectorProps> = ({
                               />
                               <label
                                 htmlFor={`pet-${segment.id}-${i}`}
-                                className="text-xs font-medium rounded-full p-[6px_16px]  border-white border bg-gradient-to-b shadow-2xl from-[#EEDBFFCC]  to-[#FEFEFE] peer-checked:to-[#c69cea]"
+                                className="text-xs font-medium cursor-pointer rounded-full p-[6px_16px]  border-white border bg-gradient-to-b shadow-2xl from-[#EEDBFFCC]  to-[#FEFEFE] peer-checked:to-[#c69cea]"
                               >
                                 {pet}
                               </label>
@@ -1586,7 +1553,7 @@ const SegmentsSelectorKettleAndFire: React.FC<SegmentsSelectorProps> = ({
                               />
                               <label
                                 htmlFor={`child-${segment.id}-${i}`}
-                                className="text-xs font-medium rounded-full p-[6px_16px]  border-white border bg-gradient-to-b shadow-2xl from-[#E6FCFACC]  to-[#FEFEFE] peer-checked:to-[#adfdf7]"
+                                className="text-xs font-medium cursor-pointer rounded-full p-[6px_16px]  border-white border bg-gradient-to-b shadow-2xl from-[#E6FCFACC]  to-[#FEFEFE] peer-checked:to-[#adfdf7]"
                               >
                                 {child}
                               </label>
@@ -1856,8 +1823,8 @@ const SegmentsSelectorKettleAndFire: React.FC<SegmentsSelectorProps> = ({
                   </div>
 
                   {/* Right side: Persona Details */}
-                  <div className="flex-1 overflow-hidden flex flex-col h-[100vh]">
-                    <div className="overflow-y-auto pl-5 bg-white h-full custom-scrollbar pr-[15px]">
+                  <div className="flex-1 overflow-hidden flex flex-col h-full">
+                    <div className="overflow-y-auto pl-5 bg-white h-full custom-scrollbar pr-[15px] pb-12">
                       {selectedPersona ? (
                         <div className="overflow-hidden animate-fadeIn w-full">
                           {/* Persona Header */}
@@ -1966,37 +1933,28 @@ const SegmentsSelectorKettleAndFire: React.FC<SegmentsSelectorProps> = ({
                                   <div className="flex flex-col gap-4">
                                     {[
                                       {
-                                        key: "age_group",
-                                        label: "Age Group",
-                                        icon: <PiPersonArmsSpread size={20} />,
-                                        value: selectedPersona.data?.age_group,
+                                        key: "industry",
+                                        label: "Industry",
+                                        icon: <IndustryIcon size={20} />,
+                                        value: selectedPersona?.industry_l1,
                                       },
                                       {
-                                        key: "household_income",
-                                        label: "Income Range",
-                                        icon: <PiUsersLight />,
-                                        value:
-                                          selectedPersona.data
-                                            ?.household_income,
+                                        key: "subIndustry",
+                                        label: "Sub-Industry",
+                                        icon: <IndustryIcon size={20} />,
+                                        value: selectedPersona?.sub_industry_l2,
                                       },
                                       {
-                                        key: "geo_location",
-                                        label: "Location Type",
-                                        icon: <LocationIcon />,
-                                        value:
-                                          selectedPersona.data?.geo_location,
+                                        key: "function",
+                                        label: "Function",
+                                        icon: <FunctionSquare size={20} />,
+                                        value: selectedPersona?.function,
                                       },
                                       {
-                                        key: "pets",
-                                        label: "Pets",
-                                        icon: <PetsIcon />,
-                                        value: selectedPersona.data?.pets,
-                                      },
-                                      {
-                                        key: "children",
-                                        label: "Children",
-                                        icon: <PiBabyLight size={20} />,
-                                        value: selectedPersona.data?.children,
+                                        key: "role",
+                                        label: "Role",
+                                        icon: <RollerCoaster size={20} />,
+                                        value: selectedPersona?.role,
                                       },
                                     ]
                                       .filter((field) => field.value)
@@ -2186,40 +2144,40 @@ const SegmentsSelectorKettleAndFire: React.FC<SegmentsSelectorProps> = ({
                                     </div>
                                   </div>
                                 )}
-
-                              {/* {selectedPersona.values &&
-                              selectedPersona.values.length > 0 && (
-                                <div className="bg-green-50 p-5 rounded-lg border border-green-100">
-                                  <h4 className="font-medium text-green-800 mb-3 flex items-center">
-                                    <svg
-                                      className="w-4 h-4 mr-2"
-                                      fill="none"
-                                      viewBox="0 0 24 24"
-                                      stroke="currentColor"
-                                    >
-                                      <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth="2"
-                                        d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
-                                      />
-                                    </svg>
-                                    Values
-                                  </h4>
-                                  <ul className="list-disc ml-5 space-y-1.5">
-                                    {selectedPersona.values.map(
-                                      (value: string, idx: number) => (
-                                        <li
-                                          key={idx}
-                                          className="text-sm text-gray-700"
-                                        >
-                                          {value}
-                                        </li>
-                                      )
-                                    )}
-                                  </ul>
-                                </div>
-                              )} */}
+                              {selectedPersona.values &&
+                                selectedPersona.values.length > 0 && (
+                                  <div className="mt-5">
+                                    <SectionHeader
+                                      icon={
+                                        <Shield size={24} color="#028B7E" />
+                                      }
+                                      title="Values"
+                                      number={7}
+                                      titleColor="#028B7E"
+                                    />
+                                    <div className="p-4 border-2 border-[#ECECEC] bg-gradient-to-b from-[#E6FCFA] to-[#FEFEFE] rounded-2xl drop-shadow-md">
+                                      <div className="flex flex-col gap-4">
+                                        {selectedPersona.values.map(
+                                          (point: string, index: number) => (
+                                            <div
+                                              key={index}
+                                              className="flex items-start gap-3"
+                                            >
+                                              <div className="text-primary2 pr-3 border-r border-[#DBDDE0]">
+                                                <ArrowBigRight size={24} />
+                                              </div>
+                                              <div className="flex items-start justify-between w-full gap-1">
+                                                <h3 className="text-black font-normal text-xs">
+                                                  {point}
+                                                </h3>
+                                              </div>
+                                            </div>
+                                          )
+                                        )}
+                                      </div>
+                                    </div>
+                                  </div>
+                                )}
                             </div>
                             {/* Replace the hardcoded sections with dynamic rendering */}
                             <div className="space-y-6 mt-4">

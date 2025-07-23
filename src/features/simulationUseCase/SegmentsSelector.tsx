@@ -1,20 +1,93 @@
-import React, { useState, useEffect, useMemo } from 'react';
-import { User, Info, ArrowLeft, Briefcase, Building, Users, Building2, Filter, Search, X, ChevronDown, ChevronRight } from 'lucide-react';
-import Button from '../../components/Button';
-import StepContainer from '../../components/StepContainer';
-import { useAudience } from '../../context/AudienceContext';
-import { Dialog, DialogHeader, DialogTitle } from '../../components/ui/dialog.jsx';
-import { CustomDialogContent as DialogContent, CustomDialogClose } from '../../components/ui/dialog-custom.jsx';
-import { formatPersonaFilterRequest } from '../../lib/utils';
-import { cn } from '../../lib/utils';
-
-
-
+import React, { useState, useEffect, useMemo } from "react";
+import {
+  User,
+  Info,
+  ArrowLeft,
+  Briefcase,
+  Building,
+  Users,
+  Building2,
+  Filter,
+  Search,
+  X,
+  ChevronDown,
+  ChevronRight,
+  LucideCheck,
+  UserIcon,
+  FunctionSquare,
+  RollerCoaster,
+  Shield,
+  ArrowBigRight,
+} from "lucide-react";
+import Button from "../../components/Button";
+import StepContainer from "../../components/StepContainer";
+import { useAudience } from "../../context/AudienceContext";
+import {
+  Dialog,
+  DialogHeader,
+  DialogTitle,
+  DialogPortal,
+  DialogOverlay,
+} from "../../components/ui/dialog.jsx";
+import {
+  CustomDialogContent as DialogContent,
+  CustomDialogClose,
+} from "../../components/ui/dialog-custom.jsx";
+import { formatPersonaFilterRequest } from "../../lib/utils";
+import { cn } from "../../lib/utils";
+import TooltipBox from "@/components/Buttons/TooltipBox.js";
+import {
+  PiBabyLight,
+  PiBuildingsLight,
+  PiGenderIntersex,
+  PiPersonArmsSpread,
+  PiSuitcase,
+  PiUser,
+  PiUsers,
+  PiUsersLight,
+} from "react-icons/pi";
+import { BiFilterAlt } from "react-icons/bi";
+import BlackButton from "@/components/Buttons/BlackButton.js";
+import PrimaryButton from "@/components/Buttons/PrimaryButton.js";
+import { IndustryIcon, RightWhiteArrow } from "@/icons/simulatePageIcons.js";
+import {
+  BehaviorsIcon,
+  BuildingIcon,
+  CloseXIcon,
+  EducationPrimeIcon,
+  GeographicsIcon,
+  GoalPrimeIcon,
+  GoalsPrimeIcon,
+  GoalsYellowIcon,
+  IncomePrimeIcon,
+  InterestsIcon,
+  InterestsPerpleIcon,
+  LifeStageIcon,
+  LocationPrimeIcon,
+  MarriedIcon,
+  PainPointsIcon,
+  PersonaSegmentIcon,
+  PetsPrimeIcon,
+  PlayIcon,
+  PreferredChanelIcon,
+  PreferredChannelsIcon,
+  PsychographicsIcon,
+  PurchasingHabitsIcon,
+  RightUniqueArrowIcon,
+  SalesMarketingHooksIcon,
+  SegmentNameIcon,
+  SubsegmentIcon,
+  TrustedSourcesIcon,
+  ValueDriversIcon,
+} from "@/icons/Other.js";
 interface SegmentsSelectorProps {
   btn_text?: string; // Optional prop with default value "Continue to Use Cases"
   audienceId: number;
   onBack: () => void;
-  onNext: (selectedSegments: number[], personaFilters: Record<number, SegmentPersonaFilters>) => void;
+  onNext: (
+    selectedSegments: number[],
+    personaFilters: Record<number, SegmentPersonaFilters>
+  ) => void;
   onEditStep?: () => void; // Add this prop to notify parent of edits
 }
 
@@ -49,14 +122,105 @@ interface SegmentPersonaFilters {
   roles: string[];
 }
 
-const API_URL = import.meta.env.VITE_API_URL || '';
+const API_URL = import.meta.env.VITE_API_URL || "";
+const SectionHeader = ({
+  icon,
+  title,
+  number,
+  titleColor = "primary2",
+}: any) => {
+  return (
+    <div className="flex items-center w-full mb-3">
+      {/* Icon and Title */}
+      <div
+        style={{ color: titleColor == "primary2" ? "#028B7E" : titleColor }}
+        className={`flex items-center   gap-3 font-medium text-lg`}
+      >
+        {icon}
+        <span>{title}</span>
+      </div>
 
+      {/* Line */}
+      <div className="flex-grow border-t border-black mx-4" />
+
+      {/* Number */}
+      <div className="font-medium text-base">
+        {number < 10 ? "0" : ""}
+        {number}
+      </div>
+    </div>
+  );
+};
+const GreenHeading = ({ text }: any) => {
+  return (
+    <div
+      className="p-[12px_28px]  relative text-primary2 font-semibold text-base"
+      style={{
+        background:
+          "linear-gradient(90deg, rgba(7, 229, 209, 0.05) 0%, rgba(7, 229, 209, 0.013942) 92.88%, rgba(7, 229, 209, 0) 100%)",
+      }}
+    >
+      <div className="absolute left-0 top-0 rounded-r-lg h-full w-[5px] bg-primary2"></div>
+      {text || "——————————————"}
+    </div>
+  );
+};
+const AdvancedDataContent = ({ title, data }: any) => {
+  return (
+    <>
+      <GreenHeading text={title} />
+      <ul className="list-disc pl-[34px] mt-[6px] mb-4">
+        {data.map((point: any, idx: number) => (
+          <li
+            key={idx}
+            className="text-[#595E64] text-[12px] leading-[23px] font-normal"
+          >
+            {point}
+          </li>
+        ))}
+      </ul>
+    </>
+  );
+};
+const HabitsDataContent = ({
+  title,
+  data,
+  icon,
+  fromColor = "#E6FCFA",
+}: any) => {
+  return (
+    <div
+      className={`p-4 border-2 h-full border-[#ECECEC] bg-gradient-to-b from-[${fromColor}] to-[#FEFEFE] rounded-2xl drop-shadow-md`}
+    >
+      <div className="flex items-start gap-3">
+        <div className="text-primary2 pr-3 border-r border-[#DBDDE0]">
+          {icon}
+        </div>
+        <div className="flex items-start flex-col justify-between w-full gap-2">
+          <h3 className="text-black text-start font-medium text-sm ">
+            {title}
+          </h3>
+        </div>
+      </div>
+      <ul className="list-disc pl-[34px] mt-[6px] mb-4">
+        {data?.map((point: any, idx: number) => (
+          <li
+            key={idx}
+            className="text-[#595E64] text-[12px] leading-[23px] font-normal"
+          >
+            {point}
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+};
 const SegmentsSelector: React.FC<SegmentsSelectorProps> = ({
-  btn_text = 'Continue to Use Cases',
+  btn_text = "Continue to Use Cases",
   audienceId,
   onBack,
   onNext,
-  onEditStep
+  onEditStep,
 }) => {
   const { audienceData, updateAudienceData } = useAudience();
   const [segments, setSegments] = useState<Segment[]>([]);
@@ -64,31 +228,57 @@ const SegmentsSelector: React.FC<SegmentsSelectorProps> = ({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   // Track persona filters for each segment
-  const [personaFilters, setPersonaFilters] = useState<Record<number, SegmentPersonaFilters>>({});
-  const [initialSelectedSegments, setInitialSelectedSegments] = useState<number[]>([]);
-  const [initialPersonaFilters, setInitialPersonaFilters] = useState<Record<number, SegmentPersonaFilters>>({});
+  const [personaFilters, setPersonaFilters] = useState<
+    Record<number, SegmentPersonaFilters>
+  >({});
+  const [initialSelectedSegments, setInitialSelectedSegments] = useState<
+    number[]
+  >([]);
+  const [initialPersonaFilters, setInitialPersonaFilters] = useState<
+    Record<number, SegmentPersonaFilters>
+  >({});
   // Filter states
-  const [industryL1Filters, setIndustryL1Filters] = useState<FilterOption[]>([]);
-  const [industryL2Filters, setIndustryL2Filters] = useState<FilterOption[]>([]);
+  const [industryL1Filters, setIndustryL1Filters] = useState<FilterOption[]>(
+    []
+  );
+  const [industryL2Filters, setIndustryL2Filters] = useState<FilterOption[]>(
+    []
+  );
   const [functionFilters, setFunctionFilters] = useState<FilterOption[]>([]);
   const [roleFilters, setRoleFilters] = useState<FilterOption[]>([]);
-  const [titleSearchValue, setTitleSearchValue] = useState('');
+  const [titleSearchValue, setTitleSearchValue] = useState("");
   const [filteredSegments, setFilteredSegments] = useState<Segment[]>([]);
 
   // States for persona modal
-  const [isPersonaModalOpen, setIsPersonaModalOpen] = useState(false); const [selectedSegmentForPersonas, setSelectedSegmentForPersonas] = useState<number | null>(null);
+  const [isPersonaModalOpen, setIsPersonaModalOpen] = useState(false);
+  const [selectedSegmentForPersonas, setSelectedSegmentForPersonas] = useState<
+    number | null
+  >(null);
   const [segmentPersonas, setSegmentPersonas] = useState<PersonaType[]>([]);
   const [loadingPersonas, setLoadingPersonas] = useState(false);
   const [selectedRole, setSelectedRole] = useState<string | null>(null);
-  const [selectedPersona, setSelectedPersona] = useState<PersonaType | null>(null);  // Add state for expanded roles in the persona modal  
-  const [expandedRoles, setExpandedRoles] = useState<Record<string, boolean>>({});
+  const [selectedPersona, setSelectedPersona] = useState<PersonaType | null>(
+    null
+  ); // Add state for expanded roles in the persona modal
+  const [expandedRoles, setExpandedRoles] = useState<Record<string, boolean>>(
+    {}
+  );
+  console.log(15515, selectedPersona);
   // Add state to track persona counts for each segment
-  const [segmentPersonaCounts, setSegmentPersonaCounts] = useState<Record<number, number>>({});
+  const [segmentPersonaCounts, setSegmentPersonaCounts] = useState<
+    Record<number, number>
+  >({});
   // Add state to track which segments are currently loading their count
-  const [loadingCounts, setLoadingCounts] = useState<Record<number, boolean>>({});
+  const [loadingCounts, setLoadingCounts] = useState<Record<number, boolean>>(
+    {}
+  );
 
   // Add state for info tooltip
-  const [showInfoTooltip, setShowInfoTooltip] = useState<{ segmentId: number | null, x: number, y: number }>({ segmentId: null, x: 0, y: 0 });
+  const [showInfoTooltip, setShowInfoTooltip] = useState<{
+    segmentId: number | null;
+    x: number;
+    y: number;
+  }>({ segmentId: null, x: 0, y: 0 });
 
   // Define a Persona type to avoid "any" type errors
   interface PersonaType {
@@ -126,44 +316,95 @@ const SegmentsSelector: React.FC<SegmentsSelectorProps> = ({
   }
 
   // Standard functions and roles that are common across all segments
-  const standardFunctions = useMemo(() => ['Legal', 'Procurement', 'Finance', 'Sales'], []);
-  const standardRoles = useMemo(() => ["CXO", "Decision Maker/Leaders", "Mid Level Managers", "Individual contributors"], []);
+  const standardFunctions = useMemo(
+    () => ["Legal", "Procurement", "Finance", "Sales"],
+    []
+  );
+  const standardRoles = useMemo(
+    () => [
+      "CXO",
+      "Decision Maker/Leaders",
+      "Mid Level Managers",
+      "Individual contributors",
+    ],
+    []
+  );
   // Define industry taxonomies - L1 industries and their corresponding L2 industries using useMemo
   // These are predefined industry categories that we'll try to match against segment names
-  const industries = useMemo(() => [
-    'Industrial', 'Healthcare And Life Sciences', 'Public Sector',
-    'Retail And Consumer Goods', 'Tmt And Consulting', 'Banking Financial Services And Insurance'
-  ], []);
+  const industries = useMemo(
+    () => [
+      "Industrial",
+      "Healthcare And Life Sciences",
+      "Public Sector",
+      "Retail And Consumer Goods",
+      "Tmt And Consulting",
+      "Banking Financial Services And Insurance",
+    ],
+    []
+  );
 
   // Mapping of industry L1 to their L2 subcategories
-  const industryL2Map = useMemo(() => ({
-    'Industrial': ['Manufacturing', 'Automotive', 'Transportation', 'Energy And Utilities', 'Construction'],
-    'Public Sector': ['Government Contractors', 'Federal Government', 'Higher Education', 'State and Local Government'],
-    'Healthcare And Life Sciences': ['Payers', 'Providers', 'Medical Technology', 'Pharma'],
-    'Retail And Consumer Goods': ['Retail', 'Consumer Goods', 'Wholesale Distribution'],
-    'Tmt And Consulting': ['Technology', 'Telecom', 'Media', 'Consulting And IT Services'],
-    'Banking Financial Services And Insurance': ['Banking', 'Insurance', 'Financial Service Institutions', 'Lending and Credit Services']
-  }), []);  // Initialize persona filters when segments change - but with empty arrays for filters
+  const industryL2Map = useMemo(
+    () => ({
+      Industrial: [
+        "Manufacturing",
+        "Automotive",
+        "Transportation",
+        "Energy And Utilities",
+        "Construction",
+      ],
+      "Public Sector": [
+        "Government Contractors",
+        "Federal Government",
+        "Higher Education",
+        "State and Local Government",
+      ],
+      "Healthcare And Life Sciences": [
+        "Payers",
+        "Providers",
+        "Medical Technology",
+        "Pharma",
+      ],
+      "Retail And Consumer Goods": [
+        "Retail",
+        "Consumer Goods",
+        "Wholesale Distribution",
+      ],
+      "Tmt And Consulting": [
+        "Technology",
+        "Telecom",
+        "Media",
+        "Consulting And IT Services",
+      ],
+      "Banking Financial Services And Insurance": [
+        "Banking",
+        "Insurance",
+        "Financial Service Institutions",
+        "Lending and Credit Services",
+      ],
+    }),
+    []
+  ); // Initialize persona filters when segments change - but with empty arrays for filters
   useEffect(() => {
     // Only initialize filters for segments that don't already have them
-    setPersonaFilters(prevFilters => {
+    setPersonaFilters((prevFilters) => {
       const updatedFilters = { ...prevFilters };
 
       // Go through all segments, not just selected ones
-      segments.forEach(segment => {
+      segments.forEach((segment) => {
         // If this segment doesn't have filters yet, initialize them with empty arrays
         if (!updatedFilters[segment.id]) {
           updatedFilters[segment.id] = {
             industryL1: [], // Empty array instead of all values
             industryL2: [], // Empty array instead of all values
             functions: [], // Empty array instead of all values
-            roles: [] // Empty array instead of all values
+            roles: [], // Empty array instead of all values
           };
 
           // Initialize persona counts for each segment with their default len value
-          setSegmentPersonaCounts(prev => ({
+          setSegmentPersonaCounts((prev) => ({
             ...prev,
-            [segment.id]: segment.len
+            [segment.id]: segment.len,
           }));
         }
       });
@@ -179,7 +420,7 @@ const SegmentsSelector: React.FC<SegmentsSelectorProps> = ({
           industryL1: [],
           industryL2: [],
           functions: [],
-          roles: []
+          roles: [],
         };
 
         // Update count if segment is selected and has filters
@@ -193,66 +434,101 @@ const SegmentsSelector: React.FC<SegmentsSelectorProps> = ({
 
       setLoading(true);
       try {
-        const response = await fetch(`${API_URL}/audience/${audienceId}/segments`, {
-          credentials: 'include'
-        });
+        const response = await fetch(
+          `${API_URL}/audience/${audienceId}/segments`,
+          {
+            credentials: "include",
+          }
+        );
 
         if (!response.ok) {
-          throw new Error('Failed to fetch segments');
+          throw new Error("Failed to fetch segments");
         }
 
         const data = await response.json();
         // Enhance data with example hierarchical attributes for personas
         // In production, this should come from your API
-        const enhancedData = data.map((segment: Omit<Segment, 'industryL1' | 'industryL2' | 'functions' | 'roles' | 'titles'>) => {
-          // Use our standardized functions and roles
-          const titles = ['CEO', 'CFO', 'CTO', 'CMO', 'COO', 'VP of Sales', 'Director of Marketing', 'Project Manager'];
-          // Use the segment name as the L1 industry directly
-          const segmentNameL1 = segment.name;
-          const selectedIndustries = [segmentNameL1];
-          // Get L2 industries for the L1 industry if it exists in our mapping
-          // Check if the segment name matches or contains any of our predefined industries
-          const matchedIndustry = industries.find(ind =>
-            segmentNameL1 === ind || segmentNameL1.includes(ind)
-          );
-          const selectedL2 = matchedIndustry && Object.prototype.hasOwnProperty.call(industryL2Map, matchedIndustry)
-            ? industryL2Map[matchedIndustry as keyof typeof industryL2Map] || []
-            : [];
+        const enhancedData = data.map(
+          (
+            segment: Omit<
+              Segment,
+              "industryL1" | "industryL2" | "functions" | "roles" | "titles"
+            >
+          ) => {
+            // Use our standardized functions and roles
+            const titles = [
+              "CEO",
+              "CFO",
+              "CTO",
+              "CMO",
+              "COO",
+              "VP of Sales",
+              "Director of Marketing",
+              "Project Manager",
+            ];
+            // Use the segment name as the L1 industry directly
+            const segmentNameL1 = segment.name;
+            const selectedIndustries = [segmentNameL1];
+            // Get L2 industries for the L1 industry if it exists in our mapping
+            // Check if the segment name matches or contains any of our predefined industries
+            const matchedIndustry = industries.find(
+              (ind) => segmentNameL1 === ind || segmentNameL1.includes(ind)
+            );
+            const selectedL2 =
+              matchedIndustry &&
+              Object.prototype.hasOwnProperty.call(
+                industryL2Map,
+                matchedIndustry
+              )
+                ? industryL2Map[
+                    matchedIndustry as keyof typeof industryL2Map
+                  ] || []
+                : [];
 
-          // Use all our standardized functions (no random subset)
-          const selectedFunctions = [...standardFunctions];
+            // Use all our standardized functions (no random subset)
+            const selectedFunctions = [...standardFunctions];
 
-          // Use all our standardized roles (no random subset)
-          const selectedRoles = [...standardRoles];
+            // Use all our standardized roles (no random subset)
+            const selectedRoles = [...standardRoles];
 
-          // Select 1-3 titles
-          const selectedTitles = [...new Set(Array(1 + Math.floor(Math.random() * 3))
-            .fill(0)
-            .map(() => titles[Math.floor(Math.random() * titles.length)]))]
+            // Select 1-3 titles
+            const selectedTitles = [
+              ...new Set(
+                Array(1 + Math.floor(Math.random() * 3))
+                  .fill(0)
+                  .map(() => titles[Math.floor(Math.random() * titles.length)])
+              ),
+            ];
 
-          return {
-            ...segment,
-            industryL1: selectedIndustries,
-            industryL2: selectedL2,
-            functions: selectedFunctions,
-            roles: selectedRoles,
-            titles: selectedTitles
-          };
-        });
+            return {
+              ...segment,
+              industryL1: selectedIndustries,
+              industryL2: selectedL2,
+              functions: selectedFunctions,
+              roles: selectedRoles,
+              titles: selectedTitles,
+            };
+          }
+        );
 
         setSegments(enhancedData);
         setFilteredSegments(enhancedData);
 
         // IMPORTANT: Always use audienceData to initialize selections
         // This ensures selections persist across navigation
-        if (audienceData.selectedSegments && audienceData.selectedSegments.length > 0) {
+        if (
+          audienceData.selectedSegments &&
+          audienceData.selectedSegments.length > 0
+        ) {
           setSelectedSegments(audienceData.selectedSegments);
           setInitialSelectedSegments(audienceData.selectedSegments);
 
           // Also initialize filters from audienceData if available
           if (Object.keys(audienceData.personaFilters || {}).length > 0) {
             setPersonaFilters(audienceData.personaFilters || {});
-            setInitialPersonaFilters(JSON.parse(JSON.stringify(audienceData.personaFilters || {})));
+            setInitialPersonaFilters(
+              JSON.parse(JSON.stringify(audienceData.personaFilters || {}))
+            );
           }
         }
 
@@ -261,14 +537,22 @@ const SegmentsSelector: React.FC<SegmentsSelectorProps> = ({
 
         setError(null);
       } catch (err) {
-        console.error('Error fetching segments:', err);
-        setError('Failed to load segments. Please try again.');
+        console.error("Error fetching segments:", err);
+        setError("Failed to load segments. Please try again.");
       } finally {
         setLoading(false);
       }
     };
     fetchSegments();
-  }, [audienceId, industries, industryL2Map, standardFunctions, standardRoles, audienceData.selectedSegments, audienceData.personaFilters]);
+  }, [
+    audienceId,
+    industries,
+    industryL2Map,
+    standardFunctions,
+    standardRoles,
+    audienceData.selectedSegments,
+    audienceData.personaFilters,
+  ]);
 
   // Extract and initialize filter options
   const initializeFilters = (segments: Segment[]) => {
@@ -278,24 +562,24 @@ const SegmentsSelector: React.FC<SegmentsSelectorProps> = ({
     const functionMap: Record<string, number> = {};
     const roleMap: Record<string, number> = {};
 
-    segments.forEach(segment => {
+    segments.forEach((segment) => {
       // Count Industry L1
-      segment.industryL1.forEach(ind => {
+      segment.industryL1.forEach((ind) => {
         l1Map[ind] = (l1Map[ind] || 0) + 1;
       });
 
       // Count Industry L2
-      segment.industryL2.forEach(ind => {
+      segment.industryL2.forEach((ind) => {
         l2Map[ind] = (l2Map[ind] || 0) + 1;
       });
 
       // Count Functions
-      segment.functions.forEach(func => {
+      segment.functions.forEach((func) => {
         functionMap[func] = (functionMap[func] || 0) + 1;
       });
 
       // Count Roles
-      segment.roles.forEach(role => {
+      segment.roles.forEach((role) => {
         roleMap[role] = (roleMap[role] || 0) + 1;
       });
     });
@@ -306,7 +590,7 @@ const SegmentsSelector: React.FC<SegmentsSelectorProps> = ({
         id: label,
         label,
         selected: false,
-        count
+        count,
       }))
     );
 
@@ -315,7 +599,7 @@ const SegmentsSelector: React.FC<SegmentsSelectorProps> = ({
         id: label,
         label,
         selected: false,
-        count
+        count,
       }))
     );
 
@@ -324,7 +608,7 @@ const SegmentsSelector: React.FC<SegmentsSelectorProps> = ({
         id: label,
         label,
         selected: false,
-        count
+        count,
       }))
     );
 
@@ -333,7 +617,7 @@ const SegmentsSelector: React.FC<SegmentsSelectorProps> = ({
         id: label,
         label,
         selected: false,
-        count
+        count,
       }))
     );
   };
@@ -341,10 +625,18 @@ const SegmentsSelector: React.FC<SegmentsSelectorProps> = ({
   // Apply filters whenever filter state changes
   useEffect(() => {
     // Get selected filters
-    const selectedL1 = industryL1Filters.filter(f => f.selected).map(f => f.label);
-    const selectedL2 = industryL2Filters.filter(f => f.selected).map(f => f.label);
-    const selectedFunctions = functionFilters.filter(f => f.selected).map(f => f.label);
-    const selectedRoles = roleFilters.filter(f => f.selected).map(f => f.label);
+    const selectedL1 = industryL1Filters
+      .filter((f) => f.selected)
+      .map((f) => f.label);
+    const selectedL2 = industryL2Filters
+      .filter((f) => f.selected)
+      .map((f) => f.label);
+    const selectedFunctions = functionFilters
+      .filter((f) => f.selected)
+      .map((f) => f.label);
+    const selectedRoles = roleFilters
+      .filter((f) => f.selected)
+      .map((f) => f.label);
 
     // Check if any filters are active
     const hasActiveFilters =
@@ -361,26 +653,31 @@ const SegmentsSelector: React.FC<SegmentsSelectorProps> = ({
     }
 
     // Filter segments based on selected criteria
-    const filtered = segments.filter(segment => {
+    const filtered = segments.filter((segment) => {
       // Industry L1 match (if any L1 filters are selected)
-      const l1Match = selectedL1.length === 0 ||
-        segment.industryL1.some(ind => selectedL1.includes(ind));
+      const l1Match =
+        selectedL1.length === 0 ||
+        segment.industryL1.some((ind) => selectedL1.includes(ind));
 
       // Industry L2 match (if any L2 filters are selected)
-      const l2Match = selectedL2.length === 0 ||
-        segment.industryL2.some(ind => selectedL2.includes(ind));
+      const l2Match =
+        selectedL2.length === 0 ||
+        segment.industryL2.some((ind) => selectedL2.includes(ind));
 
       // Function match (if any function filters are selected)
-      const functionMatch = selectedFunctions.length === 0 ||
-        segment.functions.some(func => selectedFunctions.includes(func));
+      const functionMatch =
+        selectedFunctions.length === 0 ||
+        segment.functions.some((func) => selectedFunctions.includes(func));
 
       // Role match (if any role filters are selected)
-      const roleMatch = selectedRoles.length === 0 ||
-        segment.roles.some(role => selectedRoles.includes(role));
+      const roleMatch =
+        selectedRoles.length === 0 ||
+        segment.roles.some((role) => selectedRoles.includes(role));
 
       // Title search match (if search text entered)
-      const titleMatch = titleSearchValue === '' ||
-        segment.titles.some(title =>
+      const titleMatch =
+        titleSearchValue === "" ||
+        segment.titles.some((title) =>
           title.toLowerCase().includes(titleSearchValue.toLowerCase())
         );
 
@@ -388,13 +685,22 @@ const SegmentsSelector: React.FC<SegmentsSelectorProps> = ({
     });
 
     setFilteredSegments(filtered);
-  }, [industryL1Filters, industryL2Filters, functionFilters, roleFilters, titleSearchValue, segments]);
+  }, [
+    industryL1Filters,
+    industryL2Filters,
+    functionFilters,
+    roleFilters,
+    titleSearchValue,
+    segments,
+  ]);
   // Filter toggling functionality - can be implemented if needed
   // For now using direct filtering in the useEffect hook above    // Toggle segment selection
   const toggleSegment = (segmentId: number) => {
     if (selectedSegments.includes(segmentId)) {
       // Remove segment from selection
-      const newSelectedSegments = selectedSegments.filter(id => id !== segmentId);
+      const newSelectedSegments = selectedSegments.filter(
+        (id) => id !== segmentId
+      );
       setSelectedSegments(newSelectedSegments);
 
       // Check if this is a change from the initial state and notify parent if needed
@@ -417,12 +723,12 @@ const SegmentsSelector: React.FC<SegmentsSelectorProps> = ({
           industryL1: [],
           industryL2: [],
           functions: [],
-          roles: []
+          roles: [],
         };
 
-        setPersonaFilters(prev => ({
+        setPersonaFilters((prev) => ({
           ...prev,
-          [segmentId]: emptyFilters
+          [segmentId]: emptyFilters,
         }));
 
         // Update persona count for the newly selected segment
@@ -436,14 +742,22 @@ const SegmentsSelector: React.FC<SegmentsSelectorProps> = ({
 
   // Clear all filters
   const clearAllFilters = () => {
-    setIndustryL1Filters(prev => prev.map(f => ({ ...f, selected: false })));
-    setIndustryL2Filters(prev => prev.map(f => ({ ...f, selected: false })));
-    setFunctionFilters(prev => prev.map(f => ({ ...f, selected: false })));
-    setRoleFilters(prev => prev.map(f => ({ ...f, selected: false })));
-    setTitleSearchValue('');
+    setIndustryL1Filters((prev) =>
+      prev.map((f) => ({ ...f, selected: false }))
+    );
+    setIndustryL2Filters((prev) =>
+      prev.map((f) => ({ ...f, selected: false }))
+    );
+    setFunctionFilters((prev) => prev.map((f) => ({ ...f, selected: false })));
+    setRoleFilters((prev) => prev.map((f) => ({ ...f, selected: false })));
+    setTitleSearchValue("");
   };
   // Helper function to check if a filter value is selected
-  const isFilterSelected = (segmentId: number, filterType: keyof SegmentPersonaFilters, value: string): boolean => {
+  const isFilterSelected = (
+    segmentId: number,
+    filterType: keyof SegmentPersonaFilters,
+    value: string
+  ): boolean => {
     if (!personaFilters[segmentId]) return false;
     return personaFilters[segmentId][filterType].includes(value);
   };
@@ -454,20 +768,21 @@ const SegmentsSelector: React.FC<SegmentsSelectorProps> = ({
     value: string,
     checked: boolean
   ) => {
-    setPersonaFilters(prev => {
+    setPersonaFilters((prev) => {
       const segmentFilters = prev[segmentId] || {
         industryL1: [],
         industryL2: [],
         functions: [],
-        roles: []
+        roles: [],
       };
 
       const updatedFilters = checked
         ? [...segmentFilters[filterType], value]
-        : segmentFilters[filterType].filter(item => item !== value);
+        : segmentFilters[filterType].filter((item) => item !== value);
 
       // Check if this is a change from the initial state
-      const initialFilters = initialPersonaFilters[segmentId]?.[filterType] || [];
+      const initialFilters =
+        initialPersonaFilters[segmentId]?.[filterType] || [];
       const isAdding = checked && !initialFilters.includes(value);
       const isRemoving = !checked && initialFilters.includes(value);
 
@@ -479,8 +794,8 @@ const SegmentsSelector: React.FC<SegmentsSelectorProps> = ({
         ...prev,
         [segmentId]: {
           ...segmentFilters,
-          [filterType]: updatedFilters
-        }
+          [filterType]: updatedFilters,
+        },
       };
 
       // After updating filters, fetch the filtered personas count
@@ -496,7 +811,7 @@ const SegmentsSelector: React.FC<SegmentsSelectorProps> = ({
       const selectedFilters: Record<number, SegmentPersonaFilters> = {};
 
       // Use the current filter state for each selected segment
-      selectedSegments.forEach(segmentId => {
+      selectedSegments.forEach((segmentId) => {
         // If this segment already has filters in our state, use those
         if (personaFilters[segmentId]) {
           // If no filters were selected at all for this segment, select all filters by default
@@ -512,13 +827,13 @@ const SegmentsSelector: React.FC<SegmentsSelectorProps> = ({
             selectedFilters[segmentId] = currentFilters;
           } else {
             // No filters selected, use all values from the segment
-            const segment = segments.find(s => s.id === segmentId);
+            const segment = segments.find((s) => s.id === segmentId);
             if (segment) {
               selectedFilters[segmentId] = {
                 industryL1: [...segment.industryL1],
                 industryL2: [...segment.industryL2],
                 functions: [...segment.functions],
-                roles: [...segment.roles]
+                roles: [...segment.roles],
               };
             }
           }
@@ -527,14 +842,14 @@ const SegmentsSelector: React.FC<SegmentsSelectorProps> = ({
 
       updateAudienceData({
         selectedSegments: selectedSegments,
-        personaFilters: selectedFilters
+        personaFilters: selectedFilters,
       });
 
       onNext(selectedSegments, selectedFilters);
     } else {
-      console.error('SegmentsSelector: No segments selected!');
+      console.error("SegmentsSelector: No segments selected!");
     }
-  };  // We can calculate the number of applied filters here if needed for the UI
+  }; // We can calculate the number of applied filters here if needed for the UI
   // Example: const appliedFiltersCount = industryL1Filters.filter(f => f.selected).length + ...;
   // Function to handle viewing personas for a segment
   const handleViewPersonas = async (segmentId: number) => {
@@ -560,7 +875,7 @@ const SegmentsSelector: React.FC<SegmentsSelectorProps> = ({
       // Open the modal after data is ready
       setIsPersonaModalOpen(true);
     } catch (error) {
-      console.error('Error viewing personas:', error);
+      console.error("Error viewing personas:", error);
     } finally {
       setLoadingPersonas(false);
     }
@@ -569,15 +884,15 @@ const SegmentsSelector: React.FC<SegmentsSelectorProps> = ({
   // Function to get personas filtered by selected role
   const getPersonasByRole = (): PersonaType[] => {
     if (!selectedRole) return segmentPersonas;
-    return segmentPersonas.filter(persona =>
-      persona.data?.role === selectedRole
+    return segmentPersonas.filter(
+      (persona) => persona.data?.role === selectedRole
     );
   };
 
   // Extract unique roles from personas for dropdown
   const getUniqueRoles = (): string[] => {
     const roles: string[] = [];
-    segmentPersonas.forEach(persona => {
+    segmentPersonas.forEach((persona) => {
       if (persona.data?.role && !roles.includes(persona.data.role)) {
         roles.push(persona.data.role);
       }
@@ -591,7 +906,9 @@ const SegmentsSelector: React.FC<SegmentsSelectorProps> = ({
 
     return (
       <div key={title} className="mb-3">
-        <h4 className="text-sm font-semibold text-gray-700 mb-1 capitalize">{title}</h4>
+        <h4 className="text-sm font-semibold text-gray-700 mb-1 capitalize">
+          {title}
+        </h4>
         <ul className="list-disc pl-5 text-xs text-gray-600 space-y-1">
           {items.map((item, idx) => (
             <li key={`${title}-${idx}`}>{item}</li>
@@ -602,62 +919,69 @@ const SegmentsSelector: React.FC<SegmentsSelectorProps> = ({
   };
 
   // Add these new state variables for filtered personas
-  const [rolePersonaMap, setRolePersonaMap] = useState<Record<string, number[]>>({});
-  const [fetchedPersonasMap, setFetchedPersonasMap] = useState<Record<number, PersonaType>>({});
+  const [rolePersonaMap, setRolePersonaMap] = useState<
+    Record<string, number[]>
+  >({});
+  const [fetchedPersonasMap, setFetchedPersonasMap] = useState<
+    Record<number, PersonaType>
+  >({});
   const [loadingPersonaIds, setLoadingPersonaIds] = useState(false);
   // Function to update segment persona count based on filters
-  const updateSegmentPersonaCount = async (segmentId: number, filters: SegmentPersonaFilters) => {
+  const updateSegmentPersonaCount = async (
+    segmentId: number,
+    filters: SegmentPersonaFilters
+  ) => {
     try {
       // Set loading state for this segment
-      setLoadingCounts(prev => ({
+      setLoadingCounts((prev) => ({
         ...prev,
-        [segmentId]: true
+        [segmentId]: true,
       }));
 
       const filterRequest = {
-        audience_name: 'icertis',
+        audience_name: "icertis",
         segments: [segmentId],
         filters: {
-          [segmentId]: filters
-        }
+          [segmentId]: filters,
+        },
       };
 
       const response = await fetch(`${API_URL}/filter_personas`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
-        credentials: 'include',
-        body: JSON.stringify(filterRequest)
+        credentials: "include",
+        body: JSON.stringify(filterRequest),
       });
 
       if (!response.ok) {
-        throw new Error('Failed to fetch filtered personas for count update');
+        throw new Error("Failed to fetch filtered personas for count update");
       }
 
       const roleToPersonaIdsMap = await response.json();
 
       // Calculate total personas across all roles
       let totalPersonas = 0;
-      Object.values(roleToPersonaIdsMap).forEach(personaIds => {
+      Object.values(roleToPersonaIdsMap).forEach((personaIds) => {
         totalPersonas += personaIds.length;
       });
 
       // Update the count for this segment
-      setSegmentPersonaCounts(prev => ({
+      setSegmentPersonaCounts((prev) => ({
         ...prev,
-        [segmentId]: totalPersonas
+        [segmentId]: totalPersonas,
       }));
 
       return totalPersonas;
     } catch (error) {
-      console.error('Error updating persona count:', error);
+      console.error("Error updating persona count:", error);
       return 0;
     } finally {
       // Clear loading state for this segment
-      setLoadingCounts(prev => ({
+      setLoadingCounts((prev) => ({
         ...prev,
-        [segmentId]: false
+        [segmentId]: false,
       }));
     }
   };
@@ -672,29 +996,28 @@ const SegmentsSelector: React.FC<SegmentsSelectorProps> = ({
         industryL1: [],
         industryL2: [],
         functions: [],
-        roles: []
+        roles: [],
       };
 
       const filterRequest = {
-        audience_name: 'icertis',
+        audience_name: "icertis",
         segments: [segmentId],
         filters: {
-          [segmentId]: segmentFilters
-        }
+          [segmentId]: segmentFilters,
+        },
       };
 
-
       const response = await fetch(`${API_URL}/filter_personas`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
-        credentials: 'include',
-        body: JSON.stringify(filterRequest)
+        credentials: "include",
+        body: JSON.stringify(filterRequest),
       });
 
       if (!response.ok) {
-        throw new Error('Failed to fetch filtered personas');
+        throw new Error("Failed to fetch filtered personas");
       }
 
       // Expected response format: { role1: [id1, id2, ...], role2: [...], ... }
@@ -707,7 +1030,10 @@ const SegmentsSelector: React.FC<SegmentsSelectorProps> = ({
       if (roles.length > 0) {
         // Pre-fetch all personas for all roles to ensure they're available when needed
         for (const role of roles) {
-          if (roleToPersonaIdsMap[role] && roleToPersonaIdsMap[role].length > 0) {
+          if (
+            roleToPersonaIdsMap[role] &&
+            roleToPersonaIdsMap[role].length > 0
+          ) {
             // Fetch personas in the background
             fetchPersonasByIds(roleToPersonaIdsMap[role]);
           }
@@ -716,7 +1042,7 @@ const SegmentsSelector: React.FC<SegmentsSelectorProps> = ({
 
       return roleToPersonaIdsMap;
     } catch (error) {
-      console.error('Error fetching filtered persona IDs:', error);
+      console.error("Error fetching filtered persona IDs:", error);
       return {};
     } finally {
       setLoadingPersonaIds(false);
@@ -727,25 +1053,31 @@ const SegmentsSelector: React.FC<SegmentsSelectorProps> = ({
   const fetchPersonasByIds = async (personaIds: number[]) => {
     if (!personaIds || personaIds.length === 0) return;
 
-    const idsToFetch = personaIds.filter(id => !fetchedPersonasMap[id]);
+    const idsToFetch = personaIds.filter((id) => !fetchedPersonasMap[id]);
     if (idsToFetch.length === 0) return;
 
     try {
-      const fetchPromises = idsToFetch.map(id =>
-        fetch(`${API_URL}/personas/${id}`, { credentials: 'include' })
-          .then(res => {
+      const fetchPromises = idsToFetch.map((id) =>
+        fetch(`${API_URL}/personas/${id}`, { credentials: "include" })
+          .then((res) => {
             if (!res.ok) throw new Error(`Failed to fetch persona ${id}`);
             return res.json();
           })
-          .then(data => {
+          .then((data) => {
             // Process the persona data
             try {
               return {
                 ...data,
-                data: typeof data.data === 'string' ? JSON.parse(data.data) : data.data
+                data:
+                  typeof data.data === "string"
+                    ? JSON.parse(data.data)
+                    : data.data,
               };
             } catch (error) {
-              console.error(`Error parsing persona data for ${data.name}:`, error);
+              console.error(
+                `Error parsing persona data for ${data.name}:`,
+                error
+              );
               return data;
             }
           })
@@ -755,13 +1087,13 @@ const SegmentsSelector: React.FC<SegmentsSelectorProps> = ({
 
       // Update the fetchedPersonasMap with new personas
       const newPersonasMap = { ...fetchedPersonasMap };
-      personas.forEach(persona => {
+      personas.forEach((persona) => {
         newPersonasMap[persona.id] = persona;
       });
 
       setFetchedPersonasMap(newPersonasMap);
     } catch (error) {
-      console.error('Error fetching personas by IDs:', error);
+      console.error("Error fetching personas by IDs:", error);
     }
   };
 
@@ -806,8 +1138,8 @@ const SegmentsSelector: React.FC<SegmentsSelectorProps> = ({
 
     // Return only personas that we've already fetched
     return personaIds
-      .map(id => fetchedPersonasMap[id])
-      .filter(persona => persona !== undefined);
+      .map((id) => fetchedPersonasMap[id])
+      .filter((persona) => persona !== undefined);
   };
 
   // Add state for the Select All button loading indicator
@@ -819,7 +1151,7 @@ const SegmentsSelector: React.FC<SegmentsSelectorProps> = ({
 
     try {
       // First, select all segments
-      setSelectedSegments(filteredSegments.map(segment => segment.id));
+      setSelectedSegments(filteredSegments.map((segment) => segment.id));
 
       // Then, select all filters for each segment
       const allFiltersObj: Record<number, SegmentPersonaFilters> = {};
@@ -830,7 +1162,7 @@ const SegmentsSelector: React.FC<SegmentsSelectorProps> = ({
           industryL1: [...segment.industryL1],
           industryL2: [...segment.industryL2],
           functions: [...segment.functions],
-          roles: [...segment.roles]
+          roles: [...segment.roles],
         };
 
         allFiltersObj[segment.id] = updatedFilters;
@@ -850,7 +1182,7 @@ const SegmentsSelector: React.FC<SegmentsSelectorProps> = ({
         if (onEditStep) onEditStep();
       }
     } catch (error) {
-      console.error('Error selecting all segments:', error);
+      console.error("Error selecting all segments:", error);
     } finally {
       setSelectAllLoading(false);
     }
@@ -862,7 +1194,7 @@ const SegmentsSelector: React.FC<SegmentsSelectorProps> = ({
     setShowInfoTooltip({
       segmentId: segment.id,
       x: rect.left,
-      y: rect.bottom + window.scrollY + 10
+      y: rect.bottom + window.scrollY + 10,
     });
   };
 
@@ -871,341 +1203,354 @@ const SegmentsSelector: React.FC<SegmentsSelectorProps> = ({
   };
 
   return (
-    <StepContainer
-      title="Select Audience Segments"
-      subtitle={`Choose which segments of ${audienceData?.audienceName || 'your audience'} to include in this simulation`}
-      className="animate-fadeIn"
-    >
-      <div className="mb-6 flex justify-between items-center">
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={onBack}
-          icon={<ArrowLeft className="w-4 h-4 mr-1" />}
-        >
-          Back to audiences
-        </Button>
-
-
-
-        <Button
-          variant="secondary"
-          size="sm"
+    <div className="w-full bg-gray_light rounded-tl-[30px] p-[30px] relative">
+      <div className="flex items-center gap-1 justify-between">
+        <div>
+          <h3 className="text-[28px] font-semibold text-black mb-3">
+            Select Audience Segments
+          </h3>
+          <p className="text-xs font-normal text-[#595E64]">
+            Choose which segments of{" "}
+            {audienceData?.audienceName || "your audience"} to include in this
+            simulation
+          </p>
+        </div>
+        <button
+          className=" mt-5 rounded-full bg-primary flex items-center justify-center gap-2 text-sm font-semibold p-[13px_30px] text-white"
           onClick={handleSelectAll}
-          disabled={loading || selectAllLoading || filteredSegments.length === 0}
-          icon={selectAllLoading ? (
-            <div className="animate-spin h-4 w-4 border-b-2 border-blue-600 rounded-full"></div>
-          ) : (
-            <svg
-              className="w-4 h-4"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
-              />
-            </svg>
-          )}
+          disabled={
+            loading || selectAllLoading || filteredSegments.length === 0
+          }
         >
           {selectAllLoading ? "Selecting all..." : "Select All Segments"}
-        </Button>
+        </button>
       </div>
-
-      <div className="bg-white rounded-xl shadow-sm p-6">
-        <div className="mb-6">
-          <div className="flex justify-between items-center">
-            <div className="flex items-center">
-              <h2 className="text-lg font-medium text-gray-900 mr-2">Audience Segments</h2>
-              <span className="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
-                {filteredSegments.length} segments
-              </span>
-            </div>
-
+      {/* Segment Cards Grid */}
+      <div className="mt-[30px]">
+        {loading ? (
+          <div className="flex justify-center items-center py-6">
+            <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-500"></div>
           </div>
-
-
-          {/* Segment Cards Grid */}
-          <div className="mt-6">
-            {loading ? (
-              <div className="flex justify-center items-center py-6">
-                <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-500"></div>
-              </div>
-            ) : error ? (
-              <div className="text-sm text-red-600 mb-3">
-                {error}
-              </div>
-            ) : filteredSegments.length === 0 ? (
-              <div className="text-center py-8 bg-gray-50 rounded-lg border border-dashed border-gray-300">
-                <p className="text-gray-500">No segments match your filters</p>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={clearAllFilters}
-                  className="mt-2"
+        ) : error ? (
+          <div className="text-sm text-red-600 mb-3">{error}</div>
+        ) : filteredSegments.length === 0 ? (
+          <div className="text-center py-8 bg-gray-50 rounded-lg border border-dashed border-gray-300">
+            <p className="text-gray-500">No segments match your filters</p>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={clearAllFilters}
+              className="mt-2"
+            >
+              Clear all filters
+            </Button>
+          </div>
+        ) : (
+          <div className="grid sm:grid-cols-1 lg:grid-cols-2 gap-5">
+            {filteredSegments.map((segment) => (
+              <div key={segment.id} className="relative">
+                <div
+                  className={`rounded-2xl ${
+                    selectedSegments.includes(segment.id)
+                      ? "bg-primary "
+                      : "bg-[#E6FCFA]"
+                  }`}
                 >
-                  Clear all filters
-                </Button>
-              </div>
-            ) : (<div className="grid sm:grid-cols-1 lg:grid-cols-2 gap-5">
-              {filteredSegments.map((segment) => (<div
-                key={segment.id}
-                className="relative"
-              ><div
-                className={`border rounded-xl p-5 transition hover:shadow-lg min-h-[200px] flex flex-col justify-between
-                                ${selectedSegments.includes(segment.id)
-                    ? 'bg-blue-50 border-blue-300'
-                    : 'border-gray-200 hover:border-gray-300'}`}
-              >                      <div
-                className="flex justify-between mb-4 cursor-pointer"
-                onClick={() => toggleSegment(segment.id)}
-              >
-                    <div className="flex items-start">
-                      {/* Checkbox */}
-                      <div className={`w-5 h-5 border rounded-md flex items-center justify-center mt-0.5 mr-3 flex-shrink-0 transition-all
-                                        ${selectedSegments.includes(segment.id)
-                          ? 'bg-blue-600 border-blue-600 shadow-sm'
-                          : 'border-gray-300 hover:border-blue-400'}`}>
-                        {selectedSegments.includes(segment.id) && (
-                          <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
-                          </svg>
-                        )}
-                      </div>
-
-                      <div>
-                        {/* Title */}
-                        <h3 className="font-semibold text-gray-900 text-lg">{segment.name}</h3>
-                        {/* Personas count with View button */}                            <div className="flex items-center text-xs mt-1">                              <div className="flex items-center text-gray-500">                                <User className="w-3 h-3 mr-1" />                                {loadingCounts[segment.id] ? (
-                          <span className="font-medium text-blue-600 flex items-center">
-                            <div className="flex space-x-1 items-center">
-                              <div className="w-1.5 h-1.5 bg-blue-600 rounded-full animate-pulse"></div>
-                              <div className="w-1.5 h-1.5 bg-blue-600 rounded-full animate-pulse" style={{ animationDelay: '0.2s' }}></div>
-                              <div className="w-1.5 h-1.5 bg-blue-600 rounded-full animate-pulse" style={{ animationDelay: '0.4s' }}></div>
-                            </div>
-                          </span>
-                        ) : (
-                          <span className={segmentPersonaCounts[segment.id] !== undefined && segmentPersonaCounts[segment.id] !== segment.len ? "font-medium text-blue-600" : ""}>
-                            {segmentPersonaCounts[segment.id] !== undefined
-                              ? segmentPersonaCounts[segment.id]
-                              : segment.len} profiles
-                            {segmentPersonaCounts[segment.id] !== undefined && segmentPersonaCounts[segment.id] !== segment.len &&
-                              " (filtered)"}
-                          </span>
-                        )}
+                  {" "}
+                  <div className="flex items-start">
+                    <div className="flex items-center gap-2 justify-between w-full mx-4 my-[10px]">
+                      <div className="flex items-center gap-2">
+                        <div
+                          onClick={() => toggleSegment(segment.id)}
+                          className={`w-5 cursor-pointer h-5 border rounded-[4px] flex items-center justify-center mt-0.5 mr-3 flex-shrink-0 transition-all
+                                              ${
+                                                selectedSegments.includes(
+                                                  segment.id
+                                                )
+                                                  ? "bg-white border-white text-primary2"
+                                                  : "border-[#595E64] bg-transparent"
+                                              }`}
+                        >
+                          {selectedSegments.includes(segment.id) && (
+                            <LucideCheck size={14} />
+                          )}
                         </div>
-                          <button
-                            className="ml-2 px-2 py-0.5 text-xs bg-blue-50 text-blue-600 hover:bg-blue-100 rounded-full border border-blue-100 transition-colors"
+                        <h3
+                          className="font-semibold text-gray-900 text-lg break-words cursor-pointer"
+                          onClick={() => toggleSegment(segment.id)}
+                          title={segment.name}
+                        >
+                          {segment.name.length > 35
+                            ? `${segment.name.substring(0, 32)}...`
+                            : segment.name}
+                        </h3>
+                      </div>
+                      <div className="flex items-center text-xs mt-1">
+                        <TooltipBox text="View profiles">
+                          <div
                             onClick={(e) => {
                               e.stopPropagation();
                               handleViewPersonas(segment.id);
                             }}
+                            className={`flex items-center cursor-pointer ${
+                              selectedSegments.includes(segment.id)
+                                ? "text-white"
+                                : "text-primary2"
+                            } gap-2 cursor-pointer`}
                           >
-                            View All
-                          </button>
-                        </div>
+                            <PiUsersLight size={20} />
+                            {loadingCounts[segment.id] ? (
+                              <span className="font-medium text-blue-600 flex items-center">
+                                <div className="flex space-x-1 items-center ml-1">
+                                  <div className="w-1.5 h-1.5 bg-blue-600 rounded-full animate-pulse"></div>
+                                  <div
+                                    className="w-1.5 h-1.5 bg-blue-600 rounded-full animate-pulse"
+                                    style={{ animationDelay: "0.2s" }}
+                                  ></div>
+                                  <div
+                                    className="w-1.5 h-1.5 bg-blue-600 rounded-full animate-pulse"
+                                    style={{ animationDelay: "0.4s" }}
+                                  ></div>
+                                </div>
+                              </span>
+                            ) : (
+                              <span className="underline text-sm font-medium text-black">
+                                {segmentPersonaCounts[segment.id] !== undefined
+                                  ? segmentPersonaCounts[segment.id]
+                                  : segment.len}{" "}
+                                profiles
+                                {segmentPersonaCounts[segment.id] !==
+                                  undefined &&
+                                  segmentPersonaCounts[segment.id] !==
+                                    segment.len &&
+                                  " (filtered)"}
+                              </span>
+                            )}
+                          </div>
+                        </TooltipBox>
                       </div>
                     </div>
-
-                    <div className="relative">
-                      <Info 
-                        className="w-4 h-4 text-gray-400 flex-shrink-0 cursor-pointer hover:text-gray-600 mt-1" 
-                        onMouseEnter={(e) => handleInfoHover(e, segment)}
-                        onMouseLeave={handleInfoLeave}
-                      />
-                      {showInfoTooltip.segmentId === segment.id && (
-                        <div 
-                          className="absolute z-50 bg-white rounded-lg shadow-lg border border-gray-200 p-4 max-w-md animate-fadeIn tooltip-container"
-                          style={{
-                            left: '50%',
-                            top: '100%',
-                            transform: 'translateX(-50%)',
-                            marginTop: '8px'
-                          }}
-                          onMouseEnter={(e) => e.stopPropagation()}
-                          onMouseLeave={handleInfoLeave}
-                        >
-                          <div className="flex justify-between items-start mb-2">
-                            <h3 className="font-semibold text-gray-900">
-                              {segment.name}
-                            </h3>
-                          </div>
-                          <p className="text-sm text-gray-600">
-                            {segment.description}
-                          </p>
-                        </div>
-                      )}
-                    </div>
-                  </div>                      {/* Preview tags shown when not selected */}
+                  </div>
+                  {/* Preview tags shown when not selected */}
                   {!selectedSegments.includes(segment.id) && (
-                    <div className="space-y-3 cursor-pointer flex-grow" onClick={() => toggleSegment(segment.id)}>
-                      <div className="flex items-center mb-2">
-                        <Building2 className="w-4 h-4 text-blue-600 mr-2" />
-                        <span className="text-xs font-medium text-gray-700">Industries & Functions</span>
+                    <div
+                      className="rounded-2xl p-4 bg-white h-full  border-[1.5px] border-[#F5F5F5]"
+                      // onClick={() => toggleSegment(segment.id)}
+                    >
+                      <div className="flex items-center mb-2 gap-2">
+                        <span className="text-primary2 pr-2 border-r border-[#E8E8E8]">
+                          <PiBuildingsLight size={20} />
+                        </span>
+                        <h3 className="text-sm font-medium text-black">
+                          Industries & Functions
+                        </h3>
                       </div>
 
                       {/* Industry L1 Tags */}
-                      <div className="flex flex-wrap gap-2">
+                      <div className="flex flex-wrap gap-3 mt-3">
                         {segment.industryL1.slice(0, 2).map((ind, i) => (
-                          <span key={i} className="inline-block px-2.5 py-1 bg-blue-50 text-blue-700 text-xs font-medium rounded-full border border-blue-100 shadow-sm">
+                          <span
+                            key={i}
+                            className="text-xs font-medium rounded-full p-[6px_16px]  border-white border bg-gradient-to-b shadow-2xl from-[#E6FCFACC] to-[#FEFEFE]"
+                          >
                             {ind}
                           </span>
                         ))}
                         {segment.industryL1.length > 2 && (
-                          <span className="inline-block px-2 py-1 bg-gray-50 text-gray-500 text-xs font-medium rounded-full shadow-sm">
+                          <span className="text-xs font-medium rounded-full p-[6px_16px]  border-white border bg-[#FAFAFA] shadow-2xl">
                             +{segment.industryL1.length - 2}
                           </span>
                         )}
                       </div>
 
                       {/* Sub-Industry Tags */}
-                      <div className="flex flex-wrap gap-2">
+                      <div className="flex flex-wrap gap-3 mt-3 mb-4">
                         {segment.industryL2.slice(0, 2).map((ind, i) => (
-                          <span key={i} className="inline-block px-2.5 py-1 bg-indigo-50 text-indigo-700 text-xs font-medium rounded-full border border-indigo-100 shadow-sm">
+                          <span
+                            key={i}
+                            className="text-xs font-medium rounded-full p-[6px_16px]  border-white border bg-gradient-to-b shadow-2xl from-[#E0E7FFCC] to-[#FEFEFE]"
+                          >
                             {ind}
                           </span>
                         ))}
                         {segment.industryL2.length > 2 && (
-                          <span className="inline-block px-2 py-1 bg-gray-50 text-gray-500 text-xs font-medium rounded-full shadow-sm">
+                          <span className="text-xs font-medium rounded-full p-[6px_16px]  border-white border bg-[#FAFAFA] shadow-2xl">
                             +{segment.industryL2.length - 2}
                           </span>
                         )}
                       </div>
 
-                      <div className="flex items-center mt-4 mb-2">
-                        <Users className="w-4 h-4 text-amber-600 mr-2" />
-                        <span className="text-xs font-medium text-gray-700">Functions & Roles</span>
+                      <div className="flex items-center mt-4 mb-2 pt-4 border-t border-[#F5F5F5]">
+                        <div className="flex items-center mb-2 gap-2">
+                          <span className="text-primary2 pr-2 border-r border-[#E8E8E8]">
+                            <PiUsers size={20} />
+                          </span>
+                          <h3 className="text-sm font-medium text-black">
+                            Functions & Roles
+                          </h3>
+                        </div>
                       </div>
 
                       {/* Functions Tags */}
-                      <div className="flex flex-wrap gap-2">
+                      <div className="flex flex-wrap gap-3 mb-3">
                         {segment.functions.slice(0, 2).map((func, i) => (
-                          <span key={i} className="inline-block px-2.5 py-1 bg-green-50 text-green-700 text-xs font-medium rounded-full border border-green-100 shadow-sm">
+                          <span
+                            key={i}
+                            className="text-xs font-medium rounded-full p-[6px_16px]  border-white border bg-gradient-to-b shadow-2xl from-[#D1FAE5CC] to-[#FEFEFE]"
+                          >
                             {func}
                           </span>
                         ))}
                         {segment.functions.length > 2 && (
-                          <span className="inline-block px-2 py-1 bg-gray-50 text-gray-500 text-xs font-medium rounded-full shadow-sm">
+                          <span className="text-xs font-medium rounded-full p-[6px_16px]  border-white border bg-[#FAFAFA] shadow-2xl">
                             +{segment.functions.length - 2}
                           </span>
                         )}
                       </div>
 
                       {/* Roles Tags */}
-                      <div className="flex flex-wrap gap-2">
+                      <div className="flex flex-wrap gap-3">
                         {segment.roles.slice(0, 2).map((role, i) => (
-                          <span key={i} className="inline-block px-2.5 py-1 bg-amber-50 text-amber-700 text-xs font-medium rounded-full border border-amber-100 shadow-sm">
+                          <span
+                            key={i}
+                            className="text-xs font-medium rounded-full p-[6px_16px]  border-white border bg-gradient-to-b shadow-2xl from-[#FFF7E0CC] to-[#FEFEFE]"
+                          >
                             {role}
                           </span>
                         ))}
                         {segment.roles.length > 2 && (
-                          <span className="inline-block px-2 py-1 bg-gray-50 text-gray-500 text-xs font-medium rounded-full shadow-sm">
+                          <span className="text-xs font-medium rounded-full p-[6px_16px]  border-white border bg-[#FAFAFA] shadow-2xl">
                             +{segment.roles.length - 2}
                           </span>
                         )}
                       </div>
                     </div>
-                  )}                      {/* Filter fields shown when selected */}
+                  )}{" "}
+                  {/* Filter fields shown when selected */}
                   {selectedSegments.includes(segment.id) && (
-                    <div className="space-y-5 mt-4 animate-fadeIn flex-grow">                          <div className="border-t border-gray-200 pt-3 mb-3 flex justify-between items-center">
-                      <p className="text-xs text-gray-500 italic">Select filters to apply to this segment:</p>
-                      <div className="flex gap-3">
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            // Clear all filters for this segment
-                            const emptyFilters = {
-                              industryL1: [],
-                              industryL2: [],
-                              functions: [],
-                              roles: []
-                            };
-
-                            // Update the filters state
-                            setPersonaFilters(prev => ({
-                              ...prev,
-                              [segment.id]: emptyFilters
-                            }));
-
-                            // Update persona count with empty filters
-                            updateSegmentPersonaCount(segment.id, emptyFilters);
-
-                            // Notify parent of edit if needed
-                            if (onEditStep) {
-                              onEditStep();
-                            }
-                          }}
-                          className="text-xs text-gray-500 hover:text-gray-700 hover:underline"
-                        >
-                          Clear
-                        </button>
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            // Select all filters for this segment
-                            const segmentData = segments.find(s => s.id === segment.id);
-                            if (segmentData) {
-                              // Create the updated filters object
-                              const updatedFilters = {
-                                industryL1: [...segmentData.industryL1],
-                                industryL2: [...segmentData.industryL2],
-                                functions: [...segmentData.functions],
-                                roles: [...segmentData.roles]
+                    <div className="space-y-5 mt-4 animate-fadeIn flex-grow">
+                      {" "}
+                      <div className="border-t border-gray-200 pt-3 mb-3 flex justify-between items-center">
+                        <p className="text-xs text-gray-500 italic">
+                          Select filters to apply to this segment:
+                        </p>
+                        <div className="flex gap-3">
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              // Clear all filters for this segment
+                              const emptyFilters = {
+                                industryL1: [],
+                                industryL2: [],
+                                functions: [],
+                                roles: [],
                               };
 
                               // Update the filters state
-                              setPersonaFilters(prev => ({
+                              setPersonaFilters((prev) => ({
                                 ...prev,
-                                [segment.id]: updatedFilters
+                                [segment.id]: emptyFilters,
                               }));
 
-                              // Update persona count for this segment with all filters selected
-                              // This should restore the count to the original total
-                              updateSegmentPersonaCount(segment.id, updatedFilters);
+                              // Update persona count with empty filters
+                              updateSegmentPersonaCount(
+                                segment.id,
+                                emptyFilters
+                              );
 
                               // Notify parent of edit if needed
                               if (onEditStep) {
                                 onEditStep();
                               }
-                            }
-                          }}
-                          className="text-xs text-blue-600 hover:text-blue-800 hover:underline"
-                        >
-                          Select All
-                        </button>
-                      </div>
-                    </div>
+                            }}
+                            className="text-xs text-gray-500 hover:text-gray-700 hover:underline"
+                          >
+                            Clear
+                          </button>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              // Select all filters for this segment
+                              const segmentData = segments.find(
+                                (s) => s.id === segment.id
+                              );
+                              if (segmentData) {
+                                // Create the updated filters object
+                                const updatedFilters = {
+                                  industryL1: [...segmentData.industryL1],
+                                  industryL2: [...segmentData.industryL2],
+                                  functions: [...segmentData.functions],
+                                  roles: [...segmentData.roles],
+                                };
 
+                                // Update the filters state
+                                setPersonaFilters((prev) => ({
+                                  ...prev,
+                                  [segment.id]: updatedFilters,
+                                }));
+
+                                // Update persona count for this segment with all filters selected
+                                // This should restore the count to the original total
+                                updateSegmentPersonaCount(
+                                  segment.id,
+                                  updatedFilters
+                                );
+
+                                // Notify parent of edit if needed
+                                if (onEditStep) {
+                                  onEditStep();
+                                }
+                              }
+                            }}
+                            className="text-xs text-blue-600 hover:text-blue-800 hover:underline"
+                          >
+                            Select All
+                          </button>
+                        </div>
+                      </div>
                       {/* Show all L2 industries for the selected L1 industries */}
                       <div>
-                        <h4 className="text-sm font-semibold text-gray-800 mb-3 flex items-center">
-                          <Building className="w-4 h-4 mr-2 text-indigo-600" />
-                          Filter by Sub-Industry
-                        </h4>
+                        <div className="flex items-center mb-2 gap-2 mt-4">
+                          <span className="text-primary2 pr-2 border-r border-[#E8E8E8]">
+                            <PiBuildingsLight size={20} />
+                          </span>
+                          <h3 className="text-sm font-medium text-black">
+                            Filter by Sub-Industry
+                          </h3>
+                        </div>
                         <div className="flex flex-wrap gap-2">
                           {/* Display all L2 industries for this segment's L1 industry */}
-                          {segment.industryL1.map(l1 => {
+                          {segment.industryL1.map((l1) => {
                             // Get all possible L2 industries for this L1 industry
-                            const possibleL2Industries = industryL2Map[l1] || [];
+                            const possibleL2Industries =
+                              industryL2Map[l1] || [];
 
                             return possibleL2Industries.map((l2, i) => (
-                              <div key={`${l1}-${l2}-${i}`} className="relative inline-flex items-center">
+                              <div
+                                key={`${l1}-${l2}-${i}`}
+                                className="relative inline-flex items-center"
+                              >
                                 <input
                                   type="checkbox"
                                   id={`subind-${segment.id}-${l1}-${i}`}
-                                  checked={isFilterSelected(segment.id, 'industryL2', l2)}
+                                  checked={isFilterSelected(
+                                    segment.id,
+                                    "industryL2",
+                                    l2
+                                  )}
                                   className="peer absolute opacity-0 w-0 h-0 cursor-pointer"
-                                  onChange={(e) => togglePersonaFilter(segment.id, 'industryL2', l2, e.target.checked)}
+                                  onChange={(e) =>
+                                    togglePersonaFilter(
+                                      segment.id,
+                                      "industryL2",
+                                      l2,
+                                      e.target.checked
+                                    )
+                                  }
                                 />
                                 <label
                                   htmlFor={`subind-${segment.id}-${l1}-${i}`}
-                                  className="inline-block px-3 py-1 cursor-pointer select-none
-                                              peer-checked:bg-indigo-100 peer-checked:text-indigo-800 peer-checked:border-indigo-300
-                                              peer-not-checked:bg-gray-50 peer-not-checked:text-gray-600 peer-not-checked:border-gray-200
-                                              text-xs font-medium rounded-full border transition-colors"
+                                  className="cursor-pointer text-xs font-medium rounded-full p-[6px_16px]  border-white border bg-gradient-to-b shadow-2xl from-[#E6FCFACC]  to-[#FEFEFE] peer-checked:to-[#81fef4]"
                                 >
                                   {l2}
                                 </label>
@@ -1214,29 +1559,43 @@ const SegmentsSelector: React.FC<SegmentsSelectorProps> = ({
                           })}
                         </div>
                       </div>
-
-                      <div>
-                        <h4 className="text-sm font-semibold text-gray-800 mb-3 flex items-center">
-                          <Briefcase className="w-4 h-4 mr-2 text-green-600" />
-                          Filter by Function
-                        </h4>
+                      <div className="pt-4 border-t border-[#F5F5F5] mt-4">
+                        <div className="flex items-center mb-2 gap-2 mt-4">
+                          <span className="text-primary2 pr-2 border-r border-[#E8E8E8]">
+                            <BiFilterAlt size={20} />
+                          </span>
+                          <h3 className="text-sm font-medium text-black">
+                            Filter by Function
+                          </h3>
+                        </div>
                         <div className="flex flex-wrap gap-2">
                           {/* Use standardized functions list that's common for all segments */}
                           {standardFunctions.map((func, i) => (
-                            <div key={i} className="relative inline-flex items-center">
+                            <div
+                              key={i}
+                              className="relative inline-flex items-center"
+                            >
                               <input
                                 type="checkbox"
                                 id={`func-${segment.id}-${i}`}
-                                checked={isFilterSelected(segment.id, 'functions', func)}
+                                checked={isFilterSelected(
+                                  segment.id,
+                                  "functions",
+                                  func
+                                )}
                                 className="peer absolute opacity-0 w-0 h-0 cursor-pointer"
-                                onChange={(e) => togglePersonaFilter(segment.id, 'functions', func, e.target.checked)}
+                                onChange={(e) =>
+                                  togglePersonaFilter(
+                                    segment.id,
+                                    "functions",
+                                    func,
+                                    e.target.checked
+                                  )
+                                }
                               />
                               <label
                                 htmlFor={`func-${segment.id}-${i}`}
-                                className="inline-block px-3 py-1 cursor-pointer select-none
-                                              peer-checked:bg-green-100 peer-checked:text-green-800 peer-checked:border-green-300
-                                              peer-not-checked:bg-gray-50 peer-not-checked:text-gray-600 peer-not-checked:border-gray-200
-                                              text-xs font-medium rounded-full border transition-colors"
+                                className="text-xs cursor-pointer font-medium rounded-full p-[6px_16px]  border-white border bg-gradient-to-b shadow-2xl from-[#FFF7E0CC]  to-[#FEFEFE] peer-checked:to-[#ebdcae]"
                               >
                                 {func}
                               </label>
@@ -1244,29 +1603,43 @@ const SegmentsSelector: React.FC<SegmentsSelectorProps> = ({
                           ))}
                         </div>
                       </div>
-
-                      <div>
-                        <h4 className="text-sm font-semibold text-gray-800 mb-3 flex items-center">
-                          <Users className="w-4 h-4 mr-2 text-amber-600" />
-                          Filter by Role
-                        </h4>
+                      <div className="pt-4 border-t border-[#F5F5F5] mt-4">
+                        <div className="flex items-center mb-2 gap-2 mt-4">
+                          <span className="text-primary2 pr-2 border-r border-[#E8E8E8]">
+                            <PiUsers size={20} />
+                          </span>
+                          <h3 className="text-sm font-medium text-black">
+                            Filter by Role
+                          </h3>
+                        </div>
                         <div className="flex flex-wrap gap-2">
                           {/* Use standardized roles list that's common for all segments */}
                           {standardRoles.map((role, i) => (
-                            <div key={i} className="relative inline-flex items-center">
+                            <div
+                              key={i}
+                              className="relative inline-flex items-center"
+                            >
                               <input
                                 type="checkbox"
                                 id={`role-${segment.id}-${i}`}
-                                checked={isFilterSelected(segment.id, 'roles', role)}
+                                checked={isFilterSelected(
+                                  segment.id,
+                                  "roles",
+                                  role
+                                )}
                                 className="peer absolute opacity-0 w-0 h-0 cursor-pointer"
-                                onChange={(e) => togglePersonaFilter(segment.id, 'roles', role, e.target.checked)}
+                                onChange={(e) =>
+                                  togglePersonaFilter(
+                                    segment.id,
+                                    "roles",
+                                    role,
+                                    e.target.checked
+                                  )
+                                }
                               />
                               <label
                                 htmlFor={`role-${segment.id}-${i}`}
-                                className="inline-block px-3 py-1 cursor-pointer select-none
-                                              peer-checked:bg-amber-100 peer-checked:text-amber-800 peer-checked:border-amber-300
-                                              peer-not-checked:bg-gray-50 peer-not-checked:text-gray-600 peer-not-checked:border-gray-200
-                                              text-xs font-medium rounded-full border transition-colors"
+                                className="text-xs font-medium cursor-pointer rounded-full p-[6px_16px]  border-white border bg-gradient-to-b shadow-2xl from-[#E0E7FFCC]  to-[#FEFEFE] peer-checked:to-[#beccfa]"
                               >
                                 {role}
                               </label>
@@ -1275,406 +1648,952 @@ const SegmentsSelector: React.FC<SegmentsSelectorProps> = ({
                         </div>
                       </div>
                     </div>
-                  )}                    </div>
-
-              </div>
-              ))}
-            </div>
-            )}
-          </div>
-        </div>
-        <div className="flex justify-between items-center">
-          <div className="text-sm text-gray-500">            <div>{selectedSegments.length} of {segments.length} segments selected</div>
-            {selectedSegments.length > 0 && (
-              <div className="text-xs mt-1">
-                {(() => {
-                  // Check if any segments are currently loading
-                  const isAnySegmentLoading = selectedSegments.some(segmentId => loadingCounts[segmentId]);
-
-                  if (isAnySegmentLoading) {
-                    return (
-                      <div className="flex items-center">
-                        <span>Total: </span>
-                        <div className="flex space-x-1 items-center ml-1">
-                          <div className="w-1.5 h-1.5 bg-blue-600 rounded-full animate-pulse"></div>
-                          <div className="w-1.5 h-1.5 bg-blue-600 rounded-full animate-pulse" style={{ animationDelay: '0.2s' }}></div>
-                          <div className="w-1.5 h-1.5 bg-blue-600 rounded-full animate-pulse" style={{ animationDelay: '0.4s' }}></div>
-                        </div>
-                      </div>
-                    );
-                  } else {
-                    const totalPersonas = selectedSegments.reduce((sum, segmentId) =>
-                      sum + (segmentPersonaCounts[segmentId] !== undefined ? segmentPersonaCounts[segmentId] : 0), 0);
-                    return `Total: ${totalPersonas} profiles`;
-                  }
-                })()}
-              </div>
-            )}
-          </div>
-          {/* Check if total personas is less than or equal to 50 */}
-          {(() => {
-            const totalPersonas = selectedSegments.reduce((sum, segmentId) =>
-              sum + (segmentPersonaCounts[segmentId] !== undefined ? segmentPersonaCounts[segmentId] : 0), 0);
-
-            const isAnySegmentLoading = selectedSegments.some(segmentId => loadingCounts[segmentId]);
-            const tooManyPersonas = totalPersonas > 300 && !isAnySegmentLoading;
-
-            return tooManyPersonas ? (
-              <div className="flex flex-col items-end">
-                <div className="text-red-600 text-sm mb-2">
-                  You've selected {totalPersonas} profiles. Please select fewer than 300 profiles.
+                  )}{" "}
                 </div>
-                <Button
-                  variant="primary"
-                  size="lg"
-                  disabled={true}
-                  className="px-8"
-                >
-                  {btn_text}
-                </Button>
               </div>
-            ) : (
-              <Button
-                variant="primary"
-                size="lg"
-                onClick={handleNext}
-                disabled={selectedSegments.length === 0 || isAnySegmentLoading}
-                className="px-8"
-              >
-                {btn_text}
-              </Button>
-            );
-          })()}
-        </div>      {/* Improved Persona Viewing Modal */}
+            ))}
+          </div>
+        )}
       </div>
-      <Dialog open={isPersonaModalOpen} onOpenChange={setIsPersonaModalOpen}>
-        <DialogContent className="h-[80vh] w-[90vw] md:w-[85vw] max-w-[1400px] !p-0 rounded-xl overflow-hidden border border-gray-200 shadow-xl relative" style={{ maxWidth: '1400px', margin: 'auto' }}>
-          <CustomDialogClose onClick={() => setIsPersonaModalOpen(false)}>
-            <X className="h-5 w-5" />
-          </CustomDialogClose>
-          <DialogHeader className="border-b pb-4 pt-5 px-6 bg-gradient-to-r from-blue-50 to-indigo-50">
-            <div className="flex items-center">
-              <div>
-                <DialogTitle className="text-xl font-semibold text-gray-800 flex items-center">
-                  <User className="w-5 h-5 mr-3 text-blue-600" />
-                  {selectedSegmentForPersonas && segments.find(s => s.id === selectedSegmentForPersonas)?.name}
-                </DialogTitle>
-                <p className="text-sm text-gray-600 mt-1 ml-8">Explore detailed profiles for this segment</p>
-              </div>
-            </div>
-          </DialogHeader>
+      <div className="flex justify-between items-center mt-6">
+        <div className="text-sm text-gray-500">
+          <BlackButton onClick={onBack}>Back</BlackButton>
+          {selectedSegments.length > 0 && (
+            <div className="text-xs mt-1">
+              {(() => {
+                // Check if any segments are currently loading
+                const isAnySegmentLoading = selectedSegments.some(
+                  (segmentId) => loadingCounts[segmentId]
+                );
 
-          {loadingPersonas || loadingPersonaIds ? (
-            <div className="flex flex-col justify-center items-center h-full py-20">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mb-4"></div>
-              <p className="text-gray-600">Loading profiles...</p>
+                if (isAnySegmentLoading) {
+                  return (
+                    <div className="flex items-center">
+                      <span>Total: </span>
+                      <div className="flex space-x-1 items-center ml-1">
+                        <div className="w-1.5 h-1.5 bg-blue-600 rounded-full animate-pulse"></div>
+                        <div
+                          className="w-1.5 h-1.5 bg-blue-600 rounded-full animate-pulse"
+                          style={{ animationDelay: "0.2s" }}
+                        ></div>
+                        <div
+                          className="w-1.5 h-1.5 bg-blue-600 rounded-full animate-pulse"
+                          style={{ animationDelay: "0.4s" }}
+                        ></div>
+                      </div>
+                    </div>
+                  );
+                } else {
+                  const totalPersonas = selectedSegments.reduce(
+                    (sum, segmentId) =>
+                      sum +
+                      (segmentPersonaCounts[segmentId] !== undefined
+                        ? segmentPersonaCounts[segmentId]
+                        : 0),
+                    0
+                  );
+                  return `Total: ${totalPersonas} profiles`;
+                }
+              })()}
+            </div>
+          )}
+        </div>
+
+        {/* Check if total personas is less than or equal to 50 */}
+        {(() => {
+          const totalPersonas = selectedSegments.reduce(
+            (sum, segmentId) =>
+              sum +
+              (segmentPersonaCounts[segmentId] !== undefined
+                ? segmentPersonaCounts[segmentId]
+                : 0),
+            0
+          );
+
+          const isAnySegmentLoading = selectedSegments.some(
+            (segmentId) => loadingCounts[segmentId]
+          );
+          const tooManyPersonas = totalPersonas > 300 && !isAnySegmentLoading;
+
+          return tooManyPersonas ? (
+            <div className="flex flex-col items-end">
+              <div className="text-red-600 text-sm mb-2">
+                You've selected {totalPersonas} profiles. Please select fewer
+                than 300 profiles.
+              </div>
+              <PrimaryButton disabled={true} icon={<RightWhiteArrow />}>
+                {btn_text}
+              </PrimaryButton>
             </div>
           ) : (
-            <div className="flex flex-col md:flex-row h-full">
-              {/* Left side: Role accordion with personas */}
-              <div className="md:w-[340px] border-r overflow-hidden flex flex-col h-full bg-gradient-to-b from-gray-50 to-white">
-                <div className="p-5 border-b">
-                  <h3 className="text-sm font-medium text-gray-800 flex items-center">
-                    <Users className="w-4 h-4 mr-2 text-blue-600" />
-                    Profiles by Role
-                  </h3>
-                  <p className="text-xs text-gray-500 mt-1 ml-6">
-                    Select a role to explore detailed profiles
-                  </p>
-                </div>
+            // <button
+            //   onClick={handleNext}
+            //   disabled={selectedSegments.length === 0 || isAnySegmentLoading}
+            //   className="  rounded-full bg-primary flex items-center justify-center gap-2 text-base font-semibold p-[14px_30px] text-white"
+            // >
+            //   {btn_text}
+            //   <RightWhiteArrow />
+            // </button>
+            <PrimaryButton
+              onClick={handleNext}
+              disabled={selectedSegments.length === 0 || isAnySegmentLoading}
+              icon={<RightWhiteArrow />}
+            >
+              {btn_text}
+            </PrimaryButton>
+          );
+        })()}
+      </div>
+      {/* Improved Persona Viewing Modal */}
+      <Dialog open={isPersonaModalOpen} onOpenChange={setIsPersonaModalOpen}>
+        <DialogPortal>
+          <DialogOverlay className="fixed inset-0 bg-black/40 z-40" />
 
-                <div className="overflow-y-auto h-[58vh] custom-scrollbar">
-                  {Object.keys(rolePersonaMap).length > 0 ? (
-                    <div className="divide-y">
-                      {Object.entries(rolePersonaMap).map(([role, personaIds]) => (
-                        <div key={role} className="border-b">
-                          <button
-                            onClick={() => toggleRoleExpansion(role)}
-                            className={cn(
-                              "w-full flex items-center justify-between px-5 py-3.5 hover:bg-gray-50 transition-all duration-200 focus:outline-none",
-                              expandedRoles[role] && "bg-blue-50/70"
-                            )}
-                          >
-                            <div className="flex items-center">
-                              {expandedRoles[role] ? (
-                                <ChevronDown className="w-4 h-4 mr-3 text-blue-600 flex-shrink-0" />
-                              ) : (
-                                <ChevronRight className="w-4 h-4 mr-3 text-gray-400 flex-shrink-0" />
-                              )}
-                              <div className="text-left">
-                                <span className="font-medium text-gray-800">{role}</span>
-                                <div className="text-xs text-gray-500 mt-0.5">
-                                  {personaIds?.length || 0} {personaIds?.length === 1 ? 'profile' : 'profiles'}
-                                </div>
-                              </div>
-                            </div>
-                          </button>
-                          {/* Expanded personas list - no nested scrolling */}                          {expandedRoles[role] && (
-                            <div className="bg-blue-50/40 py-2 px-4">
-                              <div>
-                                {getPersonasForRole(role).length > 0 ? (
-                                  getPersonasForRole(role).map((persona) => (
-                                    <button
-                                      key={persona.id}
-                                      onClick={() => setSelectedPersona(persona)}
-                                      className={cn(
-                                        "w-full text-left px-4 py-3 my-1.5 rounded-lg hover:bg-white transition-all duration-150 ml-4",
-                                        selectedPersona?.id === persona.id
-                                          ? "bg-white shadow-sm border border-blue-200 ring-1 ring-blue-100"
-                                          : "border border-transparent"
-                                      )}
-                                    >
-                                      <div className="font-medium text-gray-800">{persona.name}</div>
-                                      <div className="text-xs text-gray-500 truncate mt-1 flex items-center">
-                                        <Briefcase className="w-3 h-3 mr-1.5 text-gray-400" />
-                                        {persona.job_title || persona.occupation || 'No title'}
-                                        {persona.company_name && ` • ${persona.company_name}`}
+          <DialogContent
+            className={cn(
+              "fixed right-0 top-0 z-50 h-screen max-w-[90vw] rounded-none w-full bg-white",
+              "overflow-hidden border-l border-gray-200 ",
+              "animate-in slide-in-from-right duration-300"
+            )}
+          >
+            {loadingPersonas || loadingPersonaIds ? (
+              <div className="flex flex-col justify-center items-center h-full py-20">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mb-4"></div>
+                <p className="text-gray-600">Loading profiles...</p>
+              </div>
+            ) : (
+              <div className=" bg-white p-[30px] pr-[15px] h-full">
+                <div className="flex items-center justify-between mb-10">
+                  <div className="flex items-start flex-col gap-2">
+                    <h3 className="text-2xl font-semibold text-primary2">
+                      Bone Broth Buyers
+                    </h3>
+                    <p className="text-base font-medium text-black">
+                      Explore detailed profiles for this segment
+                    </p>
+                  </div>
+                  <button
+                    onClick={() => {
+                      setIsPersonaModalOpen(false);
+                    }}
+                  >
+                    <CloseXIcon />
+                  </button>
+                </div>
+                <div className="flex flex-col md:flex-row h-full ">
+                  {/* Left side: Role accordion with personas */}
+                  <div className="md:w-[320px] border-r border-[#EBEBEB] pr-5 overflow-hidden flex flex-col h-full bg-white">
+                    {/* <div className="p-5 border-b">
+                          <h3 className="text-sm font-medium text-gray-800 flex items-center">
+                            <Users className="w-4 h-4 mr-2 text-blue-600" />
+                            Profiles by Role
+                          </h3>
+                          <p className="text-xs text-gray-500 mt-1 ml-6">
+                            Select a role to explore detailed profiles
+                          </p>
+                        </div> */}
+
+                    <div className="overflow-y-auto h-full scrollbar-hide">
+                      {Object.keys(rolePersonaMap).length > 0 ? (
+                        <div className="flex flex-col gap-3 items-start">
+                          {Object.entries(rolePersonaMap).map(
+                            ([role, personaIds]) => (
+                              <div key={role} className="w-full">
+                                <button
+                                  onClick={() => toggleRoleExpansion(role)}
+                                  className={cn(
+                                    "w-full bg-[#FAFAFA] text-start border-transparent border-l-4 p-3 pl-5 rounded-xl justify-between text-sm flex gap-[10px] items-center",
+                                    expandedRoles[role]
+                                      ? "bg-[#E6FCFA] border-primary2 font-semibold text-primary2 "
+                                      : "font-medium text-[#595E64]"
+                                  )}
+                                >
+                                  {role}
+                                  <span className="text-primary2">
+                                    {personaIds?.length < 10 ? "0" : ""}
+                                    {personaIds?.length || 0}
+                                  </span>
+                                </button>
+                                {expandedRoles[role] && (
+                                  <div className="mt-3 flex flex-col gap-3 items-end pl-5 pb-5">
+                                    {getPersonasForRole(role).length > 0 ? (
+                                      getPersonasForRole(role).map(
+                                        (persona) => (
+                                          <button
+                                            key={persona.id}
+                                            onClick={() =>
+                                              setSelectedPersona(persona)
+                                            }
+                                            className={cn(
+                                              "p-[10px] pl-[18px] border-l-4 group flex items-center justify-between max-w-[280px] w-full rounded-xl transition-all duration-200",
+                                              selectedPersona?.id === persona.id
+                                                ? "border-primary2  bg-[#E6FCFA]"
+                                                : "border-transparent bg-[#FAFAFA]"
+                                            )}
+                                          >
+                                            <div className="flex items-center gap-[10px]">
+                                              <div
+                                                className={`p-2 relative rounded-full transition-all duration-200 h-[32px] w-[32px] group-hover:bg-[#E6FCFA]  ${
+                                                  selectedPersona?.id ===
+                                                    persona.id && "bg-[#E6FCFA]"
+                                                }`}
+                                              >
+                                                <UserIcon className="absolute top-2/4 left-2/4 -translate-x-2/4 -translate-y-2/4 text-gray-600" />
+                                              </div>
+                                              <div className="flex flex-col items-start gap-1">
+                                                <h3
+                                                  className={`text-sm text-start${
+                                                    selectedPersona?.id ===
+                                                    persona.id
+                                                      ? "text-primary2 font-semibold"
+                                                      : " text-[#595E64] font-medium"
+                                                  }`}
+                                                >
+                                                  {persona.name}
+                                                </h3>
+                                                <p
+                                                  className={`text-xs font-normal text-start${
+                                                    selectedPersona?.id ===
+                                                    persona.id
+                                                      ? "text-black "
+                                                      : " text-[#595E64] "
+                                                  }`}
+                                                >
+                                                  {persona.job_title ||
+                                                    persona.occupation ||
+                                                    "No title"}
+                                                </p>
+                                              </div>
+                                            </div>
+                                            <div
+                                              className={`transition-all duration-200 ${
+                                                selectedPersona?.id ===
+                                                persona.id
+                                                  ? "opacity-100 "
+                                                  : "opacity-0"
+                                              }`}
+                                            >
+                                              <PlayIcon />
+                                            </div>
+                                            {/* <div className="font-medium text-gray-800"></div>
+                                              <div className="text-xs text-gray-500 truncate mt-1 flex items-center">
+                                                <Briefcase className="w-3 h-3 mr-1.5 text-gray-400" />
+      
+                                                {persona.company_name &&
+                                                  ` • ${persona.company_name}`}
+                                              </div> */}
+                                          </button>
+                                        )
+                                      )
+                                    ) : (
+                                      <div className="p-4 text-xs text-gray-500 italic text-center">
+                                        Loading profiles...
                                       </div>
-                                    </button>
-                                  ))
-                                ) : (
-                                  <div className="p-4 text-xs text-gray-500 italic text-center">
-                                    Loading profiles...
+                                    )}
                                   </div>
                                 )}
                               </div>
-                            </div>
+                            )
                           )}
                         </div>
-                      ))}
-                    </div>
-                  ) : (
-                    <div className="p-8 text-center text-gray-500 flex flex-col items-center">
-                      <Users className="w-12 h-12 text-gray-300 mb-3" />
-                      <p className="text-sm">No roles found for the selected filters</p>
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              {/* Right side: Persona Details */}
-              <div className="flex-1 overflow-hidden flex flex-col h-[69vh]">
-                <div className="overflow-y-auto p-6 bg-gradient-to-br from-gray-50/70 to-white h-full custom-scrollbar">
-                  {selectedPersona ? (
-                    <div className="rounded-xl border border-gray-200 shadow-sm overflow-hidden animate-fadeIn max-w-4xl mx-auto">
-                      {/* Persona Header */}
-                      <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-6 border-b border-gray-200">
-                        <h3 className="text-2xl font-semibold text-gray-800 flex items-center">
-                          <span className="w-10 h-10 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center mr-3 border border-blue-200">
-                            {selectedPersona.name.charAt(0)}
-                          </span>
-                          {selectedPersona.name}
-                        </h3>
-                        <div className="flex items-center text-sm text-gray-600 mt-3 ml-1">
-                          <Briefcase className="w-4 h-4 mr-2 text-blue-600" />
-                          <span className="font-medium">
-                            {selectedPersona.job_title || 'No title available'}
-                            {selectedPersona.company_name && ` at ${selectedPersona.company_name}`}
-                          </span>
+                      ) : (
+                        <div className="p-8 text-center text-gray-500 flex flex-col items-center">
+                          <Users className="w-12 h-12 text-gray-300 mb-3" />
+                          <p className="text-sm">
+                            No roles found for the selected filters
+                          </p>
                         </div>
-                      </div>
+                      )}
+                    </div>
+                  </div>
 
-                      <div className="bg-white p-6">
-                        {/* Main Info Sections Grid */}
-                        <div className="grid md:grid-cols-2 gap-6 mb-6">
-                          {/* Personal Info Section */}
-                          <div className="bg-blue-50/50 p-5 rounded-lg border border-blue-100">
-                            <h4 className="font-medium text-blue-800 mb-4 flex items-center">
-                              <User className="w-4 h-4 mr-2" />
-                              Personal Information
-                            </h4>
-                            <div className="space-y-3">
-                              {selectedPersona.age && (
-                                <div className="flex items-start">
-                                  <span className="text-sm font-medium text-gray-600 w-28">Age:</span>
-                                  <span className="text-sm text-gray-800">{selectedPersona.age}</span>
-                                </div>
-                              )}
-                              {selectedPersona.gender && (
-                                <div className="flex items-start">
-                                  <span className="text-sm font-medium text-gray-600 w-28">Gender:</span>
-                                  <span className="text-sm text-gray-800">{selectedPersona.gender}</span>
-                                </div>
-                              )}
-                              {selectedPersona.location && (
-                                <div className="flex items-start">
-                                  <span className="text-sm font-medium text-gray-600 w-28">Location:</span>
-                                  <span className="text-sm text-gray-800">{selectedPersona.location}</span>
-                                </div>
-                              )}
-                              {selectedPersona.income && (
-                                <div className="flex items-start">
-                                  <span className="text-sm font-medium text-gray-600 w-28">Income:</span>
-                                  <span className="text-sm text-gray-800">{selectedPersona.income}</span>
-                                </div>
-                              )}
-                              {selectedPersona.education && (
-                                <div className="flex items-start">
-                                  <span className="text-sm font-medium text-gray-600 w-28">Education:</span>
-                                  <span className="text-sm text-gray-800">{selectedPersona.education}</span>
-                                </div>
-                              )}
+                  {/* Right side: Persona Details */}
+                  <div className="flex-1 overflow-hidden flex flex-col h-full">
+                    <div className="overflow-y-auto pl-5 bg-white h-full custom-scrollbar pr-[15px] pb-12">
+                      {selectedPersona ? (
+                        <div className="overflow-hidden animate-fadeIn w-full">
+                          {/* Persona Header */}
+                          <div className="bg-gradient-to-b rounded-2xl drop-shadow-md from-[#E6FCFA] mb-5 to-[#FEFEFE] px-5 py-3 border-[#ECECEC] border-2  justify-between   flex items-center gap-[10px]">
+                            <div className="flex items-center gap-[10px]">
+                              <div
+                                className={`p-3 relative rounded-full transition-all duration-200 h-[50px] w-[50px] bg-primary `}
+                              >
+                                <UserIcon className="absolute top-2/4 left-2/4 -translate-x-2/4 -translate-y-2/4 text-gray-600" />
+                              </div>
+                              <h3 className="text-2xl  font-semibold text-primary2">
+                                {selectedPersona?.name}
+                              </h3>
+                            </div>
+                            <div className="flex items-center gap-[10px] text-primary2">
+                              <PiSuitcase size={24} />
+                              <span className="font-medium">
+                                {selectedPersona?.job_title ||
+                                  "No title available"}
+                                {selectedPersona?.company_name &&
+                                  ` at ${selectedPersona?.company_name}`}
+                              </span>
                             </div>
                           </div>
 
-                          {/* Professional Info Section */}
-                          <div className="bg-indigo-50/50 p-5 rounded-lg border border-indigo-100">
-                            <h4 className="font-medium text-indigo-800 mb-4 flex items-center">
-                              <Building className="w-4 h-4 mr-2" />
-                              Professional Details
-                            </h4>
-                            <div className="space-y-3">
-                              {selectedPersona.industry_l1 && (
-                                <div className="flex items-start">
-                                  <span className="text-sm font-medium text-gray-600 w-28">Industry:</span>
-                                  <span className="text-sm text-gray-800">{selectedPersona.industry_l1}</span>
+                          <div className="bg-white">
+                            {/* Main Info Sections Grid */}
+                            <div className="grid md:grid-cols-2 gap-x-[25px] gap-y-5">
+                              {/* Personal Info Section */}
+                              <div className="">
+                                {/* <h4 className="font-medium text-blue-800 mb-4 flex items-center">
+                                      <User className="w-4 h-4 mr-2" />
+                                      Personal Information
+                                    </h4> */}
+                                <SectionHeader
+                                  icon={<PiUser size={24} />}
+                                  title="Personal Information"
+                                  number={1}
+                                />
+                                <div className="p-4 border-2 border-[#ECECEC] bg-gradient-to-b from-[#E6FCFA] to-[#FEFEFE] rounded-2xl drop-shadow-md">
+                                  <div className="flex flex-col gap-4">
+                                    {[
+                                      {
+                                        key: "age",
+                                        label: "Age",
+                                        icon: <PiPersonArmsSpread size={20} />,
+                                        value:
+                                          selectedPersona?.demographics?.age,
+                                      },
+                                      {
+                                        key: "gender",
+                                        label: "Gender",
+                                        icon: <PiGenderIntersex size={20} />,
+                                        value:
+                                          selectedPersona?.demographics?.gender,
+                                      },
+                                      {
+                                        key: "location",
+                                        label: "Location",
+                                        icon: <LocationPrimeIcon />,
+                                        value:
+                                          selectedPersona?.demographics
+                                            ?.location?.specific_location,
+                                      },
+                                      {
+                                        key: "income",
+                                        label: "Income",
+                                        icon: <IncomePrimeIcon />,
+                                        value:
+                                          selectedPersona?.demographics?.income,
+                                      },
+                                      {
+                                        key: "education",
+                                        label: "Education",
+                                        icon: <EducationPrimeIcon />,
+                                        value:
+                                          selectedPersona?.demographics
+                                            ?.education,
+                                      },
+                                    ]
+                                      .filter((field) => field.value)
+                                      .map((field: any, index: number) => (
+                                        <div
+                                          key={index}
+                                          className="flex items-start gap-3"
+                                        >
+                                          <div className="text-primary2 pr-3 border-r border-[#DBDDE0]">
+                                            {field.icon}
+                                          </div>
+                                          <div className="flex items-start justify-between w-full gap-1">
+                                            <h3 className="text-black font-medium text-sm ">
+                                              {field.label}
+                                            </h3>
+                                            <span className="text-primary2 font-semibold text-xs text-right ">
+                                              {field.value}
+                                            </span>
+                                          </div>
+                                        </div>
+                                      ))}
+                                  </div>
                                 </div>
-                              )}
-                              {selectedPersona.sub_industry_l2 && (
-                                <div className="flex items-start">
-                                  <span className="text-sm font-medium text-gray-600 w-28">Sub-Industry:</span>
-                                  <span className="text-sm text-gray-800">{selectedPersona.sub_industry_l2}</span>
+                              </div>
+
+                              {/* Professional Info Section - Adjust fields for B2C personas */}
+                              <div className="">
+                                <SectionHeader
+                                  icon={<BuildingIcon />}
+                                  title="Consumer Details"
+                                  number={2}
+                                  titleColor="#4F46E5"
+                                />
+                                <div className="p-4 border-2 border-[#ECECEC] bg-gradient-to-b from-[#E0E7FF] to-[#FEFEFE] rounded-2xl drop-shadow-md">
+                                  <div className="flex flex-col gap-4">
+                                    {[
+                                      {
+                                        key: "industry",
+                                        label: "Industry",
+                                        icon: <IndustryIcon size={20} />,
+                                        value: selectedPersona?.industry_l1,
+                                      },
+                                      {
+                                        key: "subIndustry",
+                                        label: "Sub-Industry",
+                                        icon: <IndustryIcon size={20} />,
+                                        value: selectedPersona?.sub_industry_l2,
+                                      },
+                                      {
+                                        key: "function",
+                                        label: "Function",
+                                        icon: <FunctionSquare size={20} />,
+                                        value: selectedPersona?.function,
+                                      },
+                                      {
+                                        key: "role",
+                                        label: "Role",
+                                        icon: <RollerCoaster size={20} />,
+                                        value: selectedPersona?.role,
+                                      },
+                                      // {
+                                      //   key: "children",
+                                      //   label: "Children",
+                                      //   icon: <PiBabyLight size={20} />,
+                                      //   value: selectedPersona.data?.children,
+                                      // },
+                                    ]
+                                      .filter((field) => field.value)
+                                      .map((field, index) => (
+                                        <div
+                                          key={index}
+                                          className="flex items-start gap-3"
+                                        >
+                                          <div className="text-primary2 pr-3 border-r border-[#DBDDE0]">
+                                            {field.icon}
+                                          </div>
+                                          <div className="flex items-start justify-between w-full gap-1">
+                                            <h3 className="text-black font-medium text-sm ">
+                                              {field.label}
+                                            </h3>
+                                            <span className="text-primary2 font-semibold text-xs text-right">
+                                              {field.value}
+                                            </span>
+                                          </div>
+                                        </div>
+                                      ))}
+                                  </div>
                                 </div>
-                              )}
-                              {selectedPersona.function && (
-                                <div className="flex items-start">
-                                  <span className="text-sm font-medium text-gray-600 w-28">Function:</span>
-                                  <span className="text-sm text-gray-800">{selectedPersona.function}</span>
+                              </div>
+
+                              {selectedPersona.goals &&
+                                selectedPersona.goals.length > 0 && (
+                                  <div className="">
+                                    <SectionHeader
+                                      icon={<GoalPrimeIcon />}
+                                      title="Goals"
+                                      number={3}
+                                    />
+                                    <div className="p-4 border-2 border-[#ECECEC] bg-gradient-to-b from-[#D1FAE5] to-[#FEFEFE] rounded-2xl drop-shadow-md">
+                                      <div className="flex flex-col gap-4">
+                                        {selectedPersona.goals.map(
+                                          (goal: string, index: number) => (
+                                            <div
+                                              key={index}
+                                              className="flex items-start gap-3"
+                                            >
+                                              <div className="text-primary2 pr-3 border-r border-[#DBDDE0]">
+                                                <GoalsPrimeIcon />
+                                              </div>
+                                              <div className="flex items-start justify-between w-full gap-1">
+                                                <h3 className="text-black font-normal text-xs">
+                                                  {goal}
+                                                </h3>
+                                              </div>
+                                            </div>
+                                          )
+                                        )}
+                                      </div>
+                                    </div>
+                                  </div>
+                                )}
+
+                              {selectedPersona.behaviors &&
+                                selectedPersona.behaviors.length > 0 && (
+                                  <div className="">
+                                    <SectionHeader
+                                      icon={<BehaviorsIcon />}
+                                      title="Behaviors"
+                                      number={4}
+                                      titleColor="#E9BC3B"
+                                    />
+                                    <div className="p-4 border-2 border-[#ECECEC] bg-gradient-to-b from-[#FFF7E0CC] to-[#FEFEFE] rounded-2xl drop-shadow-md">
+                                      <div className="flex flex-col gap-4">
+                                        {selectedPersona.behaviors.map(
+                                          (behavior: string, index: number) => (
+                                            <div
+                                              key={index}
+                                              className="flex items-start gap-3"
+                                            >
+                                              <div className="text-primary2 pr-3 border-r border-[#DBDDE0]">
+                                                <GoalsYellowIcon />
+                                              </div>
+                                              <div className="flex items-start justify-between w-full gap-1">
+                                                <h3 className="text-black font-normal text-xs">
+                                                  {behavior}
+                                                </h3>
+                                              </div>
+                                            </div>
+                                          )
+                                        )}
+                                      </div>
+                                    </div>
+                                  </div>
+                                )}
+
+                              {selectedPersona.interests &&
+                                selectedPersona.interests.length > 0 && (
+                                  <div className="">
+                                    <SectionHeader
+                                      icon={<InterestsIcon />}
+                                      title="Interests"
+                                      number={5}
+                                      titleColor="#8B47C8"
+                                    />
+                                    <div className="p-4 border-2 border-[#ECECEC] bg-gradient-to-b from-[#EEDBFFCC] to-[#FEFEFE] rounded-2xl drop-shadow-md">
+                                      <div className="flex flex-col gap-4">
+                                        {selectedPersona.interests.map(
+                                          (interest: string, index: number) => (
+                                            <div
+                                              key={index}
+                                              className="flex items-start gap-3"
+                                            >
+                                              <div className="text-primary2 pr-3 border-r border-[#DBDDE0]">
+                                                <InterestsPerpleIcon />
+                                              </div>
+                                              <div className="flex items-start justify-between w-full gap-1">
+                                                <h3 className="text-black font-normal text-xs">
+                                                  {interest}
+                                                </h3>
+                                              </div>
+                                            </div>
+                                          )
+                                        )}
+                                      </div>
+                                    </div>
+                                  </div>
+                                )}
+
+                              {selectedPersona.preferred_channels &&
+                                selectedPersona.preferred_channels.length >
+                                  0 && (
+                                  <div className="">
+                                    <SectionHeader
+                                      icon={<PreferredChannelsIcon />}
+                                      title="Preferred Channels"
+                                      number={6}
+                                    />
+                                    <div className="p-4 border-2 border-[#ECECEC] bg-gradient-to-b from-[#E6FCFA] to-[#FEFEFE] rounded-2xl drop-shadow-md">
+                                      <div className="flex flex-col gap-4">
+                                        {selectedPersona.preferred_channels.map(
+                                          (channel: string, index: number) => (
+                                            <div
+                                              key={index}
+                                              className="flex items-start gap-3"
+                                            >
+                                              <div className="text-primary2 pr-3 border-r border-[#DBDDE0]">
+                                                <PreferredChanelIcon />
+                                              </div>
+                                              <div className="flex items-start justify-between w-full gap-1">
+                                                <h3 className="text-black font-normal text-xs">
+                                                  {channel}
+                                                </h3>
+                                              </div>
+                                            </div>
+                                          )
+                                        )}
+                                      </div>
+                                    </div>
+                                  </div>
+                                )}
+                            </div>
+                            <div className="w-full pt-5">
+                              {selectedPersona.pain_points &&
+                                selectedPersona.pain_points.length > 0 && (
+                                  <div className="">
+                                    <SectionHeader
+                                      icon={<PainPointsIcon />}
+                                      title="Pain Points"
+                                      number={7}
+                                      titleColor="#C84747"
+                                    />
+                                    <div className="p-4 border-2 border-[#ECECEC] bg-gradient-to-b from-[#FFD8D880] to-[#FEFEFE] rounded-2xl drop-shadow-md">
+                                      <div className="flex flex-col gap-4">
+                                        {selectedPersona.pain_points.map(
+                                          (point: any, index: number) => (
+                                            <div
+                                              key={index}
+                                              className="flex items-start gap-3"
+                                            >
+                                              <div className="text-primary2 pr-3 border-r border-[#DBDDE0]">
+                                                <RightUniqueArrowIcon />
+                                              </div>
+                                              <div className="flex items-start justify-between w-full gap-1">
+                                                <h3 className="text-black font-normal text-xs">
+                                                  {point?.behavioral_result}
+                                                </h3>
+                                              </div>
+                                            </div>
+                                          )
+                                        )}
+                                      </div>
+                                    </div>
+                                  </div>
+                                )}
+                              {selectedPersona?.values &&
+                                selectedPersona?.values.length > 0 && (
+                                  <div className="mt-5">
+                                    <SectionHeader
+                                      icon={
+                                        <Shield size={24} color="#028B7E" />
+                                      }
+                                      title="Values"
+                                      number={7}
+                                      titleColor="#028B7E"
+                                    />
+                                    <div className="p-4 border-2 border-[#ECECEC] bg-gradient-to-b from-[#E6FCFA] to-[#FEFEFE] rounded-2xl drop-shadow-md">
+                                      <div className="flex flex-col gap-4">
+                                        {selectedPersona.values.map(
+                                          (point: string, index: number) => (
+                                            <div
+                                              key={index}
+                                              className="flex items-start gap-3"
+                                            >
+                                              <div className="text-primary2 pr-3 border-r border-[#DBDDE0]">
+                                                <ArrowBigRight size={24} />
+                                              </div>
+                                              <div className="flex items-start justify-between w-full gap-1">
+                                                <h3 className="text-black font-normal text-xs">
+                                                  {point}
+                                                </h3>
+                                              </div>
+                                            </div>
+                                          )
+                                        )}
+                                      </div>
+                                    </div>
+                                  </div>
+                                )}
+                            </div>
+                            {/* Replace the hardcoded sections with dynamic rendering */}
+                            <div className="space-y-6 mt-4">
+                              {/* Dynamic rendering of additional data (excluding basic fields already shown) */}
+                              <div className="mt-10">
+                                <h3 className="text-2xl  font-semibold text-black mb-5">
+                                  Additional Details
+                                </h3>
+                                {selectedPersona?.demographics?.family_status
+                                  ?.children && (
+                                  <div className="p-4 border-2 border-[#ECECEC] bg-gradient-to-b from-[#E6FCFA] to-[#FEFEFE] rounded-2xl drop-shadow-md">
+                                    <div className="flex items-start gap-3">
+                                      <div className="text-primary2 pr-3 border-r border-[#DBDDE0]">
+                                        <PiBabyLight size={24} />
+                                      </div>
+                                      <div className="flex items-center justify-between w-full gap-1">
+                                        <h3 className="text-black font-medium text-sm ">
+                                          Children
+                                        </h3>
+                                        <span className="text-primary2 font-semibold text-xs text-right ">
+                                          {selectedPersona?.demographics?.family_status?.children?.toUpperCase()}
+                                        </span>
+                                      </div>
+                                    </div>
+                                  </div>
+                                )}
+                                <div className=" border-2 border-[#ECECEC] bg-gradient-to-b from-[#F8F8F8] to-[#FEFEFE] rounded-2xl drop-shadow-md mt-5">
+                                  <h3 className="p-4 text-xl font-semibold text-black">
+                                    Customer Profile Insights
+                                  </h3>
+                                  <AdvancedDataContent
+                                    title="Concerns And Obstacles:"
+                                    data={
+                                      selectedPersona?.customer_profile_insights
+                                        ?.concerns_and_obstacles
+                                    }
+                                  />
+                                  <AdvancedDataContent
+                                    title="Decision Criteria:"
+                                    data={
+                                      selectedPersona?.customer_profile_insights
+                                        ?.decision_criteria
+                                    }
+                                  />
+                                  <AdvancedDataContent
+                                    title="Expected Outcomes:"
+                                    data={
+                                      selectedPersona?.customer_profile_insights
+                                        ?.expected_outcomes
+                                    }
+                                  />
+                                  <AdvancedDataContent
+                                    title="Path To Purchase:"
+                                    data={
+                                      selectedPersona?.customer_profile_insights
+                                        ?.path_to_purchase
+                                    }
+                                  />
+                                  <AdvancedDataContent
+                                    title="Triggers And Motivations:"
+                                    data={
+                                      selectedPersona?.customer_profile_insights
+                                        ?.triggers_and_motivations
+                                    }
+                                  />
                                 </div>
-                              )}
-                              {selectedPersona.role && (
-                                <div className="flex items-start">
-                                  <span className="text-sm font-medium text-gray-600 w-28">Role:</span>
-                                  <span className="text-sm text-gray-800">{selectedPersona.role}</span>
+                                <div className="grid grid-cols-3 gap-5 items-center mt-5">
+                                  {selectedPersona?.geographics && (
+                                    <div className="p-4 border-2 border-[#ECECEC] bg-gradient-to-b from-[#E6FCFA] to-[#FEFEFE] rounded-2xl drop-shadow-md">
+                                      <div className="flex items-start gap-3">
+                                        <div className="text-primary2 pr-3 border-r border-[#DBDDE0]">
+                                          <GeographicsIcon />
+                                        </div>
+                                        <div className="flex items-start flex-col justify-between w-full gap-2">
+                                          <h3 className="text-black text-start font-medium text-sm ">
+                                            Geographics
+                                          </h3>
+                                          <span className="text-primary2 text-start font-semibold text-xs ">
+                                            {selectedPersona?.geographics?.toUpperCase()}
+                                          </span>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  )}
+                                  {selectedPersona?.demographics?.family_status
+                                    ?.married && (
+                                    <div className="p-4 border-2 border-[#ECECEC] bg-gradient-to-b from-[#E6FCFA] to-[#FEFEFE] rounded-2xl drop-shadow-md">
+                                      <div className="flex items-start gap-3">
+                                        <div className="text-primary2 pr-3 border-r border-[#DBDDE0]">
+                                          <MarriedIcon />
+                                        </div>
+                                        <div className="flex items-start flex-col justify-between w-full gap-2">
+                                          <h3 className="text-black text-start font-medium text-sm ">
+                                            Married
+                                          </h3>
+                                          <span className="text-primary2 text-start font-semibold text-xs  ">
+                                            {selectedPersona?.demographics?.family_status?.married?.toUpperCase()}
+                                          </span>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  )}
+                                  {selectedPersona?.demographics?.family_status
+                                    ?.pets && (
+                                    <div className="p-4 border-2 border-[#ECECEC] bg-gradient-to-b from-[#E6FCFA] to-[#FEFEFE] rounded-2xl drop-shadow-md">
+                                      <div className="flex items-start gap-3">
+                                        <div className="text-primary2 pr-3 border-r border-[#DBDDE0]">
+                                          <PetsPrimeIcon />
+                                        </div>
+                                        <div className="flex items-start flex-col justify-between w-full gap-2">
+                                          <h3 className="text-black text-start font-medium text-sm ">
+                                            Pets
+                                          </h3>
+                                          <span className="text-primary2 text-start font-semibold text-xs  ">
+                                            {selectedPersona?.demographics?.family_status?.pets?.toUpperCase()}
+                                          </span>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  )}
                                 </div>
-                              )}
+                                <div className="grid grid-cols-2 gap-5 items-center mt-5">
+                                  {selectedPersona?.demographics?.life_stage && (
+                                    <div className="p-4 border-2 border-[#ECECEC] bg-gradient-to-b from-[#E6FCFA] to-[#FEFEFE] rounded-2xl drop-shadow-md">
+                                      <div className="flex items-start gap-3">
+                                        <div className="text-primary2 pr-3 border-r border-[#DBDDE0]">
+                                          <LifeStageIcon />
+                                        </div>
+                                        <div className="flex items-start flex-col justify-between w-full gap-2">
+                                          <h3 className="text-black text-start font-medium text-sm ">
+                                            Life Stage
+                                          </h3>
+                                          <span className="text-primary2 text-start font-semibold text-xs ">
+                                            {selectedPersona?.demographics?.life_stage?.toUpperCase()}
+                                          </span>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  )}
+                                  {selectedPersona?.persona_segment && (
+                                    <div className="p-4 border-2 border-[#ECECEC] bg-gradient-to-b from-[#E6FCFA] to-[#FEFEFE] rounded-2xl drop-shadow-md">
+                                      <div className="flex items-start gap-3">
+                                        <div className="text-primary2 pr-3 border-r border-[#DBDDE0]">
+                                          <PersonaSegmentIcon />
+                                        </div>
+                                        <div className="flex items-start flex-col justify-between w-full gap-2">
+                                          <h3 className="text-black text-start font-medium text-sm ">
+                                            Persona Segment
+                                          </h3>
+                                          <span className="text-primary2 text-start font-semibold text-xs  ">
+                                            {selectedPersona?.persona_segment?.toUpperCase()}
+                                          </span>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  )}
+                                </div>
+                                {selectedPersona?.psychographics && (
+                                  <div className="p-4 border-2 border-[#ECECEC] bg-gradient-to-b from-[#F8F8F8] to-[#FEFEFE] rounded-2xl drop-shadow-md mt-5">
+                                    <div className="flex items-start gap-3">
+                                      <div className="text-primary2 pr-3 border-r border-[#DBDDE0]">
+                                        <PsychographicsIcon />
+                                      </div>
+                                      <div className="flex items-start flex-col justify-between w-full gap-2">
+                                        <h3 className="text-black text-start font-medium text-sm ">
+                                          Psychographics
+                                        </h3>
+                                        <span className="text-[#595E64] text-start font-normal text-xs ">
+                                          {selectedPersona?.psychographics}
+                                        </span>
+                                      </div>
+                                    </div>
+                                  </div>
+                                )}
+                                <div className="grid grid-cols-2 gap-5 items-center mt-5">
+                                  {selectedPersona?.purchasing_habits && (
+                                    <HabitsDataContent
+                                      title="Purchasing Habits"
+                                      icon={<PurchasingHabitsIcon />}
+                                      fromColor="#F8F8F8"
+                                      data={selectedPersona?.purchasing_habits}
+                                    />
+                                  )}
+                                  {selectedPersona?.sales_marketing_hooks && (
+                                    <HabitsDataContent
+                                      title="Sales Marketing Hooks"
+                                      icon={<SalesMarketingHooksIcon />}
+                                      fromColor="#F8F8F8"
+                                      data={
+                                        selectedPersona?.sales_marketing_hooks
+                                      }
+                                    />
+                                  )}
+                                </div>
+                                <div className="grid grid-cols-2 gap-5 items-center mt-5">
+                                  {selectedPersona?.segment_name && (
+                                    <div className="p-4 border-2 border-[#ECECEC] bg-gradient-to-b from-[#E6FCFA] to-[#FEFEFE] rounded-2xl drop-shadow-md">
+                                      <div className="flex items-start gap-3">
+                                        <div className="text-primary2 pr-3 border-r border-[#DBDDE0]">
+                                          <SegmentNameIcon />
+                                        </div>
+                                        <div className="flex items-start flex-col justify-between w-full gap-2">
+                                          <h3 className="text-black text-start font-medium text-sm ">
+                                            Segment Name
+                                          </h3>
+                                          <span className="text-primary2 text-start font-semibold text-xs ">
+                                            {selectedPersona?.segment_name?.toUpperCase()}
+                                          </span>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  )}
+                                  {selectedPersona?.subsegment && (
+                                    <div className="p-4 border-2 border-[#ECECEC] bg-gradient-to-b from-[#E6FCFA] to-[#FEFEFE] rounded-2xl drop-shadow-md">
+                                      <div className="flex items-start gap-3">
+                                        <div className="text-primary2 pr-3 border-r border-[#DBDDE0]">
+                                          <SubsegmentIcon />
+                                        </div>
+                                        <div className="flex items-start flex-col justify-between w-full gap-2">
+                                          <h3 className="text-black text-start font-medium text-sm ">
+                                            Subsegment
+                                          </h3>
+                                          <span className="text-primary2 text-start font-semibold text-xs  ">
+                                            {selectedPersona?.subsegment?.toUpperCase()}
+                                          </span>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  )}
+                                </div>
+                                <div className="grid grid-cols-2 gap-5 items-center mt-5 mb-16">
+                                  {selectedPersona?.trusted_sources && (
+                                    <HabitsDataContent
+                                      title="Trusted Sources"
+                                      icon={<TrustedSourcesIcon />}
+                                      fromColor="#F8F8F8"
+                                      data={selectedPersona?.trusted_sources}
+                                    />
+                                  )}
+                                  {selectedPersona?.value_drivers && (
+                                    <HabitsDataContent
+                                      title="Value Drivers"
+                                      icon={<ValueDriversIcon />}
+                                      fromColor="#F8F8F8"
+                                      data={selectedPersona?.value_drivers}
+                                    />
+                                  )}
+                                </div>
+                                {/* {selectedPersona.data &&
+                                      renderDynamicPersonaData(selectedPersona.data, [
+                                        "age_group",
+                                        "household_income",
+                                        "geo_location",
+                                        "pets",
+                                        "children",
+                                      ])} */}
+                                {/* Also render any top-level persona fields we haven't explicitly handled */}
+                                {/* {renderDynamicPersonaData(
+                                      Object.entries(selectedPersona)
+                                        .filter(
+                                          ([key]) =>
+                                            ![
+                                              "id",
+                                              "name",
+                                              "age",
+                                              "gender",
+                                              "job_title",
+                                              "company_name",
+                                              "income",
+                                              "education",
+                                              "location",
+                                              "interests",
+                                              "goals",
+                                              "pain_points",
+                                              "behaviors",
+                                              "values",
+                                              "preferred_channels",
+                                              "data",
+                                              "created_at",
+                                              "updated_at",
+                                              "segment_id",
+                                            ].includes(key)
+                                        )
+                                        .reduce(
+                                          (obj, [key, value]) => ({
+                                            ...obj,
+                                            [key]: value,
+                                          }),
+                                          {}
+                                        )
+                                    )} */}
+                              </div>
                             </div>
                           </div>
                         </div>
-
-                        {/* Additional Details Sections */}
-                        <div className="grid md:grid-cols-2 gap-6">
-                          {/* Left column */}
-                          <div className="space-y-5">
-                            {selectedPersona.goals && selectedPersona.goals.length > 0 && (
-                              <div className="bg-emerald-50 p-5 rounded-lg border border-emerald-100">
-                                <h4 className="font-medium text-emerald-800 mb-3 flex items-center">
-                                  <svg className="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
-                                  </svg>
-                                  Goals
-                                </h4>
-                                <ul className="list-disc ml-5 space-y-1.5">
-                                  {selectedPersona.goals.map((goal: string, idx: number) => (
-                                    <li key={idx} className="text-sm text-gray-700">{goal}</li>
-                                  ))}
-                                </ul>
-                              </div>
-                            )}
-
-                            {selectedPersona.pain_points && selectedPersona.pain_points.length > 0 && (
-                              <div className="bg-rose-50 p-5 rounded-lg border border-rose-100">
-                                <h4 className="font-medium text-rose-800 mb-3 flex items-center">
-                                  <svg className="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                                  </svg>
-                                  Pain Points
-                                </h4>
-                                <ul className="list-disc ml-5 space-y-1.5">
-                                  {selectedPersona.pain_points.map((point: string, idx: number) => (
-                                    <li key={idx} className="text-sm text-gray-700">{point}</li>
-                                  ))}
-                                </ul>
-                              </div>
-                            )}
-
-                            {selectedPersona.interests && selectedPersona.interests.length > 0 && (
-                              <div className="bg-purple-50 p-5 rounded-lg border border-purple-100">
-                                <h4 className="font-medium text-purple-800 mb-3 flex items-center">
-                                  <svg className="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905a3.61 3.61 0 01-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5" />
-                                  </svg>
-                                  Interests
-                                </h4>
-                                <ul className="list-disc ml-5 space-y-1.5">
-                                  {selectedPersona.interests.map((interest: string, idx: number) => (
-                                    <li key={idx} className="text-sm text-gray-700">{interest}</li>
-                                  ))}
-                                </ul>
-                              </div>
-                            )}
+                      ) : (
+                        <div className="flex flex-col items-center justify-center h-full text-gray-500">
+                          <div className="bg-blue-50 p-6 rounded-full mb-4 border border-blue-100">
+                            <User className="w-12 h-12 text-blue-400" />
                           </div>
-
-                          {/* Right column */}
-                          <div className="space-y-5">
-                            {selectedPersona.behaviors && selectedPersona.behaviors.length > 0 && (
-                              <div className="bg-amber-50 p-5 rounded-lg border border-amber-100">
-                                <h4 className="font-medium text-amber-800 mb-3 flex items-center">
-                                  <svg className="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                                  </svg>
-                                  Behaviors
-                                </h4>
-                                <ul className="list-disc ml-5 space-y-1.5">
-                                  {selectedPersona.behaviors.map((behavior: string, idx: number) => (
-                                    <li key={idx} className="text-sm text-gray-700">{behavior}</li>
-                                  ))}
-                                </ul>
-                              </div>
-                            )}
-
-                            {selectedPersona.values && selectedPersona.values.length > 0 && (
-                              <div className="bg-green-50 p-5 rounded-lg border border-green-100">
-                                <h4 className="font-medium text-green-800 mb-3 flex items-center">
-                                  <svg className="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                                  </svg>
-                                  Values
-                                </h4>
-                                <ul className="list-disc ml-5 space-y-1.5">
-                                  {selectedPersona.values.map((value: string, idx: number) => (
-                                    <li key={idx} className="text-sm text-gray-700">{value}</li>
-                                  ))}
-                                </ul>
-                              </div>
-                            )}
-
-                            {selectedPersona.preferred_channels && selectedPersona.preferred_channels.length > 0 && (
-                              <div className="bg-blue-50 p-5 rounded-lg border border-blue-100">
-                                <h4 className="font-medium text-blue-800 mb-3 flex items-center">
-                                  <svg className="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                  </svg>
-                                  Preferred Channels
-                                </h4>
-                                <ul className="list-disc ml-5 space-y-1.5">
-                                  {selectedPersona.preferred_channels.map((channel: string, idx: number) => (
-                                    <li key={idx} className="text-sm text-gray-700">{channel}</li>
-                                  ))}
-                                </ul>
-                              </div>
-                            )}
-                          </div>
+                          <p className="text-lg text-gray-600 mb-2">
+                            Select a profile
+                          </p>
+                          <p className="text-sm text-gray-500">
+                            Choose from the list on the left to view detailed
+                            information
+                          </p>
                         </div>
-                      </div>
+                      )}
                     </div>
-                  ) : (
-                    <div className="flex flex-col items-center justify-center h-full text-gray-500">
-                      <div className="bg-blue-50 p-6 rounded-full mb-4 border border-blue-100">
-                        <User className="w-12 h-12 text-blue-400" />
-                      </div>
-                      <p className="text-lg text-gray-600 mb-2">Select a profile</p>
-                      <p className="text-sm text-gray-500">Choose from the list on the left to view detailed information</p>
-                    </div>
-                  )}
+                  </div>
                 </div>
               </div>
-            </div>
-          )}
-        </DialogContent>
+            )}
+          </DialogContent>
+        </DialogPortal>
       </Dialog>
-
-    </StepContainer>
+    </div>
   );
 };
 

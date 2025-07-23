@@ -43,6 +43,7 @@ const ProgressSteps: React.FC<ProgressStepsProps> = ({ steps }) => {
 
           return (
             <div
+              key={idx}
               className={`
                 text-sm font-semibold flex items-center rounded-xl gap-[10px] p-3 pl-5 border-l-4
                      

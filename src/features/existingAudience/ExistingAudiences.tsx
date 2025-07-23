@@ -108,6 +108,7 @@ const ExistingAudiences: React.FC<ExistingAudiencesProps> = ({
         );
 
         setAudiences((prev) => [...prev, res.data]);
+        setLoading(false)
       } catch (err) {
         console.error(`Error fetching audience ${audienceId}:`, err);
       } finally {
@@ -136,7 +137,6 @@ const ExistingAudiences: React.FC<ExistingAudiencesProps> = ({
         : [...prev, audienceId]
     );
   };
-  console.log(51515, audiences);
 
   return (
     <div className="w-full bg-gray_light rounded-tl-[30px] p-[30px] relative">
@@ -170,8 +170,8 @@ const ExistingAudiences: React.FC<ExistingAudiencesProps> = ({
       )}
 
       <div className="grid grid-cols-2 gap-[19px] mt-[30px]">
-        {audiences.map((audience: any) => (
-          <div className="bg-[#E6FCFA] rounded-2xl overflow-hidden">
+        {audiences.map((audience: any , index:number) => (
+          <div key={index} className="bg-[#E6FCFA] rounded-2xl overflow-hidden">
             <div className="  mx-4 mt-2 mb-[7px] flex items-center gap-2 justify-between">
               <h3 className="text-base font-semibold text-black">
                 {audience.name}
