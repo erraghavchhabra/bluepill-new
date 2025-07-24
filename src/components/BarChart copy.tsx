@@ -156,7 +156,7 @@ const BarChart: React.FC<BarChartProps> = ({ data, xAxis, yAxis, title }) => {
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-sm font-medium text-gray-700">{title}</h3>
           <div className="flex gap-2 no-print">
-            <div className="relative">
+            <div className="relative no-print">
               <Button
                 size="sm"
                 variant="ghost"
@@ -166,6 +166,7 @@ const BarChart: React.FC<BarChartProps> = ({ data, xAxis, yAxis, title }) => {
                 title="Download chart as image"
                 onMouseEnter={() => setShowTooltip('download')}
                 onMouseLeave={() => setShowTooltip(null)}
+                className='no-print'
               >
                 {''}
               </Button>
@@ -184,6 +185,7 @@ const BarChart: React.FC<BarChartProps> = ({ data, xAxis, yAxis, title }) => {
                 title="Copy chart as image"
                 onMouseEnter={() => setShowTooltip('copy')}
                 onMouseLeave={() => setShowTooltip(null)}
+                className='no-print'
               >
                 {''}
               </Button>

@@ -231,6 +231,12 @@ const SimulationResultsContent: React.FC<SimulationResultsContentProps> = ({
   const [sliderStyle, setSliderStyle] = useState({});
   const chatRef = useRef(null);
   const simulationRef = useRef(null);
+  const [showInputAllProfiles, setShowInputAllProfiles] = useState(false);
+  const visibleCount = 6;
+  const personasToShow = showInputAllProfiles
+    ? simulation?.personas
+    : simulation?.personas.slice(0, visibleCount);
+
   useEffect(() => {
     if (isListCollapsed === "simulation") {
       // setActiveChatTab("chat");
@@ -2068,7 +2074,7 @@ const SimulationResultsContent: React.FC<SimulationResultsContentProps> = ({
         >
           {/* Summary section - Header */}
           {/* Header */}
-          <div className="p-[30px]  bg-white  flex items-center gap-3 justify-between">
+          <div className="p-[30px]  bg-white sticky right-0 top-0 z-10   flex items-center gap-3 justify-between">
             <h2 className="text-2xl font-semibold text-primary2 ">
               Simulation Inputs
             </h2>
@@ -2169,10 +2175,10 @@ const SimulationResultsContent: React.FC<SimulationResultsContentProps> = ({
                   title={`User Profile (${simulation.personas.length})`}
                   number={4}
                 />
-                {simulation.personas && (
+                {simulation?.personas && (
                   <div className="p-3 bg-white">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                      {simulation.personas.map((persona, index) => {
+                      {personasToShow?.map((persona, index) => {
                         const personaInfo: any = extractPersonaInfo(
                           persona.data
                         );
@@ -2231,6 +2237,21 @@ const SimulationResultsContent: React.FC<SimulationResultsContentProps> = ({
                         );
                       })}
                     </div>
+                    {/* View All / View Less Button */}
+                    {simulation.personas.length > visibleCount && (
+                      <div className="text-center mt-4">
+                        <button
+                          onClick={() =>
+                            setShowInputAllProfiles((prev) => !prev)
+                          }
+                          className="text-primary2 underline text-sm font-medium"
+                        >
+                          {showInputAllProfiles
+                            ? "View Less"
+                            : `View All (${simulation.personas.length})`}
+                        </button>
+                      </div>
+                    )}
                   </div>
                 )}
               </div>
@@ -2374,6 +2395,7 @@ const SimulationResultsContent: React.FC<SimulationResultsContentProps> = ({
           const customPrintStyle = `
   <style>
     .no-print { display: none !important; }
+    .pdf-print { display: block !important; }
     .recharts-tooltip-wrapper { display: none !important; }
     table { border-collapse: collapse; width: 100%; table-layout: fixed; }
     th, td {
@@ -2744,7 +2766,7 @@ const SimulationResultsContent: React.FC<SimulationResultsContentProps> = ({
                   disabled={exportEmailStatus === "sending"}
                 />
                 <button
-                  className={`p-[13px_20px] bg-primary2 text-white text-base font-semibold rounded-full${
+                  className={`p-[13px_20px] bg-primary2 text-white text-base font-semibold rounded-full ${
                     exportEmailStatus === "sending"
                       ? "opacity-60 cursor-not-allowed"
                       : ""

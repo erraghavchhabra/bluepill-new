@@ -141,7 +141,7 @@ const BarChart: React.FC<BarChartProps> = ({ data, xAxis, yAxis, title }) => {
         {title && (
           <h2 className="text-xl font-semibold text-primary2">{title}</h2>
         )}
-        <div className="flex gap-2">
+        <div className="flex gap-2 no-print">
           <TooltipBox text="Download">
             <button
               onClick={handleDownload}
