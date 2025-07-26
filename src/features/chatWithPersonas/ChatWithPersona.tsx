@@ -10,6 +10,7 @@ import SegmentsSelector from "../simulationUseCase/SegmentsSelector";
 import ChatUI from "./ChatUI";
 import { useAudience } from "@/context/AudienceContext";
 import Header from "../../components/Header";
+import Footer from "@/components/Footer";
 
 const ChatWithPersona: React.FC = () => {
   // All hooks at the top
@@ -112,6 +113,7 @@ const ChatWithPersona: React.FC = () => {
             onBack={() => {}}
           />
         </div>
+        <Footer />
       </>
     );
   }
@@ -145,6 +147,7 @@ const ChatWithPersona: React.FC = () => {
             <SegmentsSelector {...commonProps} />
           )}
         </div>
+        <Footer />
       </>
     );
   }
@@ -187,7 +190,7 @@ const ChatWithPersona: React.FC = () => {
       <>
         <Header />
         <div className="pl-[30px]">
-          <div className="w-full bg-gray_light rounded-tl-[30px] p-[30px] relative ">
+          <div className="w-full bg-gray_light rounded-tl-[30px] p-[30px] relative pb-16 ">
             <div>
               <h3 className="text-[28px] font-semibold text-black mb-3">
                 Chat with Personas
@@ -205,6 +208,7 @@ const ChatWithPersona: React.FC = () => {
             </div>
           </div>
         </div>
+        <Footer />
       </>
     );
   }

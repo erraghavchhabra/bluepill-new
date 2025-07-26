@@ -494,7 +494,7 @@ const AudiencePreview: React.FC<AudiencePreviewProps> = ({
   // If still generating, show loading state
   if (loadingState !== "complete" && loadingState !== "error") {
     return (
-      <div className="w-full bg-gray_light rounded-tl-[30px] p-[30px] relative h-[100vh]">
+      <div className="w-full bg-gray_light rounded-tl-[30px] p-[30px] relative pb-16 h-[100vh]">
         <div>
           <h3 className="text-[28px] font-semibold text-black mb-3">
             Building your audience

@@ -1200,7 +1200,7 @@ const SegmentsSelectorCoreStack: React.FC<SegmentsSelectorProps> = ({
   };
 
   return (
-    <div className="w-full bg-gray_light rounded-tl-[30px] p-[30px] relative">
+    <div className="w-full bg-gray_light rounded-tl-[30px] p-[30px] relative pb-16">
       <div className="flex items-center gap-1 justify-between">
         <div>
           <h3 className="text-[28px] font-semibold text-black mb-3">
@@ -2239,7 +2239,7 @@ const SegmentsSelectorCoreStack: React.FC<SegmentsSelectorProps> = ({
                                         <Shield size={24} color="#028B7E" />
                                       }
                                       title="Values"
-                                      number={7}
+                                      number={8}
                                       titleColor="#028B7E"
                                     />
                                     <div className="p-4 border-2 border-[#ECECEC] bg-gradient-to-b from-[#E6FCFA] to-[#FEFEFE] rounded-2xl drop-shadow-md">

@@ -165,10 +165,12 @@ function DetailedAnalysis({ data, border, mainIndex }: any) {
               <h5 className="font-semibold text-xl px-5 pb-[13px] pt-[25px] border-t border-[#E8E8E8] mt-[25px] text-black">
                 Improvement Recommendations
               </h5>
-              <ExpertRecommendations
-                className="p-[12px_20px]"
-                data={data?.expert_recommendations?.critical_changes}
-              />
+              {data?.expert_recommendations?.critical_changes && (
+                <ExpertRecommendations
+                  className="p-[12px_20px]"
+                  data={data?.expert_recommendations?.critical_changes}
+                />
+              )}
               <ExpertRecommendations
                 data={data?.expert_recommendations?.high_impact_improvements}
               />

@@ -14,7 +14,7 @@ const LandingScreen: React.FC<LandingScreenProps> = ({
   onSelectExisting,
 }) => {
   return (
-    <div className="w-full bg-gray_light rounded-tl-[30px] p-[30px] relative h-[87vh]">
+    <div className="w-full bg-gray_light rounded-tl-[30px] p-[30px] relative pb-16 h-[82vh]">
       <div>
         <h3 className="text-[28px] font-semibold text-black mb-3">
           What would you like to do today?

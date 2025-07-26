@@ -228,22 +228,28 @@ function ChannelEventStrategyDesign({ data, contentData }: any) {
           <h5 className="font-semibold text-xl p-5 text-black">
             Improvement Recommendations
           </h5>
-          <ExpertRecommendations
-            data={expert_recommendationsData?.critical_changes}
-          />
-          <ExpertRecommendations
-            data={expert_recommendationsData?.high_impact_improvements}
-          />
-          <ExpertRecommendations
-            data={expert_recommendationsData?.optimization_opportunities}
-          />
+          {expert_recommendationsData?.critical_changes && (
+            <ExpertRecommendations
+              data={expert_recommendationsData?.critical_changes}
+            />
+          )}
+          {expert_recommendationsData?.high_impact_improvements && (
+            <ExpertRecommendations
+              data={expert_recommendationsData?.high_impact_improvements}
+            />
+          )}
+          {expert_recommendationsData?.optimization_opportunities && (
+            <ExpertRecommendations
+              data={expert_recommendationsData?.optimization_opportunities}
+            />
+          )}
         </div>
       )}
       {detailedAnalysisData && (
         <div className="bg-white rounded-2xl mt-3">
           {/* Header */}
           <div
-            className="flex items-center justify-between  p-5 pb-[25px] cursor-pointer"
+            className="flex items-center justify-between  p-5 pb-[25px] cursor-pointer no-print"
             onClick={() => setDetailDropDown(!detailDropDown)}
           >
             <div className="flex items-center gap-[10px]">
@@ -264,13 +270,38 @@ function ChannelEventStrategyDesign({ data, contentData }: any) {
           {/* Smooth Dropdown Content */}
           <div
             ref={contentRef}
-            className="smooth-dropdown "
+            className="smooth-dropdown no-print"
             style={{
               maxHeight: maxHeight,
               opacity: detailDropDown ? 1 : 0,
               // marginTop: detailDropDown ? "20px" : 0,
             }}
           >
+            <p className="text-xl font-semibold border-t   border-[#E8E8E8] w-full mx-5 pt-[25px]  text-black ">
+              Detailed Persona Analysis
+            </p>
+            {detailedAnalysisData?.map((data: any, index: number) => (
+              <DetailedAnalysis
+                border={
+                  detailedAnalysisData?.length !== index + 1 ? true : false
+                }
+                data={data}
+                key={index}
+                mainIndex={index}
+              />
+            ))}
+          </div>
+          {/* pdf */}
+          <div className="hidden pdf-print">
+            <h3
+              style={{
+                color: "#028B7E",
+                fontSize: "25px",
+                fontWeight: "600",
+              }}
+            >
+              Detailed Analysis
+            </h3>
             <p className="text-xl font-semibold border-t   border-[#E8E8E8] w-full mx-5 pt-[25px]  text-black ">
               Detailed Persona Analysis
             </p>

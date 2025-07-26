@@ -1,5 +1,6 @@
 import React from "react";
 import Header from "./Header";
+import Footer from "./Footer";
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -18,11 +19,7 @@ const Layout: React.FC<LayoutProps> = ({
       <main className={`flex-1  ${className}`}>
         <div className={noContainer ? "" : "container"}>{children}</div>
       </main>
-      {/* <footer className="bg-white border-t border-gray-200 py-6 px-4">
-        <div className="container mx-auto text-center text-gray-500 text-sm">
-          &copy; {new Date().getFullYear()} Bluepill Simulation Experience
-        </div>
-      </footer> */}
+      <Footer />
     </div>
   );
 };

@@ -284,7 +284,7 @@ function AB_estMessaging({ data }: any) {
       {detailedAnalysisData && (
         <div className="bg-white rounded-2xl">
           <div
-            className="flex items-center justify-between  p-5 cursor-pointer"
+            className="flex items-center justify-between  p-5 cursor-pointer no-print"
             onClick={() => setDetailDropDown(!detailDropDown)}
           >
             <div className="flex items-center gap-[10px]">
@@ -303,7 +303,7 @@ function AB_estMessaging({ data }: any) {
           </div>
           <div
             ref={contentRef}
-            className="smooth-dropdown "
+            className="smooth-dropdown no-print"
             style={{
               maxHeight: maxHeight,
               opacity: detailDropDown ? 1 : 0,
@@ -313,6 +313,24 @@ function AB_estMessaging({ data }: any) {
               Step 6. ITERATIVE MESSAGE OPTIMIZATION WITH FLUID VARIATION MATRIX
             </p>
             <AB_estMessagingDetaildAnalysis data={detailedAnalysisData} />
+          </div>
+          <div className="hidden pdf-print">
+            <h3
+              style={{
+                color: "#028B7E",
+                fontSize: "25px",
+                fontWeight: "600",
+              }}
+            >
+              Detailed Analysis
+            </h3>
+            <div className="">
+              <p className="text-xl font-semibold border-t border-[#E8E8E8] w-full mx-5 pt-5  text-black ">
+                Step 6. ITERATIVE MESSAGE OPTIMIZATION WITH FLUID VARIATION
+                MATRIX
+              </p>
+              <AB_estMessagingDetaildAnalysis data={detailedAnalysisData} />
+            </div>
           </div>
         </div>
       )}

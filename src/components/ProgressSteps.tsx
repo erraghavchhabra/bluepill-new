@@ -30,10 +30,9 @@ const ProgressSteps: React.FC<ProgressStepsProps> = ({ steps }) => {
   return (
     <div className="w-[323px] mb-6 sticky left-0 top-[90px] ml-[30px]">
       <h3 className="text-[28px] font-semibold text-black mb-2">Simulate</h3>
-      <p className="text-xs font-normal text-[#595E64]">
-        Lorem ipsum dolor sit amet consectetur. Diam sed erat enim justo a eu
-        eu. Nibh id tellus.
-      </p>
+      {/* <p className="text-xs font-normal text-[#595E64]">
+        
+      </p> */}
       <div className="flex flex-col gap-3 mt-5">
         {steps.map((step, idx) => {
           // Check if step is clickable

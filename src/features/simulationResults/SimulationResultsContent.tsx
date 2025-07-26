@@ -75,6 +75,7 @@ import ImageSurvey from "./ImageSurvey";
 import AB_estMessaging from "./AB_estMessaging";
 import BlackButton from "@/components/Buttons/BlackButton";
 import TooltipBox from "@/components/Buttons/TooltipBox";
+import toast from "react-hot-toast";
 
 const API_URL = import.meta.env.VITE_API_URL || "";
 
@@ -288,7 +289,22 @@ const SimulationResultsContent: React.FC<SimulationResultsContentProps> = ({
   // Add at the top with other useState
   const [cachedPdfUrl, setCachedPdfUrl] = useState<string | null>(null);
   const [pdfGenerating, setPdfGenerating] = useState(false);
+  const POLL_INTERVAL = 10000; // 5 seconds
+  const intervalRef = useRef<any>(null); // =======>Change<=======
 
+  const clearPolling = () => {
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current); // =======>Change<=======
+      intervalRef.current = null; // =======>Change<=======
+    }
+  };
+
+  const startPolling = () => {
+    if (intervalRef.current) return; // Avoid multiple intervals
+    intervalRef.current = setInterval(() => {
+      fetchSimulationStatus(false); // =======>Change<=======
+    }, POLL_INTERVAL);
+  };
   useEffect(() => {
     // Reset state when simulationId changes
     setSimulation(null);
@@ -306,12 +322,14 @@ const SimulationResultsContent: React.FC<SimulationResultsContentProps> = ({
       setLoading(false);
       return;
     }
-
+    clearPolling();
     // Initial fetch - let's determine if we need to start polling
     fetchSimulationStatus(true);
 
     // Clean up interval on component unmount
-    return () => {};
+    return () => {
+      clearPolling();
+    };
   }, [simulationId]); // Only depend on simulationId, not on simulation data
 
   // Auto-scroll chat to bottom when messages change
@@ -335,6 +353,7 @@ const SimulationResultsContent: React.FC<SimulationResultsContentProps> = ({
       const response = await fetch(`${API_URL}/simulations/${simulationId}`, {
         credentials: "include",
       });
+      console.log();
 
       if (!response.ok) {
         throw new Error("Failed to fetch simulation status");
@@ -355,12 +374,15 @@ const SimulationResultsContent: React.FC<SimulationResultsContentProps> = ({
           setSimulationStatus("completed");
           setOptimizationStatus("completed");
           setLoading(false);
+          clearPolling();
         } else {
           // Only simulation_response is ready, optimization still in progress or not needed
           setSimulationStatus("partial");
           setOptimizationStatus("running");
           setLoading(false);
-
+          clearPolling();
+          // if (data.num_tabs === 1) {
+          // }
           // If num_tabs is 1, don't poll for optimization response
           if (data.num_tabs === 1) {
           } else if (initialFetch) {
@@ -374,12 +396,14 @@ const SimulationResultsContent: React.FC<SimulationResultsContentProps> = ({
 
         // Only start polling if this is the initial fetch and we need to poll
         if (initialFetch) {
+          startPolling();
         }
       }
     } catch (err) {
       console.error("Error fetching simulation status:", err);
       setError("Failed to load simulation status. Please try again.");
       setLoading(false);
+      clearPolling();
     }
   };
 
@@ -1465,30 +1489,29 @@ const SimulationResultsContent: React.FC<SimulationResultsContentProps> = ({
                                     style={{ minWidth: 80, maxWidth: 180 }}
                                   >
                                     {/* <span>{rankText}</span> */}
-                                    <div
-                                      className="relative group"
-                                      style={{ display: "inline-block" }}
-                                    >
-                                      <img
-                                        src={imageSrc}
-                                        alt={`Ad ${imageIdx + 1}`}
-                                        className="max-w-[80px] max-h-[60px] w-auto h-auto object-contain bg-gray-100 cursor-pointer rounded-md border"
-                                        onClick={() => {
-                                          setPopupImage(imageSrc);
-                                          setPopupText(
-                                            extractSummaryFromRow(
-                                              row.props.children
-                                            )
-                                          );
-                                          setTimeout(() => {
-                                            setPopupImageVisible(true);
-                                          }, 200);
-                                        }}
-                                      />
-                                      <div className="absolute left-1/2 -translate-x-1/2 -top-8 px-2 py-1 bg-black text-white text-xs rounded opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity whitespace-nowrap z-20 shadow-lg">
-                                        Click to preview
+                                    <TooltipBox text="Click to preview">
+                                      <div
+                                        className="relative group"
+                                        style={{ display: "inline-block" }}
+                                      >
+                                        <img
+                                          src={imageSrc}
+                                          alt={`Ad ${imageIdx + 1}`}
+                                          className="max-w-[80px] max-h-[60px] w-auto h-auto object-contain bg-gray-100 cursor-pointer rounded-md border"
+                                          onClick={() => {
+                                            setPopupImage(imageSrc);
+                                            setPopupText(
+                                              extractSummaryFromRow(
+                                                row.props.children
+                                              )
+                                            );
+                                            setTimeout(() => {
+                                              setPopupImageVisible(true);
+                                            }, 200);
+                                          }}
+                                        />
                                       </div>
-                                    </div>
+                                    </TooltipBox>
                                   </div>
                                 </td>
                               );
@@ -1605,7 +1628,7 @@ const SimulationResultsContent: React.FC<SimulationResultsContentProps> = ({
                                 analysis: !prev.analysis,
                               }))
                             }
-                            className="flex items-center justify-between w-full "
+                            className="flex items-center justify-between w-full no-print"
                           >
                             <div className="flex items-center gap-[10px]">
                               <DetailedAnalysisIcon />
@@ -1622,9 +1645,29 @@ const SimulationResultsContent: React.FC<SimulationResultsContentProps> = ({
                               <ChevronDown className="h-4 w-4" />
                             )}
                           </button>
-
+                          {/* pdf  */}
+                          <div className="hidden pdf-print">
+                            <h3
+                              style={{
+                                color: "#028B7E",
+                                fontSize: "25px",
+                                fontWeight: "600",
+                              }}
+                            >
+                              Detailed Analysis
+                            </h3>
+                          </div>
+                          <div className="mt-4 prose prose-sm prose-indigo max-w-none markdown-body hidden pdf-print">
+                            <ReactMarkdown
+                              remarkPlugins={[remarkGfm]}
+                              rehypePlugins={[rehypeRaw]}
+                            >
+                              {innerParsedResponse.analysis}
+                            </ReactMarkdown>
+                          </div>
+                          {/* --------------------------------------- */}
                           {expandedCards.analysis && (
-                            <div className="mt-4 prose prose-sm prose-indigo max-w-none markdown-body">
+                            <div className="mt-4 prose prose-sm prose-indigo max-w-none markdown-body no-print">
                               <ReactMarkdown
                                 remarkPlugins={[remarkGfm]}
                                 rehypePlugins={[rehypeRaw]}
@@ -1903,24 +1946,27 @@ const SimulationResultsContent: React.FC<SimulationResultsContentProps> = ({
     };
 
     // Define the formatValue function inside the component to fix the reference error
-    const formatValue = (key: string, value: unknown): React.ReactNode => {
+    const formatValue = (key: string, value: any): React.ReactNode => {
       // Format segment_ids
       if (key === "segment_ids" && Array.isArray(value)) {
         if (simulation?.segments) {
           return (
-            <div className="flex flex-wrap gap-2 mt-2">
+            <div className="bg-[#FAFAFA] p-4 flex flex-col gap-3 items-center rounded-[20px] mb-6">
               {value.map((segmentId, idx) => {
                 const segment = simulation.segments?.find(
                   (s) => s.id === segmentId
                 );
                 return (
-                  <span
-                    key={idx}
-                    className="px-3 py-1.5 bg-blue-50/80 text-blue-700 border border-blue-200 rounded-full text-xs font-medium flex items-center gap-1.5"
+                  <div
+                    key={key}
+                    className={`${
+                      value.length == idx + 1 ? "" : "border-b pb-3"
+                    } flex items-center gap-3 justify-between border-[#E8E8E8]  w-full`}
                   >
-                    <Globe className="h-3 w-3" />
-                    {segment ? segment.name : `Segment ${segmentId}`}
-                  </span>
+                    <span className="text-right text-sm font-semibold text-gray-900">
+                      {segment ? segment.name : `Segment ${segmentId}`}
+                    </span>
+                  </div>
                 );
               })}
             </div>
@@ -2033,7 +2079,148 @@ const SimulationResultsContent: React.FC<SimulationResultsContentProps> = ({
 
       // Handle special values
       if (key === "audience_id") return null;
+      if (key == "questions") {
+        return (
+          <div className="flex flex-col gap-1 items-start">
+            {value?.map((question: any, index: number) => (
+              <p
+                key={index}
+                className={`text-start ${
+                  question?.startsWith("Q")
+                    ? "text-base font-medium text-blue-600" // Highlighted Q-type
+                    : "text-xs font-normal text-gray-800 indent-2" // Normal text
+                }`}
+              >
+                {question}
+              </p>
+            ))}
+          </div>
+        );
+      }
+      if (key == "marketing_copies") {
+        return (
+          <div className="flex flex-col gap-1 items-start">
+            {value?.map((question: any, index: number) => (
+              <p
+                key={index}
+                className={`text-start text-sm font-normal text-gray-800 indent-2`}
+              >
+                {question}
+              </p>
+            ))}
+          </div>
+        );
+      }
+      if (key == "selected_products") {
+        return (
+          <div className="flex flex-col gap-1 items-end">
+            {value?.map((question: any, index: number) => (
+              <p
+                key={index}
+                className={`text-start text-sm font-normal text-gray-800 indent-2`}
+              >
+                {question}
+              </p>
+            ))}
+          </div>
+        );
+      }
+      if (key == "additional_data") {
+        console.log(65151, value);
 
+        return (
+          <div className="flex flex-col gap-1 items-end">
+            {value?.product_name && (
+              <p
+                className={`text-start text-sm font-normal text-gray-800 indent-2`}
+              >
+                Product name:{" "}
+                <span className="text-gray-600">{value?.product_name}</span>
+              </p>
+            )}
+            {value?.website_url && (
+              <p
+                className={`text-start text-sm font-normal text-gray-800 indent-2`}
+              >
+                Website url:{" "}
+                <span className="text-gray-600">{value?.website_url}</span>
+              </p>
+            )}
+          </div>
+        );
+      }
+      if (key == "products_data") {
+        return (
+          <div className="flex flex-col gap-4">
+            {value?.map((item: any, index: number) => (
+              <div
+                key={index}
+                className="flex gap-4 items-start p-4 rounded-xl border border-gray-200 shadow-sm bg-white"
+              >
+                {/* Image */}
+                {item.image_url && (
+                  <img
+                    src={item.image_url}
+                    alt={item.brand || "Product image"}
+                    className="w-28 h-28 object-contain rounded-md border"
+                  />
+                )}
+
+                {/* Textual Info */}
+                <div className="flex flex-col gap-1 text-sm text-gray-700 w-full">
+                  <div className="font-semibold text-base text-gray-900">
+                    {item.brand}
+                  </div>
+
+                  <div>
+                    <span className="font-medium">ASIN:</span> {item.asin}
+                  </div>
+                  <div>
+                    <span className="font-medium">BSR:</span>{" "}
+                    {item.bsr ?? "N/A"}
+                  </div>
+                  <div>
+                    <span className="font-medium">Origin:</span>{" "}
+                    {item.origin ?? "N/A"}
+                  </div>
+                  <div>
+                    <span className="font-medium">Price:</span>{" "}
+                    {item.price ?? "N/A"}
+                  </div>
+                  <div>
+                    <span className="font-medium">Ratings:</span> {item.ratings}{" "}
+                    ⭐
+                  </div>
+                  <div>
+                    <span className="font-medium">Review Count:</span>{" "}
+                    {item.review_count}
+                  </div>
+
+                  {/* Product Details */}
+                  {item.product_details && (
+                    <p className="text-gray-600 mt-2 text-sm">
+                      <span className="font-medium">Details:</span>{" "}
+                      {item.product_details}
+                    </p>
+                  )}
+
+                  {/* Link */}
+                  {item.url && (
+                    <a
+                      href={item.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-primary2 hover:underline mt-1 text-sm font-medium"
+                    >
+                      View on Amazon →
+                    </a>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        );
+      }
       // For other simple values
       return (
         <span className="text-sm text-gray-800 font-medium">
@@ -2055,7 +2242,7 @@ const SimulationResultsContent: React.FC<SimulationResultsContentProps> = ({
         importantFields.includes(key)
       )
     );
-
+    let count = 1;
     return (
       <div
         className={`fixed inset-0  flex transition-all duration-200 items-center justify-end ${
@@ -2086,32 +2273,38 @@ const SimulationResultsContent: React.FC<SimulationResultsContentProps> = ({
           {/* Main content area */}
           <div className="p-5">
             {/* Key information grid */}
-            <SectionHeader
-              icon={<PiUser size={24} />}
-              title="Creator Detail"
-              number={1}
-            />
-            <div className="bg-[#FAFAFA] p-4 flex flex-col gap-3 items-center rounded-[20px] mb-6">
-              {Object.entries(importantData).map(
-                ([key, value], index: number) => (
-                  <div
-                    key={key}
-                    className={`${
-                      Object.entries(importantData).length == index + 1
-                        ? ""
-                        : "border-b pb-3"
-                    } flex items-center gap-3 justify-between border-[#E8E8E8]  w-full`}
-                  >
-                    <span className="text-[#595E64] text-sm font-medium capitalize">
-                      {key.replace(/_/g, " ")}
-                    </span>
-                    <span className="text-right text-sm font-semibold text-gray-900">
-                      {value as string}
-                    </span>
-                  </div>
-                )
-              )}
-            </div>
+            {Object.entries(importantData).length > 0 && (
+              <>
+                <SectionHeader
+                  icon={<PiUser size={24} />}
+                  title="Creator Detail"
+                  number={
+                    Object.entries(importantData).length > 0 ? count++ : count
+                  }
+                />
+                <div className="bg-[#FAFAFA] p-4 flex flex-col gap-3 items-center rounded-[20px] mb-6">
+                  {Object.entries(importantData).map(
+                    ([key, value], index: number) => (
+                      <div
+                        key={key}
+                        className={`${
+                          Object.entries(importantData).length == index + 1
+                            ? ""
+                            : "border-b pb-3"
+                        } flex items-center gap-3 justify-between border-[#E8E8E8]  w-full`}
+                      >
+                        <span className="text-[#595E64] text-sm font-medium capitalize">
+                          {key.replace(/_/g, " ")}
+                        </span>
+                        <span className="text-right text-sm font-semibold text-gray-900">
+                          {value as string}
+                        </span>
+                      </div>
+                    )
+                  )}
+                </div>
+              </>
+            )}
 
             {/* Segments section */}
 
@@ -2120,11 +2313,9 @@ const SimulationResultsContent: React.FC<SimulationResultsContentProps> = ({
                 <SectionHeader
                   icon={<PiLineSegments size={24} />}
                   title="Audience Segments"
-                  number={2}
+                  number={contentData.segment_ids ? count++ : count}
                 />
-                <div className="bg-green-50/30 p-3 rounded-lg border border-green-100">
-                  {formatValue("segment_ids", contentData.segment_ids)}
-                </div>
+                {formatValue("segment_ids", contentData.segment_ids)}
               </div>
             )}
 
@@ -2135,7 +2326,11 @@ const SimulationResultsContent: React.FC<SimulationResultsContentProps> = ({
                   <SectionHeader
                     icon={<BiFilterAlt size={24} />}
                     title="Applied Filters"
-                    number={3}
+                    number={
+                      Object.keys(contentData.persona_filters).length > 0
+                        ? count++
+                        : count
+                    }
                   />
                   <div className="">
                     {formatValue(
@@ -2173,7 +2368,7 @@ const SimulationResultsContent: React.FC<SimulationResultsContentProps> = ({
                 <SectionHeader
                   icon={<PiUsers size={24} />}
                   title={`User Profile (${simulation.personas.length})`}
-                  number={4}
+                  number={simulation.personas.length > 0 ? count++ : count}
                 />
                 {simulation?.personas && (
                   <div className="p-3 bg-white">
@@ -2271,7 +2466,7 @@ const SimulationResultsContent: React.FC<SimulationResultsContentProps> = ({
                 <SectionHeader
                   icon={<HelpCircle size={24} />}
                   title="Additional Information"
-                  number={5}
+                  number={count}
                 />
 
                 <div className="bg-[#FAFAFA] p-4 flex flex-col gap-3 items-center rounded-[20px] mb-6">
@@ -2368,7 +2563,7 @@ const SimulationResultsContent: React.FC<SimulationResultsContentProps> = ({
 
   // Add useEffect for background PDF generation
   useEffect(() => {
-    if (!loading && simulation) {
+    if (!loading && simulationId) {
       setPdfGenerating(true);
       setCachedPdfUrl(null);
       setTimeout(async () => {
@@ -2456,10 +2651,10 @@ const SimulationResultsContent: React.FC<SimulationResultsContentProps> = ({
       }
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [loading, simulationId, simulation]);
+  }, [loading, simulationId]);
 
   return (
-    <div className="bg-gray_light p-[30px] ">
+    <div className={`bg-gray_light p-[30px] pb-[60px]`}>
       <div className="flex items-center gap-[22px] pb-5 border-b border-[#E8E8E8]">
         {onBack && <BlackButton onClick={onBack}>Back</BlackButton>}
         <div className="flex items-center w-full justify-between gap-3 ">
@@ -2476,6 +2671,10 @@ const SimulationResultsContent: React.FC<SimulationResultsContentProps> = ({
               <div
                 ref={chatRef}
                 onClick={() => {
+                  if (loading) {
+                    toast.success("Please wait...");
+                    return;
+                  }
                   setActiveChatTab("chat");
                   setIsListCollapsed?.(true);
                   setIsChatCollapsed(false);
@@ -2631,7 +2830,7 @@ const SimulationResultsContent: React.FC<SimulationResultsContentProps> = ({
                             const data = await res.json();
                             if (!data.simulation_id)
                               throw new Error("No new simulation id returned");
-                            navigate(`/analysis/${data.simulation_id}`);
+                            window.location.href = `/analysis/${data.simulation_id}`;
                           } catch (err: any) {
                             setRerunError(
                               err?.message || "Failed to rerun simulation"

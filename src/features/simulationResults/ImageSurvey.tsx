@@ -102,7 +102,7 @@ function ImageSurvey({ data, contentData }: any) {
       {personas && (
         <div className="bg-white rounded-2xl w-full">
           <div
-            className="flex items-center justify-between  p-5 cursor-pointer"
+            className="flex items-center justify-between  p-5 cursor-pointer no-print"
             onClick={() => setDetailDropDown(!detailDropDown)}
           >
             <div className="flex items-center gap-[10px]">
@@ -121,7 +121,7 @@ function ImageSurvey({ data, contentData }: any) {
           </div>
           <div
             ref={contentRef}
-            className="smooth-dropdown "
+            className="smooth-dropdown no-print"
             style={{
               maxHeight: maxHeight,
               opacity: detailDropDown ? 1 : 0,
@@ -131,7 +131,7 @@ function ImageSurvey({ data, contentData }: any) {
               Detailed Persona Analysis
             </p>
             {/* Persona Choices */}
-            <GreenHeading text="Overall Analysis" />
+            {keyFindings && <GreenHeading text="Overall Analysis" />}
             <div className="px-5 mb-5">
               {keyFindings?.map((item: string, index: any) => {
                 return (
@@ -144,7 +144,7 @@ function ImageSurvey({ data, contentData }: any) {
                 );
               })}
             </div>
-            <GreenHeading text="Persona Choice Table" />
+            {personas && <GreenHeading text="Persona Choice Table" />}
             <div className="bg-white rounded-2xl p-5 overflow-x-auto w-full scrollbar-hide">
               <table className="w-full min-w-[1000px] table-auto">
                 <thead className="border-b border-[#E8E8E8]">
@@ -181,6 +181,74 @@ function ImageSurvey({ data, contentData }: any) {
                   ))}
                 </tbody>
               </table>
+            </div>
+          </div>
+          <div className="hidden pdf-print">
+            <h3
+              style={{
+                color: "#028B7E",
+                fontSize: "25px",
+                fontWeight: "600",
+              }}
+            >
+              Detailed Analysis
+            </h3>
+            <div className="">
+              <p className="text-xl font-semibold border-t border-[#E8E8E8] w-full mx-5 pt-5 mb-3 text-black ">
+                Detailed Persona Analysis
+              </p>
+              {/* Persona Choices */}
+              {keyFindings && <GreenHeading text="Overall Analysis" />}
+              <div className="px-5 mb-5">
+                {keyFindings?.map((item: string, index: any) => {
+                  return (
+                    <p
+                      key={index}
+                      className="text-xs text-[#595E64] py-1   break-words"
+                    >
+                      {item}
+                    </p>
+                  );
+                })}
+              </div>
+              {personas && <GreenHeading text="Persona Choice Table" />}
+              <div className="bg-white rounded-2xl p-5 overflow-x-auto w-full scrollbar-hide">
+                <table className="w-full min-w-[1000px] table-auto">
+                  <thead className="border-b border-[#E8E8E8]">
+                    <tr>
+                      {["#", "Name", "Image Choice", "Justification"].map(
+                        (h, i) => (
+                          <th
+                            key={i}
+                            className="text-left align-top text-sm font-medium text-black py-3 pr-5"
+                          >
+                            {h}
+                          </th>
+                        )
+                      )}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {personas.map((p: any, i: number) => (
+                      <tr key={i} className="border-b border-[#E8E8E8]">
+                        <td className="text-xs align-top font-medium text-black py-3 w-[50px] pr-[30px]">
+                          {i + 1 < 10 ? "0" : ""}
+                          {i + 1}
+                        </td>
+                        <td className="text-xs align-top text-primary2 font-medium py-3 w-[130px] pr-[30px]">
+                          {p.persona_name}
+                        </td>
+                        <td className="text-xs align-top text-primary2 font-medium py-3 w-[130px] pr-[30px]">
+                          Image {p.image_choice}
+                        </td>
+                        <td className="text-xs align-top text-[#595E64] py-3  max-w-[600px] break-words">
+                          {p.justification}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
         </div>
@@ -242,7 +310,9 @@ function ImageSurvey({ data, contentData }: any) {
               )}
               {popupDetail?.percentage && (
                 <div className="bg-gray_light p-[12px_16px] rounded-[20px]">
-                  <p className="text-xl font-medium text-black mb-3">Percentage</p>
+                  <p className="text-xl font-medium text-black mb-3">
+                    Percentage
+                  </p>
                   <p className="text-base font-semibold text-primary2">
                     {popupDetail?.percentage}%
                   </p>

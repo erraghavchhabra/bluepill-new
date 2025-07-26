@@ -1201,9 +1201,73 @@ const SegmentsSelector: React.FC<SegmentsSelectorProps> = ({
   const handleInfoLeave = () => {
     setShowInfoTooltip({ segmentId: null, x: 0, y: 0 });
   };
-
+  const PersonalInformations = [
+    {
+      key: "age",
+      label: "Age",
+      icon: <PiPersonArmsSpread size={20} />,
+      value: selectedPersona?.demographics?.age,
+    },
+    {
+      key: "gender",
+      label: "Gender",
+      icon: <PiGenderIntersex size={20} />,
+      value: selectedPersona?.demographics?.gender,
+    },
+    {
+      key: "location",
+      label: "Location",
+      icon: <LocationPrimeIcon />,
+      value: selectedPersona?.demographics?.location?.specific_location,
+    },
+    {
+      key: "income",
+      label: "Income",
+      icon: <IncomePrimeIcon />,
+      value: selectedPersona?.demographics?.income,
+    },
+    {
+      key: "education",
+      label: "Education",
+      icon: <EducationPrimeIcon />,
+      value: selectedPersona?.demographics?.education,
+    },
+  ].filter((field) => field.value);
+  const ConsumerDetails = [
+    {
+      key: "industry",
+      label: "Industry",
+      icon: <IndustryIcon size={20} />,
+      value: selectedPersona?.industry_l1,
+    },
+    {
+      key: "subIndustry",
+      label: "Sub-Industry",
+      icon: <IndustryIcon size={20} />,
+      value: selectedPersona?.sub_industry_l2,
+    },
+    {
+      key: "function",
+      label: "Function",
+      icon: <FunctionSquare size={20} />,
+      value: selectedPersona?.function,
+    },
+    {
+      key: "role",
+      label: "Role",
+      icon: <RollerCoaster size={20} />,
+      value: selectedPersona?.role,
+    },
+    // {
+    //   key: "children",
+    //   label: "Children",
+    //   icon: <PiBabyLight size={20} />,
+    //   value: selectedPersona.data?.children,
+    // },
+  ].filter((field) => field.value);
+  let count = 1;
   return (
-    <div className="w-full bg-gray_light rounded-tl-[30px] p-[30px] relative">
+    <div className="w-full bg-gray_light rounded-tl-[30px] p-[30px] relative pb-16">
       <div className="flex items-center gap-1 justify-between">
         <div>
           <h3 className="text-[28px] font-semibold text-black mb-3">
@@ -1428,13 +1492,12 @@ const SegmentsSelector: React.FC<SegmentsSelectorProps> = ({
                   )}{" "}
                   {/* Filter fields shown when selected */}
                   {selectedSegments.includes(segment.id) && (
-                    <div className="space-y-5 mt-4 animate-fadeIn flex-grow">
-                      {" "}
-                      <div className="border-t border-gray-200 pt-3 mb-3 flex justify-between items-center">
-                        <p className="text-xs text-gray-500 italic">
+                    <div className="rounded-2xl p-4 bg-white h-full  border-[1.5px] border-[#F5F5F5]">
+                      <div className="  flex justify-between gap-3 items-center">
+                        <p className="text-xs font-medium text-black ">
                           Select filters to apply to this segment:
                         </p>
-                        <div className="flex gap-3">
+                        <div className="flex gap-5 items-center">
                           <button
                             onClick={(e) => {
                               e.stopPropagation();
@@ -1463,7 +1526,7 @@ const SegmentsSelector: React.FC<SegmentsSelectorProps> = ({
                                 onEditStep();
                               }
                             }}
-                            className="text-xs text-gray-500 hover:text-gray-700 hover:underline"
+                            className="text-xs font-medium text-[#A3AAB3] hover:text-gray-700 hover:underline"
                           >
                             Clear
                           </button>
@@ -1502,7 +1565,7 @@ const SegmentsSelector: React.FC<SegmentsSelectorProps> = ({
                                 }
                               }
                             }}
-                            className="text-xs text-blue-600 hover:text-blue-800 hover:underline"
+                            className="text-xs text-[#028B7E] font-medium hover:underline"
                           >
                             Select All
                           </button>
@@ -1939,124 +2002,70 @@ const SegmentsSelector: React.FC<SegmentsSelectorProps> = ({
                             {/* Main Info Sections Grid */}
                             <div className="grid md:grid-cols-2 gap-x-[25px] gap-y-5">
                               {/* Personal Info Section */}
-                              <div className="">
-                                {/* <h4 className="font-medium text-blue-800 mb-4 flex items-center">
+                              {PersonalInformations?.length > 0 && (
+                                <div
+                                  className={
+                                    ConsumerDetails?.length > 0
+                                      ? ""
+                                      : "col-span-2"
+                                  }
+                                >
+                                  {/* <h4 className="font-medium text-blue-800 mb-4 flex items-center">
                                       <User className="w-4 h-4 mr-2" />
                                       Personal Information
                                     </h4> */}
-                                <SectionHeader
-                                  icon={<PiUser size={24} />}
-                                  title="Personal Information"
-                                  number={1}
-                                />
-                                <div className="p-4 border-2 border-[#ECECEC] bg-gradient-to-b from-[#E6FCFA] to-[#FEFEFE] rounded-2xl drop-shadow-md">
-                                  <div className="flex flex-col gap-4">
-                                    {[
-                                      {
-                                        key: "age",
-                                        label: "Age",
-                                        icon: <PiPersonArmsSpread size={20} />,
-                                        value:
-                                          selectedPersona?.demographics?.age,
-                                      },
-                                      {
-                                        key: "gender",
-                                        label: "Gender",
-                                        icon: <PiGenderIntersex size={20} />,
-                                        value:
-                                          selectedPersona?.demographics?.gender,
-                                      },
-                                      {
-                                        key: "location",
-                                        label: "Location",
-                                        icon: <LocationPrimeIcon />,
-                                        value:
-                                          selectedPersona?.demographics
-                                            ?.location?.specific_location,
-                                      },
-                                      {
-                                        key: "income",
-                                        label: "Income",
-                                        icon: <IncomePrimeIcon />,
-                                        value:
-                                          selectedPersona?.demographics?.income,
-                                      },
-                                      {
-                                        key: "education",
-                                        label: "Education",
-                                        icon: <EducationPrimeIcon />,
-                                        value:
-                                          selectedPersona?.demographics
-                                            ?.education,
-                                      },
-                                    ]
-                                      .filter((field) => field.value)
-                                      .map((field: any, index: number) => (
-                                        <div
-                                          key={index}
-                                          className="flex items-start gap-3"
-                                        >
-                                          <div className="text-primary2 pr-3 border-r border-[#DBDDE0]">
-                                            {field.icon}
+                                  <SectionHeader
+                                    icon={<PiUser size={24} />}
+                                    title="Personal Information"
+                                    number={
+                                      PersonalInformations?.length > 0
+                                        ? count++
+                                        : count
+                                    }
+                                  />
+                                  <div className="p-4 border-2 border-[#ECECEC] bg-gradient-to-b from-[#E6FCFA] to-[#FEFEFE] rounded-2xl drop-shadow-md">
+                                    <div className="flex flex-col gap-4">
+                                      {PersonalInformations?.map(
+                                        (field: any, index: number) => (
+                                          <div
+                                            key={index}
+                                            className="flex items-start gap-3"
+                                          >
+                                            <div className="text-primary2 pr-3 border-r border-[#DBDDE0]">
+                                              {field.icon}
+                                            </div>
+                                            <div className="flex items-start justify-between w-full gap-1">
+                                              <h3 className="text-black font-medium text-sm ">
+                                                {field.label}
+                                              </h3>
+                                              <span className="text-primary2 font-semibold text-xs text-right ">
+                                                {field.value}
+                                              </span>
+                                            </div>
                                           </div>
-                                          <div className="flex items-start justify-between w-full gap-1">
-                                            <h3 className="text-black font-medium text-sm ">
-                                              {field.label}
-                                            </h3>
-                                            <span className="text-primary2 font-semibold text-xs text-right ">
-                                              {field.value}
-                                            </span>
-                                          </div>
-                                        </div>
-                                      ))}
+                                        )
+                                      )}
+                                    </div>
                                   </div>
                                 </div>
-                              </div>
+                              )}
 
                               {/* Professional Info Section - Adjust fields for B2C personas */}
-                              <div className="">
-                                <SectionHeader
-                                  icon={<BuildingIcon />}
-                                  title="Consumer Details"
-                                  number={2}
-                                  titleColor="#4F46E5"
-                                />
-                                <div className="p-4 border-2 border-[#ECECEC] bg-gradient-to-b from-[#E0E7FF] to-[#FEFEFE] rounded-2xl drop-shadow-md">
-                                  <div className="flex flex-col gap-4">
-                                    {[
-                                      {
-                                        key: "industry",
-                                        label: "Industry",
-                                        icon: <IndustryIcon size={20} />,
-                                        value: selectedPersona?.industry_l1,
-                                      },
-                                      {
-                                        key: "subIndustry",
-                                        label: "Sub-Industry",
-                                        icon: <IndustryIcon size={20} />,
-                                        value: selectedPersona?.sub_industry_l2,
-                                      },
-                                      {
-                                        key: "function",
-                                        label: "Function",
-                                        icon: <FunctionSquare size={20} />,
-                                        value: selectedPersona?.function,
-                                      },
-                                      {
-                                        key: "role",
-                                        label: "Role",
-                                        icon: <RollerCoaster size={20} />,
-                                        value: selectedPersona?.role,
-                                      },
-                                      // {
-                                      //   key: "children",
-                                      //   label: "Children",
-                                      //   icon: <PiBabyLight size={20} />,
-                                      //   value: selectedPersona.data?.children,
-                                      // },
-                                    ]
-                                      .filter((field) => field.value)
-                                      .map((field, index) => (
+                              {ConsumerDetails?.length > 0 && (
+                                <div className="">
+                                  <SectionHeader
+                                    icon={<BuildingIcon />}
+                                    title="Consumer Details"
+                                    number={
+                                      ConsumerDetails?.length > 0
+                                        ? count++
+                                        : count
+                                    }
+                                    titleColor="#4F46E5"
+                                  />
+                                  <div className="p-4 border-2 border-[#ECECEC] bg-gradient-to-b from-[#E0E7FF] to-[#FEFEFE] rounded-2xl drop-shadow-md">
+                                    <div className="flex flex-col gap-4">
+                                      {ConsumerDetails?.map((field, index) => (
                                         <div
                                           key={index}
                                           className="flex items-start gap-3"
@@ -2074,9 +2083,10 @@ const SegmentsSelector: React.FC<SegmentsSelectorProps> = ({
                                           </div>
                                         </div>
                                       ))}
+                                    </div>
                                   </div>
                                 </div>
-                              </div>
+                              )}
 
                               {selectedPersona.goals &&
                                 selectedPersona.goals.length > 0 && (
@@ -2084,7 +2094,11 @@ const SegmentsSelector: React.FC<SegmentsSelectorProps> = ({
                                     <SectionHeader
                                       icon={<GoalPrimeIcon />}
                                       title="Goals"
-                                      number={3}
+                                      number={
+                                        selectedPersona.goals.length > 0
+                                          ? count++
+                                          : count
+                                      }
                                     />
                                     <div className="p-4 border-2 border-[#ECECEC] bg-gradient-to-b from-[#D1FAE5] to-[#FEFEFE] rounded-2xl drop-shadow-md">
                                       <div className="flex flex-col gap-4">
@@ -2116,7 +2130,11 @@ const SegmentsSelector: React.FC<SegmentsSelectorProps> = ({
                                     <SectionHeader
                                       icon={<BehaviorsIcon />}
                                       title="Behaviors"
-                                      number={4}
+                                      number={
+                                        selectedPersona?.behaviors?.length > 0
+                                          ? count++
+                                          : count
+                                      }
                                       titleColor="#E9BC3B"
                                     />
                                     <div className="p-4 border-2 border-[#ECECEC] bg-gradient-to-b from-[#FFF7E0CC] to-[#FEFEFE] rounded-2xl drop-shadow-md">
@@ -2149,7 +2167,11 @@ const SegmentsSelector: React.FC<SegmentsSelectorProps> = ({
                                     <SectionHeader
                                       icon={<InterestsIcon />}
                                       title="Interests"
-                                      number={5}
+                                      number={
+                                        selectedPersona?.interests?.length > 0
+                                          ? count++
+                                          : count
+                                      }
                                       titleColor="#8B47C8"
                                     />
                                     <div className="p-4 border-2 border-[#ECECEC] bg-gradient-to-b from-[#EEDBFFCC] to-[#FEFEFE] rounded-2xl drop-shadow-md">
@@ -2183,7 +2205,12 @@ const SegmentsSelector: React.FC<SegmentsSelectorProps> = ({
                                     <SectionHeader
                                       icon={<PreferredChannelsIcon />}
                                       title="Preferred Channels"
-                                      number={6}
+                                      number={
+                                        selectedPersona?.preferred_channels
+                                          ?.length > 0
+                                          ? count++
+                                          : count
+                                      }
                                     />
                                     <div className="p-4 border-2 border-[#ECECEC] bg-gradient-to-b from-[#E6FCFA] to-[#FEFEFE] rounded-2xl drop-shadow-md">
                                       <div className="flex flex-col gap-4">
@@ -2216,7 +2243,11 @@ const SegmentsSelector: React.FC<SegmentsSelectorProps> = ({
                                     <SectionHeader
                                       icon={<PainPointsIcon />}
                                       title="Pain Points"
-                                      number={7}
+                                      number={
+                                        selectedPersona?.pain_points?.length > 0
+                                          ? count++
+                                          : count
+                                      }
                                       titleColor="#C84747"
                                     />
                                     <div className="p-4 border-2 border-[#ECECEC] bg-gradient-to-b from-[#FFD8D880] to-[#FEFEFE] rounded-2xl drop-shadow-md">
@@ -2250,7 +2281,11 @@ const SegmentsSelector: React.FC<SegmentsSelectorProps> = ({
                                         <Shield size={24} color="#028B7E" />
                                       }
                                       title="Values"
-                                      number={7}
+                                      number={
+                                        selectedPersona?.values?.length > 0
+                                          ? count++
+                                          : count
+                                      }
                                       titleColor="#028B7E"
                                     />
                                     <div className="p-4 border-2 border-[#ECECEC] bg-gradient-to-b from-[#E6FCFA] to-[#FEFEFE] rounded-2xl drop-shadow-md">
@@ -2398,7 +2433,8 @@ const SegmentsSelector: React.FC<SegmentsSelectorProps> = ({
                                   )}
                                 </div>
                                 <div className="grid grid-cols-2 gap-5 items-center mt-5">
-                                  {selectedPersona?.demographics?.life_stage && (
+                                  {selectedPersona?.demographics
+                                    ?.life_stage && (
                                     <div className="p-4 border-2 border-[#ECECEC] bg-gradient-to-b from-[#E6FCFA] to-[#FEFEFE] rounded-2xl drop-shadow-md">
                                       <div className="flex items-start gap-3">
                                         <div className="text-primary2 pr-3 border-r border-[#DBDDE0]">

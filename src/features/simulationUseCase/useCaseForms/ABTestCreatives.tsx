@@ -259,7 +259,7 @@ const ABTestCreativesForm: React.FC<ABTestCreativesProps> = ({
   }
 
   return (
-    <div className="w-full bg-gray_light rounded-tl-[30px] p-[30px] relative h-[87vh]">
+    <div className="w-full bg-gray_light rounded-tl-[30px] p-[30px] relative pb-16 h-[87vh]">
       <div>
         <h3 className="text-[28px] font-semibold text-black mb-3">
           A/B Test Creatives, Ads
@@ -370,7 +370,7 @@ const ABTestCreativesForm: React.FC<ABTestCreativesProps> = ({
           </div>
         )}
       </div>
-      <div className="flex justify-between items-center mt-[100px] ">
+      <div className="flex justify-between items-center mt-10 ">
         <BlackButton onClick={onBack}>Back</BlackButton>
 
         <PrimaryButton

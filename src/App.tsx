@@ -457,7 +457,7 @@ const AppContent: React.FC = () => {
         return (
           <div
             className="w-full"
-            style={{ height: "90vh", overflow: "hidden" }}
+            style={{  overflow: "hidden" }}
           >
             {currentSimulationId ? (
               <div className="h-full flex flex-col">

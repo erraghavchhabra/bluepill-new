@@ -19,6 +19,7 @@ import { HiOutlineChevronDoubleLeft } from "react-icons/hi";
 import Header from "@/components/Header";
 import { format } from "date-fns";
 import { SearchIcon } from "@/icons/SimulationIcons";
+import Footer from "@/components/Footer";
 
 const API_URL = import.meta.env.VITE_API_URL || "";
 
@@ -150,7 +151,7 @@ const AnalysisPage: React.FC = () => {
   );
 
   const renderSimulationsList = () => (
-    <div className="flex flex-col h-full px-[30px] pt-0 overflow-hidden">
+    <div className="flex flex-col h-full  pt-0 overflow-hidden">
       {/* This container holds all content that will slide out */}
       <div
         className={`transition-all duration-500 ease-in-out flex flex-col h-full  w-full ${
@@ -332,21 +333,21 @@ const AnalysisPage: React.FC = () => {
             </div>
           )}
 
-          <div className="flex flex-row items-start h-[calc(100vh)]">
+          <div className="flex flex-row items-start h-[calc(100vh)] pl-[30px]">
             <div
-              className="relative h-full transition-[width] duration-700 ease-in-out flex-shrink-0"
-              style={{
-                width: isListCollapsed ? "5.5rem" : "26%",
-                minWidth: isListCollapsed ? "5.5rem" : "26%", // Prevent layout jump
-                maxWidth: isListCollapsed ? "5.5rem" : "26%", // Optional: Force consistency
-              }}
+              className={`relative h-full transition-all duration-500  origin-left ease-[cubic-bezier(0.25,0.8,0.25,1)] transform w-full flex-shrink-0 ${
+                isListCollapsed
+                  ? "min-w-[0%] max-w-[0%] scale-x-0 opacity-50"
+                  : "min-w-[26%] max-w-[26%] scale-x-100 opacity-100"
+              }`}
             >
               <div
                 className={`
-                  h-full  overflow-hidden 
-                  transition-all duration-700 ease-in-out 
-                  ${isListCollapsed ? "bg-transparent shadow-none" : "bg-white"}
-                `}
+                      h-full overflow-hidden transition-all duration-500 ease-[cubic-bezier(0.25,0.8,0.25,1)]
+                      transform origin-left
+                      ${isListCollapsed ? "scale-x-0 opacity-0" : "scale-x-100 opacity-100"}
+                      ${isListCollapsed ? "bg-transparent " : "bg-white "}
+                    `}
               >
                 {loading && !urlSimId
                   ? renderLoadingAnimation()
@@ -354,8 +355,18 @@ const AnalysisPage: React.FC = () => {
               </div>
             </div>
 
-            <div className="relative w-full h-full  max-w-[74%]">
-              <div className="absolute top-7 left-[-58px] z-10">
+            <div
+              className={`relative w-full h-full transition-all duration-500 ease-[cubic-bezier(0.25,0.8,0.25,1)]   ${
+                isListCollapsed
+                  ? "max-w-full pl-[5.5rem]"
+                  : "max-w-[74%] pl-[30px]"
+              }`}
+            >
+              <div
+                className={`absolute top-7 ${
+                  isListCollapsed ? "left-[13px]" : "left-[-30px]"
+                } z-10 transition-all duration-500 ease-[cubic-bezier(0.25,0.8,0.25,1)]`}
+              >
                 <button
                   className=""
                   onClick={() => setIsListCollapsed((prev) => !prev)}
@@ -388,6 +399,7 @@ const AnalysisPage: React.FC = () => {
           </div>
         </div>
       </main>
+      <Footer />
     </div>
   );
 };

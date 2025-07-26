@@ -121,7 +121,7 @@ const TableView: React.FC<TableViewProps> = ({
         </div>
       </div>
       <div className="hidden pdf-print">
-        <table className="min-w-full divide-y divide-gray-200">
+        <table className=" divide-y divide-gray-200">
           {pdfMode ? (
             <tbody className="bg-white divide-y divide-gray-200">
               {/* Render header as first row */}

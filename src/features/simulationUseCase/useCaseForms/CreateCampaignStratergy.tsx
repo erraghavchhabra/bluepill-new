@@ -205,7 +205,7 @@ const CreateCampaignStratergy: React.FC<InsightsFormProps> = ({
   };
 
   return (
-    <div className="w-full bg-gray_light rounded-tl-[30px] p-[30px] relative">
+    <div className="w-full bg-gray_light rounded-tl-[30px] p-[30px] relative pb-16">
       <div>
         <h3 className="text-[28px] font-semibold text-black mb-3">
           Create Campaign Concepts

@@ -400,18 +400,18 @@ const ChatUI: React.FC<ChatUIProps> = ({ personaIds, onBlack }) => {
             <h3 className="text-lg font-semibold text-black">Personas</h3>
             <button
               className="text-primary2 text-xs font-medium flex items-center gap-2"
-              disabled={visiblePersonas.length === 0}
+              disabled={personas.length === 0}
               onClick={() => {
-                if (selectedPersonaIds.length === visiblePersonas.length) {
+                if (selectedPersonaIds.length === personas.length) {
                   setSelectedPersonaIds([]);
                 } else {
-                  setSelectedPersonaIds(visiblePersonas.map((p) => p.id));
+                  setSelectedPersonaIds(personas.map((p) => p.id));
                 }
               }}
             >
               <SelectAllIcon />
-              {selectedPersonaIds.length === visiblePersonas.length &&
-              visiblePersonas.length > 0
+              {selectedPersonaIds.length === personas.length &&
+              personas.length > 0
                 ? "Deselect All"
                 : "Select All"}
             </button>
@@ -717,8 +717,8 @@ const ChatUI: React.FC<ChatUIProps> = ({ personaIds, onBlack }) => {
                 <div className="flex-1 overflow-hidden flex flex-col h-[100vh]">
                   <div className="overflow-y-auto bg-white h-full custom-scrollbar pr-[15px]">
                     {selectedPersona ? (
-                      <div className="overflow-hidden animate-fadeIn w-full">
-                        <div className="flex items-center justify-between mb-10">
+                      <div className=" relative animate-fadeIn w-full">
+                        <div className="flex items-center justify-between pb-5 sticky top-0 left-0 bg-white z-50">
                           <div className="flex items-start flex-col gap-2">
                             <h3 className="text-2xl font-semibold text-primary2">
                               Bone Broth Buyers
@@ -736,7 +736,7 @@ const ChatUI: React.FC<ChatUIProps> = ({ personaIds, onBlack }) => {
                           </button>
                         </div>
                         {/* Persona Header */}
-                        <div className="bg-gradient-to-b rounded-2xl drop-shadow-md from-[#E6FCFA] mb-5 to-[#FEFEFE] px-5 py-3 border-[#ECECEC] border-2  justify-between   flex items-center gap-[10px]">
+                        <div className="bg-gradient-to-b rounded-2xl drop-shadow-md from-[#E6FCFA] mt-5 mb-5 to-[#FEFEFE] px-5 py-3 border-[#ECECEC] border-2  justify-between   flex items-center gap-[10px]">
                           <div className="flex items-center gap-[10px]">
                             <div
                               className={`p-3 relative rounded-full transition-all duration-200 h-[50px] w-[50px] bg-primary `}
