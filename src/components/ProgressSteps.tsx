@@ -44,16 +44,21 @@ const ProgressSteps: React.FC<ProgressStepsProps> = ({ steps }) => {
             <div
               key={idx}
               className={`
-                text-sm font-semibold flex items-center rounded-xl gap-[10px] p-3 pl-5 border-l-4
+                text-sm font-semibold flex items-center rounded-xl gap-[10px]  p-3 pl-5 border-l-4
                      
                       ${
                         step.completed
-                          ? "text-primary2 bg-[#E6FCFA] border-transparent cursor-pointer"
+                          ? "text-primary2 bg-[#E6FCFA]   cursor-pointer"
                           : step.current
                           ? "text-primary2 bg-[#E6FCFA] border-primary2"
                           : idx <= currentStepIndex
                           ? "text-black"
-                          : "text-[#595E64] border-transparent bg-[#FAFAFA]"
+                          : "text-[#595E64]   bg-[#FAFAFA]"
+                      }
+                      ${
+                        idx == currentStepIndex
+                          ? "border-primary2"
+                          : "border-transparent"
                       }
                       
                     `}

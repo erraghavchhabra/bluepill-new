@@ -604,7 +604,6 @@ const SegmentsSelectorKettleAndFire: React.FC<SegmentsSelectorProps> = ({
     if (!personaFilters[segmentId]) return false;
     return personaFilters[segmentId][filterType]?.includes(value) || false;
   };
-  console.log(1555541, personaFilters);
 
   // Helper function to determine if any filters are selected for a segment
   const hasAnyFilters = (segmentId: number): boolean => {

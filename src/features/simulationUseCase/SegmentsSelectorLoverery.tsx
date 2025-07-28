@@ -282,7 +282,6 @@ const SegmentsSelectorLoverery: React.FC<SegmentsSelectorProps> = ({
   const [selectedPersona, setSelectedPersona] = useState<PersonaType | null>(
     null
   );
-  console.log(626615151 , selectedPersona);
   
 
   const [expandedRoles, setExpandedRoles] = useState<Record<string, boolean>>(

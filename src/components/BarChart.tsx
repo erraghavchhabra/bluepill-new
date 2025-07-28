@@ -80,6 +80,7 @@ const CustomBarShape = ({ x, y, width, height, fill }: any) => {
 const BarChart: React.FC<BarChartProps> = ({ data, xAxis, yAxis, title }) => {
   const chartRef = useRef<HTMLDivElement>(null);
   const [copied, setCopied] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const processedData = useMemo(() => {
     return data.map((item) => {
@@ -106,6 +107,7 @@ const BarChart: React.FC<BarChartProps> = ({ data, xAxis, yAxis, title }) => {
 
   const handleDownload = async () => {
     if (chartRef.current) {
+      setLoading(true);
       const canvas = await html2canvas(chartRef.current, {
         backgroundColor: "#fff",
         scale: 2,
@@ -114,11 +116,13 @@ const BarChart: React.FC<BarChartProps> = ({ data, xAxis, yAxis, title }) => {
       link.download = "chart.png";
       link.href = canvas.toDataURL("image/png");
       link.click();
+      setLoading(false);
     }
   };
 
   const handleCopy = async () => {
     if (chartRef.current) {
+      setLoading(true);
       const canvas = await html2canvas(chartRef.current, {
         backgroundColor: "#fff",
         scale: 2,
@@ -132,6 +136,7 @@ const BarChart: React.FC<BarChartProps> = ({ data, xAxis, yAxis, title }) => {
           setTimeout(() => setCopied(false), 1000);
         }
       });
+      setLoading(false);
     }
   };
 
@@ -142,16 +147,18 @@ const BarChart: React.FC<BarChartProps> = ({ data, xAxis, yAxis, title }) => {
           <h2 className="text-xl font-semibold text-primary2">{title}</h2>
         )}
         <div className="flex gap-2 no-print">
-          <TooltipBox text="Download">
+          <TooltipBox text="Download" disabled={loading}>
             <button
+              disabled={loading}
               onClick={handleDownload}
               className="rounded-full bg-gray_light p-2 hover:bg-[#E6FCFA] transition-all"
             >
               <PiDownload size={20} />
             </button>
           </TooltipBox>
-          <TooltipBox text="Copy">
+          <TooltipBox text="Copy" disabled={loading}>
             <button
+              disabled={loading}
               onClick={handleCopy}
               className="rounded-full bg-gray_light p-2 hover:bg-[#E6FCFA] transition-all"
             >
