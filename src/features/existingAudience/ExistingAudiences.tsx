@@ -143,7 +143,7 @@ const ExistingAudiences: React.FC<ExistingAudiencesProps> = ({
       <h3 className="text-[28px] font-semibold text-black mb-3">
         Select an Existing Audience
       </h3>
-      <p className="text-xs font-normal text-[#595E64]">
+      <p className="text-[14px] font-normal text-[#595E64]">
         Choose from your saved audiences to run a simulation
       </p>
       {loading && (
@@ -189,29 +189,34 @@ const ExistingAudiences: React.FC<ExistingAudiencesProps> = ({
             </div>
             <div className="rounded-2xl p-4 bg-white h-full border-[1.5px] border-[#F5F5F5]">
               <div className="grid grid-cols-3  gap-3 mb-5 ">
-                <div className="p-2 flex  items-start justify-start gap-[10px] rounded-[10px] bg-gradient-to-b from-[#E6FCFA] to-[#FEFEFE] border-2 border-[#ECECEC] shadow-xl">
+                <div className="cht-card">
+                  <div className="p-2 flex cht-inn items-start justify-start gap-[10px] rounded-[10px] bg-gradient-to-b from-[#E6FCFA] to-[#FEFEFE]">
                   <UserICon />
                   <div className="">
                     <p className="text-[#61666E] font-normal text-xs  mb-[6px]">
                       Total Profiles
                     </p>
-                    <h3 className="text-sm font-semibold text-black">
+                    <h3 className="text-sm font-semibold text-black line-clamp-1">
                       {audience.total_personas || audience.len * 5 || "N/A"}
                     </h3>
                   </div>
                 </div>
-                <div className="p-2 rounded-[10px] border-2 border-[#ECECEC] shadow-xl flex items-start justify-start gap-[10px] bg-gradient-to-b from-[#E0E7FF] to-[#FEFEFE]">
+                </div>
+                <div className="cht-card">
+                <div className="p-2 cht-inn rounded-[10px]  flex items-start justify-start gap-[10px] bg-gradient-to-b from-[#E0E7FF] to-[#FEFEFE]">
                   <SegmentIcon />
                   <div className="">
                     <p className="text-[#61666E] mb-[6px] font-normal text-xs ">
                       Segments
                     </p>
                     <h3 className="text-sm font-semibold text-black">
-                      <p className="text-lg font-medium">{audience.len}</p>
+                      <p className="text-sm font-semibold text-black line-clamp-1">{audience.len}</p>
                     </h3>
                   </div>
                 </div>
-                <div className="p-2 rounded-[10px] border-2 border-[#ECECEC] shadow-xl flex items-start justify-start gap-[10px] bg-gradient-to-b from-[#D1FAE5] to-[#FEFEFE]">
+                </div>
+                <div className="cht-card">
+                <div className="p-2 cht-inn rounded-[10px]  flex items-start justify-start gap-[10px] bg-gradient-to-b from-[#D1FAE5] to-[#FEFEFE]">
                   <IndustryIcon />
                   <div className="">
                     <p className="text-[#61666E] font-normal text-xs mb-[6px]">
@@ -293,6 +298,7 @@ const ExistingAudiences: React.FC<ExistingAudiencesProps> = ({
                         : audience.industry?.replace(/_/g, " ")}
                     </h3>
                   </div>
+                </div>
                 </div>
               </div>
               {audience.segments ? (

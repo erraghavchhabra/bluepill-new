@@ -1155,7 +1155,7 @@ const SimulationResultsContent: React.FC<SimulationResultsContentProps> = ({
     };
 
     return (
-      <div className="mt-6 space-y-6 mb-3">
+      <div className="mt-6  space-y-6 mb-3">
         {tables.map((table: TableData, index: number) => {
           // Only convert data to numbers for chart types that need it
           const formattedData =
@@ -1166,10 +1166,10 @@ const SimulationResultsContent: React.FC<SimulationResultsContentProps> = ({
           return (
             <div
               key={index}
-              className="bg-white m-3 rounded-lg border border-gray-200 shadow-sm overflow-hidden"
+              className="bg-white  rounded-lg overflow-hidden"
             >
               {table.type === "horizontal_chart" && table.messages && (
-                <div className="p-4">
+                <div className="">
                   <HorizontalBarChart
                     data={table.messages.map((msg) => ({
                       name: msg.text,
@@ -1184,7 +1184,7 @@ const SimulationResultsContent: React.FC<SimulationResultsContentProps> = ({
                 table.data &&
                 table.xAxis &&
                 table.yAxis && (
-                  <div className="px-4 py-1 mb-10">
+                  <div className=" mb-10">
                     <div className="h-96 mb-16">
                       <BarChartComponent
                         data={formattedData}
@@ -1577,10 +1577,10 @@ const SimulationResultsContent: React.FC<SimulationResultsContentProps> = ({
               />
             )}
           {typeof innerParsedResponse?.allData?.output == "string" && (
-            <div className="bg-white rounded-2xl overflow-hidden">
+            <div className="bg-gray_light rounded-2xl overflow-hidden">
               <div className="ms-content">
                 {/* {abTestSection} */}
-                <div className="prose prose-blue max-w-none p-4 markdown-body ">
+                <div className="prose prose-blue max-w-none bg-gray_light  ">
                   {/* Only render non-table charts if present */}
                   {innerParsedResponse.tables &&
                     innerParsedResponse.tables.length > 0 &&
@@ -1593,6 +1593,8 @@ const SimulationResultsContent: React.FC<SimulationResultsContentProps> = ({
                       )
                     )}
 
+                    <div className="bg-white p-4 rounded-xl markdown-body">
+
                   <ReactMarkdown
                     remarkPlugins={[[remarkGfm, { stringLength: stringWidth }]]}
                     rehypePlugins={[rehypeRaw]}
@@ -1603,6 +1605,7 @@ const SimulationResultsContent: React.FC<SimulationResultsContentProps> = ({
                   >
                     {innerParsedResponse.output}
                   </ReactMarkdown>
+                    </div>
 
                   {/* Only render table type tables if present */}
                   {innerParsedResponse.tables &&
@@ -2654,7 +2657,7 @@ const SimulationResultsContent: React.FC<SimulationResultsContentProps> = ({
   }, [loading, simulationId]);
 
   return (
-    <div className={`bg-gray_light p-[30px] pb-[60px]`}>
+    <div className={`bg-gray_light p-[25px] pt-[30px] pb-[60px]`}>
       <div className="flex items-center gap-[22px] pb-5 border-b border-[#E8E8E8]">
         {onBack && <BlackButton onClick={onBack}>Back</BlackButton>}
         <div className="flex items-center w-full justify-between gap-3 ">

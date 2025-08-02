@@ -201,29 +201,31 @@ const HabitsDataContent = ({
   fromColor = "#E6FCFA",
 }: any) => {
   return (
-    <div
-      className={`p-4 border-2 h-full border-[#ECECEC] bg-gradient-to-b from-[${fromColor}] to-[#FEFEFE] rounded-2xl drop-shadow-md`}
-    >
-      <div className="flex items-start gap-3">
-        <div className="text-primary2 pr-3 border-r border-[#DBDDE0]">
-          {icon}
+    <div className="side-card-shadow">
+      <div
+        className={`p-4 h-full  bg-gradient-to-b from-[${fromColor}] to-[#FEFEFE] rounded-2xl drop-shadow-md`}
+      >
+        <div className="flex items-start gap-3">
+          <div className="text-primary2 pr-3 border-r border-[#DBDDE0]">
+            {icon}
+          </div>
+          <div className="flex items-start flex-col justify-between w-full gap-2">
+            <h3 className="text-black text-start font-medium text-sm ">
+              {title}
+            </h3>
+          </div>
         </div>
-        <div className="flex items-start flex-col justify-between w-full gap-2">
-          <h3 className="text-black text-start font-medium text-sm ">
-            {title}
-          </h3>
-        </div>
+        <ul className="list-disc pl-[34px] mt-[6px] mb-4">
+          {data.map((point: any, idx: number) => (
+            <li
+              key={idx}
+              className="text-[#595E64] text-[12px] leading-[23px] font-normal"
+            >
+              {point}
+            </li>
+          ))}
+        </ul>
       </div>
-      <ul className="list-disc pl-[34px] mt-[6px] mb-4">
-        {data.map((point: any, idx: number) => (
-          <li
-            key={idx}
-            className="text-[#595E64] text-[12px] leading-[23px] font-normal"
-          >
-            {point}
-          </li>
-        ))}
-      </ul>
     </div>
   );
 };
@@ -232,7 +234,7 @@ const ChatUI: React.FC<ChatUIProps> = ({ personaIds, onBlack }) => {
   const [selectedPersonaIds, setSelectedPersonaIds] = useState<number[]>([]);
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [showDetailsId, setShowDetailsId] = useState<number | null>(null);
 
   const [isPersonaModalOpen, setIsPersonaModalOpen] = useState(false);
@@ -246,6 +248,7 @@ const ChatUI: React.FC<ChatUIProps> = ({ personaIds, onBlack }) => {
   const chatContainerRef = useRef<HTMLDivElement>(null);
   const [showAll, setShowAll] = useState(false);
   const visiblePersonas = showAll ? personas : personas.slice(0, 5);
+
   // Progressive persona loading
   useEffect(() => {
     setPersonas([]);
@@ -255,6 +258,7 @@ const ChatUI: React.FC<ChatUIProps> = ({ personaIds, onBlack }) => {
 
     if (personaIds.length === 0) {
       setLoading(false);
+
       setLoadingPersonasCount(0);
       return;
     }
@@ -273,6 +277,7 @@ const ChatUI: React.FC<ChatUIProps> = ({ personaIds, onBlack }) => {
             });
             setLoadingPersonasCount((count) => count - 1);
           }
+          setLoading(false);
         })
         .catch(() => {
           if (!isCancelled) {
@@ -282,10 +287,9 @@ const ChatUI: React.FC<ChatUIProps> = ({ personaIds, onBlack }) => {
             });
             setLoadingPersonasCount((count) => count - 1);
           }
+          setLoading(false);
         });
     });
-
-    setLoading(false);
 
     return () => {
       isCancelled = true;
@@ -390,7 +394,71 @@ const ChatUI: React.FC<ChatUIProps> = ({ personaIds, onBlack }) => {
       setSending(false);
     }
   };
-
+  const PersonalInformationData = [
+    {
+      key: "age",
+      label: "Age",
+      icon: <PiPersonArmsSpread size={20} />,
+      value: selectedPersona?.age,
+    },
+    {
+      key: "gender",
+      label: "Gender",
+      icon: <PiGenderIntersex size={20} />,
+      value: selectedPersona?.gender,
+    },
+    {
+      key: "location",
+      label: "Location",
+      icon: <LocationPrimeIcon />,
+      value: selectedPersona?.location,
+    },
+    {
+      key: "income",
+      label: "Income",
+      icon: <IncomePrimeIcon />,
+      value: selectedPersona?.income,
+    },
+    {
+      key: "education",
+      label: "Education",
+      icon: <EducationPrimeIcon />,
+      value: selectedPersona?.education,
+    },
+  ].filter((field) => field.value);
+  const ConsumerDetailsData = [
+    {
+      key: "age_group",
+      label: "Age Group",
+      icon: <PiPersonArmsSpread size={20} />,
+      value: selectedPersona?.data?.age_group,
+    },
+    {
+      key: "household_income",
+      label: "Income Range",
+      icon: <PiUsersLight />,
+      value: selectedPersona?.data?.household_income,
+    },
+    {
+      key: "geo_location",
+      label: "Location Type",
+      icon: <LocationIcon />,
+      value: selectedPersona?.data?.geo_location,
+    },
+    {
+      key: "pets",
+      label: "Pets",
+      icon: <PetsIcon />,
+      value: selectedPersona?.data?.pets,
+    },
+    {
+      key: "children",
+      label: "Children",
+      icon: <PiBabyLight size={20} />,
+      value: selectedPersona?.data?.children,
+    },
+  ].filter((field) => field.value);
+  let count = 1;
   return (
     <div className="flex h-[500px] items-center gap-[30px]  ">
       {/* Sidebar for persona selection */}
@@ -412,35 +480,12 @@ const ChatUI: React.FC<ChatUIProps> = ({ personaIds, onBlack }) => {
               <SelectAllIcon />
               {selectedPersonaIds.length === personas.length &&
               personas.length > 0
-                ? "Deselect All"
-                : "Select All"}
+                ? "Deselect All Segments"
+                : "Select All Segments"}
             </button>
-            {/* {loadingPersonasCount > 0 && (
-            <span className="ml-2">
-              <svg
-                className="animate-spin h-5 w-5 text-blue-500"
-                viewBox="0 0 24 24"
-              >
-                <circle
-                  className="opacity-25"
-                  cx="12"
-                  cy="12"
-                  r="10"
-                  stroke="currentColor"
-                  strokeWidth="4"
-                  fill="none"
-                />
-                <path
-                  className="opacity-75"
-                  fill="currentColor"
-                  d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
-                />
-              </svg>
-            </span>
-          )} */}
           </div>
           <div className="flex items-start flex-col overflow-y-auto scrollbar-hide gap-3 mt-5 ">
-            {loading && visiblePersonas.length === 0 && (
+            {loading && (
               <div className="flex flex-col justify-center items-center h-full py-8 text-gray-400">
                 <svg
                   className="animate-spin h-8 w-8 text-blue-500 mb-2"
@@ -464,9 +509,9 @@ const ChatUI: React.FC<ChatUIProps> = ({ personaIds, onBlack }) => {
                 <div>Loading personas...</div>
               </div>
             )}
-            {!loading && visiblePersonas.length === 0 && (
+            {/* {!loading && visiblePersonas.length === 0 && (
               <div className="text-gray-400 text-sm">No personas found.</div>
-            )}
+            )} */}
             {visiblePersonas.length > 0 &&
               visiblePersonas.map((p) => (
                 <div
@@ -524,7 +569,7 @@ const ChatUI: React.FC<ChatUIProps> = ({ personaIds, onBlack }) => {
                     />
                     <label
                       htmlFor={`persona-checkbox-${p.id}`}
-                      className={`w-5 h-5 rounded-md border flex items-center justify-center cursor-pointer transition-all duration-200 ${
+                      className={`w-5 h-5 rounded-[4px] border flex items-center justify-center cursor-pointer transition-all duration-200 ${
                         selectedPersonaIds.includes(p.id)
                           ? "bg-primary2 border-primary2"
                           : "bg-white border-[#AEAEB2]"
@@ -736,25 +781,27 @@ const ChatUI: React.FC<ChatUIProps> = ({ personaIds, onBlack }) => {
                           </button>
                         </div>
                         {/* Persona Header */}
-                        <div className="bg-gradient-to-b rounded-2xl drop-shadow-md from-[#E6FCFA] mt-5 mb-5 to-[#FEFEFE] px-5 py-3 border-[#ECECEC] border-2  justify-between   flex items-center gap-[10px]">
-                          <div className="flex items-center gap-[10px]">
-                            <div
-                              className={`p-3 relative rounded-full transition-all duration-200 h-[50px] w-[50px] bg-primary `}
-                            >
-                              <UserIcon className="absolute top-2/4 left-2/4 -translate-x-2/4 -translate-y-2/4 text-gray-600" />
+                        <div className="side-card-shadow mb-4">
+                          <div className="bg-gradient-to-b rounded-[16px]  from-[#E6FCFA] to-[#FEFEFE] px-5 py-3   justify-between   flex items-center gap-[10px]">
+                            <div className="flex items-center gap-[10px]">
+                              <div
+                                className={`p-3 relative rounded-full transition-all duration-200 h-[50px] w-[50px] bg-primary `}
+                              >
+                                <UserIcon className="absolute top-2/4 left-2/4 -translate-x-2/4 -translate-y-2/4 text-gray-600" />
+                              </div>
+                              <h3 className="text-2xl  font-semibold text-primary2">
+                                {selectedPersona.name}
+                              </h3>
                             </div>
-                            <h3 className="text-2xl  font-semibold text-primary2">
-                              {selectedPersona.name}
-                            </h3>
-                          </div>
-                          <div className="flex items-center gap-[10px] text-primary2">
-                            <PiSuitcase size={24} />
-                            <span className="font-medium">
-                              {selectedPersona.job_title ||
-                                "No title available"}
-                              {selectedPersona.company_name &&
-                                ` at ${selectedPersona.company_name}`}
-                            </span>
+                            <div className="flex items-center gap-[10px] text-primary2">
+                              <PiSuitcase size={24} />
+                              <span className="font-medium">
+                                {selectedPersona.job_title ||
+                                  "No title available"}
+                                {selectedPersona.company_name &&
+                                  ` at ${selectedPersona.company_name}`}
+                              </span>
+                            </div>
                           </div>
                         </div>
 
@@ -762,7 +809,13 @@ const ChatUI: React.FC<ChatUIProps> = ({ personaIds, onBlack }) => {
                           {/* Main Info Sections Grid */}
                           <div className="grid md:grid-cols-2 gap-x-[25px] gap-y-5">
                             {/* Personal Info Section */}
-                            <div className="">
+                            <div
+                              className={
+                                ConsumerDetailsData?.length > 0
+                                  ? ""
+                                  : "col-span-2"
+                              }
+                            >
                               {/* <h4 className="font-medium text-blue-800 mb-4 flex items-center">
                                 <User className="w-4 h-4 mr-2" />
                                 Personal Information
@@ -770,130 +823,81 @@ const ChatUI: React.FC<ChatUIProps> = ({ personaIds, onBlack }) => {
                               <SectionHeader
                                 icon={<PiUser size={24} />}
                                 title="Personal Information"
-                                number={1}
+                                number={
+                                  PersonalInformationData?.length > 0
+                                    ? count++
+                                    : count
+                                }
                               />
-                              <div className="p-4 border-2 border-[#ECECEC] bg-gradient-to-b from-[#E6FCFA] to-[#FEFEFE] rounded-2xl drop-shadow-md">
-                                <div className="flex flex-col gap-4">
-                                  {[
-                                    {
-                                      key: "age",
-                                      label: "Age",
-                                      icon: <PiPersonArmsSpread size={20} />,
-                                      value: selectedPersona.age,
-                                    },
-                                    {
-                                      key: "gender",
-                                      label: "Gender",
-                                      icon: <PiGenderIntersex size={20} />,
-                                      value: selectedPersona.gender,
-                                    },
-                                    {
-                                      key: "location",
-                                      label: "Location",
-                                      icon: <LocationPrimeIcon />,
-                                      value: selectedPersona.location,
-                                    },
-                                    {
-                                      key: "income",
-                                      label: "Income",
-                                      icon: <IncomePrimeIcon />,
-                                      value: selectedPersona.income,
-                                    },
-                                    {
-                                      key: "education",
-                                      label: "Education",
-                                      icon: <EducationPrimeIcon />,
-                                      value: selectedPersona.education,
-                                    },
-                                  ]
-                                    .filter((field) => field.value)
-                                    .map((field: any, index: number) => (
-                                      <div
-                                        key={index}
-                                        className="flex items-start gap-3"
-                                      >
-                                        <div className="text-primary2 pr-3 border-r border-[#DBDDE0]">
-                                          {field.icon}
+                              <div className="side-card-shadow">
+                                <div className="p-4  bg-gradient-to-b from-[#E6FCFA] to-[#FEFEFE] rounded-2xl">
+                                  <div className="flex flex-col gap-4">
+                                    {PersonalInformationData?.map(
+                                      (field: any, index: number) => (
+                                        <div
+                                          key={index}
+                                          className="flex items-start gap-3"
+                                        >
+                                          <div className="text-primary2 pr-3 border-r border-[#DBDDE0]">
+                                            {field.icon}
+                                          </div>
+                                          <div className="flex items-start justify-between w-full gap-1">
+                                            <h3 className="text-black font-medium text-sm ">
+                                              {field.label}
+                                            </h3>
+                                            <span className="text-primary2 font-semibold text-xs text-right ">
+                                              {field.value}
+                                            </span>
+                                          </div>
                                         </div>
-                                        <div className="flex items-start justify-between w-full gap-1">
-                                          <h3 className="text-black font-medium text-sm ">
-                                            {field.label}
-                                          </h3>
-                                          <span className="text-primary2 font-semibold text-xs text-right ">
-                                            {field.value}
-                                          </span>
-                                        </div>
-                                      </div>
-                                    ))}
+                                      )
+                                    )}
+                                  </div>
                                 </div>
                               </div>
                             </div>
 
                             {/* Professional Info Section - Adjust fields for B2C personas */}
-                            <div className="">
-                              <SectionHeader
-                                icon={<BuildingIcon />}
-                                title="Consumer Details"
-                                number={2}
-                                titleColor="#4F46E5"
-                              />
-                              <div className="p-4 border-2 border-[#ECECEC] bg-gradient-to-b from-[#E0E7FF] to-[#FEFEFE] rounded-2xl drop-shadow-md">
-                                <div className="flex flex-col gap-4">
-                                  {[
-                                    {
-                                      key: "age_group",
-                                      label: "Age Group",
-                                      icon: <PiPersonArmsSpread size={20} />,
-                                      value: selectedPersona.data?.age_group,
-                                    },
-                                    {
-                                      key: "household_income",
-                                      label: "Income Range",
-                                      icon: <PiUsersLight />,
-                                      value:
-                                        selectedPersona.data?.household_income,
-                                    },
-                                    {
-                                      key: "geo_location",
-                                      label: "Location Type",
-                                      icon: <LocationIcon />,
-                                      value: selectedPersona.data?.geo_location,
-                                    },
-                                    {
-                                      key: "pets",
-                                      label: "Pets",
-                                      icon: <PetsIcon />,
-                                      value: selectedPersona.data?.pets,
-                                    },
-                                    {
-                                      key: "children",
-                                      label: "Children",
-                                      icon: <PiBabyLight size={20} />,
-                                      value: selectedPersona.data?.children,
-                                    },
-                                  ]
-                                    .filter((field) => field.value)
-                                    .map((field, index) => (
-                                      <div
-                                        key={index}
-                                        className="flex items-start gap-3"
-                                      >
-                                        <div className="text-primary2 pr-3 border-r border-[#DBDDE0]">
-                                          {field.icon}
-                                        </div>
-                                        <div className="flex items-start justify-between w-full gap-1">
-                                          <h3 className="text-black font-medium text-sm ">
-                                            {field.label}
-                                          </h3>
-                                          <span className="text-primary2 font-semibold text-xs text-right">
-                                            {field.value}
-                                          </span>
-                                        </div>
-                                      </div>
-                                    ))}
+                            {ConsumerDetailsData?.length > 0 && (
+                              <div className="">
+                                <SectionHeader
+                                  icon={<BuildingIcon />}
+                                  title="Consumer Details"
+                                  number={
+                                    ConsumerDetailsData?.length > 0
+                                      ? count++
+                                      : count
+                                  }
+                                  titleColor="#4F46E5"
+                                />
+                                <div className="side-card-shadow">
+                                  <div className="p-4 bg-gradient-to-b from-[#E0E7FF] to-[#FEFEFE] rounded-2xl">
+                                    <div className="flex flex-col gap-4">
+                                      {ConsumerDetailsData?.map(
+                                        (field, index) => (
+                                          <div
+                                            key={index}
+                                            className="flex items-start gap-3"
+                                          >
+                                            <div className="text-primary2 pr-3 border-r border-[#DBDDE0]">
+                                              {field.icon}
+                                            </div>
+                                            <div className="flex items-start justify-between w-full gap-1">
+                                              <h3 className="text-black font-medium text-sm ">
+                                                {field.label}
+                                              </h3>
+                                              <span className="text-primary2 font-semibold text-xs text-right">
+                                                {field.value}
+                                              </span>
+                                            </div>
+                                          </div>
+                                        )
+                                      )}
+                                    </div>
+                                  </div>
                                 </div>
                               </div>
-                            </div>
+                            )}
 
                             {selectedPersona.goals &&
                               selectedPersona.goals.length > 0 && (
@@ -901,27 +905,33 @@ const ChatUI: React.FC<ChatUIProps> = ({ personaIds, onBlack }) => {
                                   <SectionHeader
                                     icon={<GoalPrimeIcon />}
                                     title="Goals"
-                                    number={3}
+                                    number={
+                                      selectedPersona.goals.length > 0
+                                        ? count++
+                                        : count
+                                    }
                                   />
-                                  <div className="p-4 border-2 border-[#ECECEC] bg-gradient-to-b from-[#D1FAE5] to-[#FEFEFE] rounded-2xl drop-shadow-md">
-                                    <div className="flex flex-col gap-4">
-                                      {selectedPersona.goals.map(
-                                        (goal: string, index: number) => (
-                                          <div
-                                            key={index}
-                                            className="flex items-start gap-3"
-                                          >
-                                            <div className="text-primary2 pr-3 border-r border-[#DBDDE0]">
-                                              <GoalsPrimeIcon />
+                                  <div className="side-card-shadow">
+                                    <div className="p-4  bg-gradient-to-b from-[#D1FAE5] to-[#FEFEFE] rounded-2xl drop-shadow-md ">
+                                      <div className="flex flex-col gap-4">
+                                        {selectedPersona.goals.map(
+                                          (goal: string, index: number) => (
+                                            <div
+                                              key={index}
+                                              className="flex items-start gap-3"
+                                            >
+                                              <div className="text-primary2 pr-3 border-r border-[#DBDDE0]">
+                                                <GoalsPrimeIcon />
+                                              </div>
+                                              <div className="flex items-start justify-between w-full gap-1">
+                                                <h3 className="text-black font-normal text-xs">
+                                                  {goal}
+                                                </h3>
+                                              </div>
                                             </div>
-                                            <div className="flex items-start justify-between w-full gap-1">
-                                              <h3 className="text-black font-normal text-xs">
-                                                {goal}
-                                              </h3>
-                                            </div>
-                                          </div>
-                                        )
-                                      )}
+                                          )
+                                        )}
+                                      </div>
                                     </div>
                                   </div>
                                 </div>
@@ -933,28 +943,34 @@ const ChatUI: React.FC<ChatUIProps> = ({ personaIds, onBlack }) => {
                                   <SectionHeader
                                     icon={<BehaviorsIcon />}
                                     title="Behaviors"
-                                    number={4}
+                                    number={
+                                      selectedPersona.behaviors.length > 0
+                                        ? count++
+                                        : count
+                                    }
                                     titleColor="#E9BC3B"
                                   />
-                                  <div className="p-4 border-2 border-[#ECECEC] bg-gradient-to-b from-[#FFF7E0CC] to-[#FEFEFE] rounded-2xl drop-shadow-md">
-                                    <div className="flex flex-col gap-4">
-                                      {selectedPersona.behaviors.map(
-                                        (behavior: string, index: number) => (
-                                          <div
-                                            key={index}
-                                            className="flex items-start gap-3"
-                                          >
-                                            <div className="text-primary2 pr-3 border-r border-[#DBDDE0]">
-                                              <GoalsYellowIcon />
+                                  <div className="side-card-shadow">
+                                    <div className="p-4  bg-gradient-to-b from-[#FFF7E0CC] to-[#FEFEFE] rounded-2xl drop-shadow-md">
+                                      <div className="flex flex-col gap-4">
+                                        {selectedPersona.behaviors.map(
+                                          (behavior: string, index: number) => (
+                                            <div
+                                              key={index}
+                                              className="flex items-start gap-3"
+                                            >
+                                              <div className="text-primary2 pr-3 border-r border-[#DBDDE0]">
+                                                <GoalsYellowIcon />
+                                              </div>
+                                              <div className="flex items-start justify-between w-full gap-1">
+                                                <h3 className="text-black font-normal text-xs">
+                                                  {behavior}
+                                                </h3>
+                                              </div>
                                             </div>
-                                            <div className="flex items-start justify-between w-full gap-1">
-                                              <h3 className="text-black font-normal text-xs">
-                                                {behavior}
-                                              </h3>
-                                            </div>
-                                          </div>
-                                        )
-                                      )}
+                                          )
+                                        )}
+                                      </div>
                                     </div>
                                   </div>
                                 </div>
@@ -966,28 +982,34 @@ const ChatUI: React.FC<ChatUIProps> = ({ personaIds, onBlack }) => {
                                   <SectionHeader
                                     icon={<InterestsIcon />}
                                     title="Interests"
-                                    number={5}
+                                    number={
+                                      selectedPersona.interests.length > 0
+                                        ? count++
+                                        : count
+                                    }
                                     titleColor="#8B47C8"
                                   />
-                                  <div className="p-4 border-2 border-[#ECECEC] bg-gradient-to-b from-[#EEDBFFCC] to-[#FEFEFE] rounded-2xl drop-shadow-md">
-                                    <div className="flex flex-col gap-4">
-                                      {selectedPersona.interests.map(
-                                        (interest: string, index: number) => (
-                                          <div
-                                            key={index}
-                                            className="flex items-start gap-3"
-                                          >
-                                            <div className="text-primary2 pr-3 border-r border-[#DBDDE0]">
-                                              <InterestsPerpleIcon />
+                                  <div className="side-card-shadow">
+                                    <div className="p-4  bg-gradient-to-b from-[#EEDBFFCC] to-[#FEFEFE] rounded-2xl drop-shadow-md">
+                                      <div className="flex flex-col gap-4">
+                                        {selectedPersona.interests.map(
+                                          (interest: string, index: number) => (
+                                            <div
+                                              key={index}
+                                              className="flex items-start gap-3"
+                                            >
+                                              <div className="text-primary2 pr-3 border-r border-[#DBDDE0]">
+                                                <InterestsPerpleIcon />
+                                              </div>
+                                              <div className="flex items-start justify-between w-full gap-1">
+                                                <h3 className="text-black font-normal text-xs">
+                                                  {interest}
+                                                </h3>
+                                              </div>
                                             </div>
-                                            <div className="flex items-start justify-between w-full gap-1">
-                                              <h3 className="text-black font-normal text-xs">
-                                                {interest}
-                                              </h3>
-                                            </div>
-                                          </div>
-                                        )
-                                      )}
+                                          )
+                                        )}
+                                      </div>
                                     </div>
                                   </div>
                                 </div>
@@ -999,27 +1021,34 @@ const ChatUI: React.FC<ChatUIProps> = ({ personaIds, onBlack }) => {
                                   <SectionHeader
                                     icon={<PreferredChannelsIcon />}
                                     title="Preferred Channels"
-                                    number={6}
+                                    number={
+                                      selectedPersona.preferred_channels
+                                        .length > 0
+                                        ? count++
+                                        : count
+                                    }
                                   />
-                                  <div className="p-4 border-2 border-[#ECECEC] bg-gradient-to-b from-[#E6FCFA] to-[#FEFEFE] rounded-2xl drop-shadow-md">
-                                    <div className="flex flex-col gap-4">
-                                      {selectedPersona.preferred_channels.map(
-                                        (channel: string, index: number) => (
-                                          <div
-                                            key={index}
-                                            className="flex items-start gap-3"
-                                          >
-                                            <div className="text-primary2 pr-3 border-r border-[#DBDDE0]">
-                                              <PreferredChanelIcon />
+                                  <div className="side-card-shadow">
+                                    <div className="p-4  bg-gradient-to-b from-[#E6FCFA] to-[#FEFEFE] rounded-2xl drop-shadow-md">
+                                      <div className="flex flex-col gap-4">
+                                        {selectedPersona.preferred_channels.map(
+                                          (channel: string, index: number) => (
+                                            <div
+                                              key={index}
+                                              className="flex items-start gap-3"
+                                            >
+                                              <div className="text-primary2 pr-3 border-r border-[#DBDDE0]">
+                                                <PreferredChanelIcon />
+                                              </div>
+                                              <div className="flex items-start justify-between w-full gap-1">
+                                                <h3 className="text-black font-normal text-xs">
+                                                  {channel}
+                                                </h3>
+                                              </div>
                                             </div>
-                                            <div className="flex items-start justify-between w-full gap-1">
-                                              <h3 className="text-black font-normal text-xs">
-                                                {channel}
-                                              </h3>
-                                            </div>
-                                          </div>
-                                        )
-                                      )}
+                                          )
+                                        )}
+                                      </div>
                                     </div>
                                   </div>
                                 </div>
@@ -1032,28 +1061,34 @@ const ChatUI: React.FC<ChatUIProps> = ({ personaIds, onBlack }) => {
                                   <SectionHeader
                                     icon={<PainPointsIcon />}
                                     title="Pain Points"
-                                    number={7}
+                                    number={
+                                      selectedPersona.pain_points.length > 0
+                                        ? count++
+                                        : count
+                                    }
                                     titleColor="#C84747"
                                   />
-                                  <div className="p-4 border-2 border-[#ECECEC] bg-gradient-to-b from-[#FFD8D880] to-[#FEFEFE] rounded-2xl drop-shadow-md">
-                                    <div className="flex flex-col gap-4">
-                                      {selectedPersona.pain_points.map(
-                                        (point: string, index: number) => (
-                                          <div
-                                            key={index}
-                                            className="flex items-start gap-3"
-                                          >
-                                            <div className="text-primary2 pr-3 border-r border-[#DBDDE0]">
-                                              <RightUniqueArrowIcon />
+                                  <div className="side-card-shadow">
+                                    <div className="p-4  bg-gradient-to-b from-[#FFD8D880] to-[#FEFEFE] rounded-2xl drop-shadow-md">
+                                      <div className="flex flex-col gap-4">
+                                        {selectedPersona.pain_points.map(
+                                          (point: string, index: number) => (
+                                            <div
+                                              key={index}
+                                              className="flex items-start gap-3"
+                                            >
+                                              <div className="text-primary2 pr-3 border-r border-[#DBDDE0]">
+                                                <RightUniqueArrowIcon />
+                                              </div>
+                                              <div className="flex items-start justify-between w-full gap-1">
+                                                <h3 className="text-black font-normal text-xs">
+                                                  {point}
+                                                </h3>
+                                              </div>
                                             </div>
-                                            <div className="flex items-start justify-between w-full gap-1">
-                                              <h3 className="text-black font-normal text-xs">
-                                                {point}
-                                              </h3>
-                                            </div>
-                                          </div>
-                                        )
-                                      )}
+                                          )
+                                        )}
+                                      </div>
                                     </div>
                                   </div>
                                 </div>
@@ -1067,18 +1102,20 @@ const ChatUI: React.FC<ChatUIProps> = ({ personaIds, onBlack }) => {
                                 Additional Details
                               </h3>
                               {selectedPersona?.children && (
-                                <div className="p-4 border-2 border-[#ECECEC] bg-gradient-to-b from-[#E6FCFA] to-[#FEFEFE] rounded-2xl drop-shadow-md">
-                                  <div className="flex items-start gap-3">
-                                    <div className="text-primary2 pr-3 border-r border-[#DBDDE0]">
-                                      <PiBabyLight size={24} />
-                                    </div>
-                                    <div className="flex items-center justify-between w-full gap-1">
-                                      <h3 className="text-black font-medium text-sm ">
-                                        Children
-                                      </h3>
-                                      <span className="text-primary2 font-semibold text-xs text-right ">
-                                        {selectedPersona?.children?.toUpperCase()}
-                                      </span>
+                                <div className="side-card-shadow">
+                                  <div className="p-4  bg-gradient-to-b from-[#E6FCFA] to-[#FEFEFE] rounded-2xl drop-shadow-md ">
+                                    <div className="flex items-start gap-3">
+                                      <div className="text-primary2 pr-3 border-r border-[#DBDDE0]">
+                                        <PiBabyLight size={24} />
+                                      </div>
+                                      <div className="flex items-center justify-between w-full gap-1">
+                                        <h3 className="text-black font-medium text-sm ">
+                                          Children
+                                        </h3>
+                                        <span className="text-primary2 font-semibold text-xs text-right ">
+                                          {selectedPersona?.children?.toUpperCase()}
+                                        </span>
+                                      </div>
                                     </div>
                                   </div>
                                 </div>
@@ -1125,52 +1162,58 @@ const ChatUI: React.FC<ChatUIProps> = ({ personaIds, onBlack }) => {
                               </div>
                               <div className="grid grid-cols-3 gap-5 items-center mt-5">
                                 {selectedPersona?.geographics && (
-                                  <div className="p-4 border-2 border-[#ECECEC] bg-gradient-to-b from-[#E6FCFA] to-[#FEFEFE] rounded-2xl drop-shadow-md">
-                                    <div className="flex items-start gap-3">
-                                      <div className="text-primary2 pr-3 border-r border-[#DBDDE0]">
-                                        <GeographicsIcon />
-                                      </div>
-                                      <div className="flex items-start flex-col justify-between w-full gap-2">
-                                        <h3 className="text-black text-start font-medium text-sm ">
-                                          Geographics
-                                        </h3>
-                                        <span className="text-primary2 text-start font-semibold text-xs ">
-                                          {selectedPersona?.geographics?.toUpperCase()}
-                                        </span>
+                                  <div className="side-card-shadow">
+                                    <div className="p-4  bg-gradient-to-b from-[#E6FCFA] to-[#FEFEFE] rounded-2xl drop-shadow-md">
+                                      <div className="flex items-start gap-3">
+                                        <div className="text-primary2 pr-3 border-r border-[#DBDDE0]">
+                                          <GeographicsIcon />
+                                        </div>
+                                        <div className="flex items-start flex-col justify-between w-full gap-2">
+                                          <h3 className="text-black text-start font-medium text-sm ">
+                                            Geographics
+                                          </h3>
+                                          <span className="text-primary2 text-start font-semibold text-xs ">
+                                            {selectedPersona?.geographics?.toUpperCase()}
+                                          </span>
+                                        </div>
                                       </div>
                                     </div>
                                   </div>
                                 )}
                                 {selectedPersona?.married && (
-                                  <div className="p-4 border-2 border-[#ECECEC] bg-gradient-to-b from-[#E6FCFA] to-[#FEFEFE] rounded-2xl drop-shadow-md">
-                                    <div className="flex items-start gap-3">
-                                      <div className="text-primary2 pr-3 border-r border-[#DBDDE0]">
-                                        <MarriedIcon />
-                                      </div>
-                                      <div className="flex items-start flex-col justify-between w-full gap-2">
-                                        <h3 className="text-black text-start font-medium text-sm ">
-                                          Married
-                                        </h3>
-                                        <span className="text-primary2 text-start font-semibold text-xs  ">
-                                          {selectedPersona?.married?.toUpperCase()}
-                                        </span>
+                                  <div className="side-card-shadow">
+                                    <div className="p-4  bg-gradient-to-b from-[#E6FCFA] to-[#FEFEFE] rounded-2xl drop-shadow-md">
+                                      <div className="flex items-start gap-3">
+                                        <div className="text-primary2 pr-3 border-r border-[#DBDDE0]">
+                                          <MarriedIcon />
+                                        </div>
+                                        <div className="flex items-start flex-col justify-between w-full gap-2">
+                                          <h3 className="text-black text-start font-medium text-sm ">
+                                            Married
+                                          </h3>
+                                          <span className="text-primary2 text-start font-semibold text-xs  ">
+                                            {selectedPersona?.married?.toUpperCase()}
+                                          </span>
+                                        </div>
                                       </div>
                                     </div>
                                   </div>
                                 )}
                                 {selectedPersona?.pets && (
-                                  <div className="p-4 border-2 border-[#ECECEC] bg-gradient-to-b from-[#E6FCFA] to-[#FEFEFE] rounded-2xl drop-shadow-md">
-                                    <div className="flex items-start gap-3">
-                                      <div className="text-primary2 pr-3 border-r border-[#DBDDE0]">
-                                        <PetsPrimeIcon />
-                                      </div>
-                                      <div className="flex items-start flex-col justify-between w-full gap-2">
-                                        <h3 className="text-black text-start font-medium text-sm ">
-                                          Pets
-                                        </h3>
-                                        <span className="text-primary2 text-start font-semibold text-xs  ">
-                                          {selectedPersona?.pets?.toUpperCase()}
-                                        </span>
+                                  <div className="side-card-shadow">
+                                    <div className="p-4  bg-gradient-to-b from-[#E6FCFA] to-[#FEFEFE] rounded-2xl drop-shadow-md">
+                                      <div className="flex items-start gap-3">
+                                        <div className="text-primary2 pr-3 border-r border-[#DBDDE0]">
+                                          <PetsPrimeIcon />
+                                        </div>
+                                        <div className="flex items-start flex-col justify-between w-full gap-2">
+                                          <h3 className="text-black text-start font-medium text-sm ">
+                                            Pets
+                                          </h3>
+                                          <span className="text-primary2 text-start font-semibold text-xs  ">
+                                            {selectedPersona?.pets?.toUpperCase()}
+                                          </span>
+                                        </div>
                                       </div>
                                     </div>
                                   </div>
@@ -1178,53 +1221,59 @@ const ChatUI: React.FC<ChatUIProps> = ({ personaIds, onBlack }) => {
                               </div>
                               <div className="grid grid-cols-2 gap-5 items-center mt-5">
                                 {selectedPersona?.life_stage && (
-                                  <div className="p-4 border-2 border-[#ECECEC] bg-gradient-to-b from-[#E6FCFA] to-[#FEFEFE] rounded-2xl drop-shadow-md">
-                                    <div className="flex items-start gap-3">
-                                      <div className="text-primary2 pr-3 border-r border-[#DBDDE0]">
-                                        <LifeStageIcon />
-                                      </div>
-                                      <div className="flex items-start flex-col justify-between w-full gap-2">
-                                        <h3 className="text-black text-start font-medium text-sm ">
-                                          Life Stage
-                                        </h3>
-                                        <span className="text-primary2 text-start font-semibold text-xs ">
-                                          {selectedPersona?.life_stage?.toUpperCase()}
-                                        </span>
+                                  <div className="side-card-shadow">
+                                    <div className="p-4  bg-gradient-to-b from-[#E6FCFA] to-[#FEFEFE] rounded-2xl drop-shadow-md">
+                                      <div className="flex items-start gap-3">
+                                        <div className="text-primary2 pr-3 border-r border-[#DBDDE0]">
+                                          <LifeStageIcon />
+                                        </div>
+                                        <div className="flex items-start flex-col justify-between w-full gap-2">
+                                          <h3 className="text-black text-start font-medium text-sm ">
+                                            Life Stage
+                                          </h3>
+                                          <span className="text-primary2 text-start font-semibold text-xs ">
+                                            {selectedPersona?.life_stage?.toUpperCase()}
+                                          </span>
+                                        </div>
                                       </div>
                                     </div>
                                   </div>
                                 )}
                                 {selectedPersona?.persona_segment && (
-                                  <div className="p-4 border-2 border-[#ECECEC] bg-gradient-to-b from-[#E6FCFA] to-[#FEFEFE] rounded-2xl drop-shadow-md">
-                                    <div className="flex items-start gap-3">
-                                      <div className="text-primary2 pr-3 border-r border-[#DBDDE0]">
-                                        <PersonaSegmentIcon />
-                                      </div>
-                                      <div className="flex items-start flex-col justify-between w-full gap-2">
-                                        <h3 className="text-black text-start font-medium text-sm ">
-                                          Persona Segment
-                                        </h3>
-                                        <span className="text-primary2 text-start font-semibold text-xs  ">
-                                          {selectedPersona?.persona_segment?.toUpperCase()}
-                                        </span>
+                                  <div className="side-card-shadow">
+                                    <div className="p-4  bg-gradient-to-b from-[#E6FCFA] to-[#FEFEFE] rounded-2xl drop-shadow-md">
+                                      <div className="flex items-start gap-3">
+                                        <div className="text-primary2 pr-3 border-r border-[#DBDDE0]">
+                                          <PersonaSegmentIcon />
+                                        </div>
+                                        <div className="flex items-start flex-col justify-between w-full gap-2">
+                                          <h3 className="text-black text-start font-medium text-sm ">
+                                            Persona Segment
+                                          </h3>
+                                          <span className="text-primary2 text-start font-semibold text-xs  ">
+                                            {selectedPersona?.persona_segment?.toUpperCase()}
+                                          </span>
+                                        </div>
                                       </div>
                                     </div>
                                   </div>
                                 )}
                               </div>
                               {selectedPersona?.psychographics && (
-                                <div className="p-4 border-2 border-[#ECECEC] bg-gradient-to-b from-[#F8F8F8] to-[#FEFEFE] rounded-2xl drop-shadow-md mt-5">
-                                  <div className="flex items-start gap-3">
-                                    <div className="text-primary2 pr-3 border-r border-[#DBDDE0]">
-                                      <PsychographicsIcon />
-                                    </div>
-                                    <div className="flex items-start flex-col justify-between w-full gap-2">
-                                      <h3 className="text-black text-start font-medium text-sm ">
-                                        Psychographics
-                                      </h3>
-                                      <span className="text-[#595E64] text-start font-normal text-xs ">
-                                        {selectedPersona?.psychographics}
-                                      </span>
+                                <div className="side-card-shadow mt-5">
+                                  <div className="p-4  bg-gradient-to-b from-[#F8F8F8] to-[#FEFEFE] rounded-2xl drop-shadow-md ">
+                                    <div className="flex items-start gap-3">
+                                      <div className="text-primary2 pr-3 border-r border-[#DBDDE0]">
+                                        <PsychographicsIcon />
+                                      </div>
+                                      <div className="flex items-start flex-col justify-between w-full gap-2">
+                                        <h3 className="text-black text-start font-medium text-sm ">
+                                          Psychographics
+                                        </h3>
+                                        <span className="text-[#595E64] text-start font-normal text-xs ">
+                                          {selectedPersona?.psychographics}
+                                        </span>
+                                      </div>
                                     </div>
                                   </div>
                                 </div>
@@ -1245,35 +1294,39 @@ const ChatUI: React.FC<ChatUIProps> = ({ personaIds, onBlack }) => {
                               </div>
                               <div className="grid grid-cols-2 gap-5 items-center mt-5">
                                 {selectedPersona?.segment_name && (
-                                  <div className="p-4 border-2 border-[#ECECEC] bg-gradient-to-b from-[#E6FCFA] to-[#FEFEFE] rounded-2xl drop-shadow-md">
-                                    <div className="flex items-start gap-3">
-                                      <div className="text-primary2 pr-3 border-r border-[#DBDDE0]">
-                                        <SegmentNameIcon />
-                                      </div>
-                                      <div className="flex items-start flex-col justify-between w-full gap-2">
-                                        <h3 className="text-black text-start font-medium text-sm ">
-                                          Segment Name
-                                        </h3>
-                                        <span className="text-primary2 text-start font-semibold text-xs ">
-                                          {selectedPersona?.segment_name?.toUpperCase()}
-                                        </span>
+                                  <div className="side-card-shadow">
+                                    <div className="p-4  bg-gradient-to-b from-[#E6FCFA] to-[#FEFEFE] rounded-2xl drop-shadow-md">
+                                      <div className="flex items-start gap-3">
+                                        <div className="text-primary2 pr-3 border-r border-[#DBDDE0]">
+                                          <SegmentNameIcon />
+                                        </div>
+                                        <div className="flex items-start flex-col justify-between w-full gap-2">
+                                          <h3 className="text-black text-start font-medium text-sm ">
+                                            Segment Name
+                                          </h3>
+                                          <span className="text-primary2 text-start font-semibold text-xs ">
+                                            {selectedPersona?.segment_name?.toUpperCase()}
+                                          </span>
+                                        </div>
                                       </div>
                                     </div>
                                   </div>
                                 )}
                                 {selectedPersona?.subsegment && (
-                                  <div className="p-4 border-2 border-[#ECECEC] bg-gradient-to-b from-[#E6FCFA] to-[#FEFEFE] rounded-2xl drop-shadow-md">
-                                    <div className="flex items-start gap-3">
-                                      <div className="text-primary2 pr-3 border-r border-[#DBDDE0]">
-                                        <SubsegmentIcon />
-                                      </div>
-                                      <div className="flex items-start flex-col justify-between w-full gap-2">
-                                        <h3 className="text-black text-start font-medium text-sm ">
-                                          Subsegment
-                                        </h3>
-                                        <span className="text-primary2 text-start font-semibold text-xs  ">
-                                          {selectedPersona?.subsegment?.toUpperCase()}
-                                        </span>
+                                  <div className="side-card-shadow">
+                                    <div className="p-4 bg-gradient-to-b from-[#E6FCFA] to-[#FEFEFE] rounded-2xl drop-shadow-md">
+                                      <div className="flex items-start gap-3">
+                                        <div className="text-primary2 pr-3 border-r border-[#DBDDE0]">
+                                          <SubsegmentIcon />
+                                        </div>
+                                        <div className="flex items-start flex-col justify-between w-full gap-2">
+                                          <h3 className="text-black text-start font-medium text-sm ">
+                                            Subsegment
+                                          </h3>
+                                          <span className="text-primary2 text-start font-semibold text-xs  ">
+                                            {selectedPersona?.subsegment?.toUpperCase()}
+                                          </span>
+                                        </div>
                                       </div>
                                     </div>
                                   </div>

@@ -1205,13 +1205,13 @@ const SegmentsSelectorKettleAndFire: React.FC<SegmentsSelectorProps> = ({
                         {AGE_GROUPS.slice(0, 2).map((age, i) => (
                           <span
                             key={i}
-                            className="text-xs font-medium rounded-full p-[6px_16px]  border-white border bg-gradient-to-b shadow-2xl from-[#E6FCFACC] to-[#FEFEFE]"
+                            className="text-xs font-medium rounded-full p-[6px_16px]  border-white border bg-gradient-to-b shadow-2xl from-[#E6FCFACC] to-[#FEFEFE] text-primary2  pill-shadow"
                           >
                             {age}
                           </span>
                         ))}
                         {AGE_GROUPS.length > 2 && (
-                          <span className="text-xs font-medium rounded-full p-[6px_16px]  border-white border bg-[#FAFAFA] shadow-2xl">
+                          <span className="text-xs font-medium rounded-full p-[6px_16px]  border-white border bg-[#FAFAFA] shadow-2xl text-[#595E64]  pill-shadow">
                             +{AGE_GROUPS.length - 2}
                           </span>
                         )}
@@ -1222,13 +1222,13 @@ const SegmentsSelectorKettleAndFire: React.FC<SegmentsSelectorProps> = ({
                         {HOUSEHOLD_INCOME.slice(0, 2).map((income, i) => (
                           <span
                             key={i}
-                            className="text-xs font-medium rounded-full p-[6px_16px]  border-white border bg-gradient-to-b shadow-2xl from-[#E0E7FFCC] to-[#FEFEFE]"
+                            className="text-xs font-medium rounded-full p-[6px_16px]  border-white border bg-gradient-to-b shadow-2xl from-[#E0E7FFCC] to-[#FEFEFE] text-[#4F46E5]  pill-shadow"
                           >
                             {income}
                           </span>
                         ))}
                         {HOUSEHOLD_INCOME.length > 2 && (
-                          <span className="text-xs font-medium rounded-full p-[6px_16px]  border-white border bg-[#FAFAFA] shadow-2xl">
+                          <span className="text-xs font-medium rounded-full p-[6px_16px]  border-white border bg-[#FAFAFA] shadow-2xl text-[#595E64]  pill-shadow">
                             +{HOUSEHOLD_INCOME.length - 2}
                           </span>
                         )}
@@ -1250,13 +1250,13 @@ const SegmentsSelectorKettleAndFire: React.FC<SegmentsSelectorProps> = ({
                         {GEO_LOCATIONS.slice(0, 2).map((loc, i) => (
                           <span
                             key={i}
-                            className="text-xs font-medium rounded-full p-[6px_16px]  border-white border bg-gradient-to-b shadow-2xl from-[#D1FAE5CC] to-[#FEFEFE]"
+                            className="text-xs font-medium rounded-full p-[6px_16px]  border-white border bg-gradient-to-b shadow-2xl from-[#D1FAE5CC] to-[#FEFEFE] text-[#059669]  pill-shadow"
                           >
                             {loc}
                           </span>
                         ))}
                         {GEO_LOCATIONS.length > 2 && (
-                          <span className="text-xs font-medium rounded-full p-[6px_16px]  border-white border bg-[#FAFAFA] shadow-2xl">
+                          <span className="text-xs font-medium rounded-full p-[6px_16px]  border-white border bg-[#FAFAFA] shadow-2xl text-[#595E64]  pill-shadow">
                             +{GEO_LOCATIONS.length - 2}
                           </span>
                         )}
@@ -1268,14 +1268,14 @@ const SegmentsSelectorKettleAndFire: React.FC<SegmentsSelectorProps> = ({
                           (item, i) => (
                             <span
                               key={i}
-                              className="text-xs font-medium rounded-full p-[6px_16px]  border-white border bg-gradient-to-b shadow-2xl from-[#FFF7E0CC] to-[#FEFEFE]"
+                              className="text-xs font-medium rounded-full p-[6px_16px]  border-white border bg-gradient-to-b shadow-2xl from-[#FFF7E0CC] to-[#FEFEFE] text-[#BE8D00]  pill-shadow"
                             >
                               {item}
                             </span>
                           )
                         )}
                         {[...PETS, ...CHILDREN].length > 2 && (
-                          <span className="text-xs font-medium rounded-full p-[6px_16px]  border-white border bg-[#FAFAFA] shadow-2xl">
+                          <span className="text-xs font-medium rounded-full p-[6px_16px]  border-white border bg-[#FAFAFA] shadow-2xl text-[#595E64]  pill-shadow">
                             +{[...PETS, ...CHILDREN].length - 2}
                           </span>
                         )}
@@ -1387,7 +1387,7 @@ const SegmentsSelectorKettleAndFire: React.FC<SegmentsSelectorProps> = ({
                                 />
                                 <label
                                   htmlFor={`subSegment-${segment.id}-${i}`}
-                                  className="text-xs cursor-pointer font-medium rounded-full p-[6px_16px]  border-white border bg-gradient-to-b shadow-2xl from-[#E6FCFACC]  to-[#FEFEFE] peer-checked:to-[#81fef4]"
+                                  className="text-xs cursor-pointer font-medium rounded-full p-[6px_16px]  border-white border bg-gradient-to-b shadow-2xl from-[#E6FCFACC]  to-[#FEFEFE] peer-checked:to-[#81fef4] text-primary2  pill-shadow"
                                 >
                                   {subSegment}
                                 </label>
@@ -1433,7 +1433,7 @@ const SegmentsSelectorKettleAndFire: React.FC<SegmentsSelectorProps> = ({
                               />
                               <label
                                 htmlFor={`age-${segment.id}-${i}`}
-                                className="text-xs font-medium cursor-pointer rounded-full p-[6px_16px]  border-white border bg-gradient-to-b shadow-2xl from-[#FFF7E0CC]  to-[#FEFEFE] peer-checked:to-[#ebdcae]"
+                                className="text-xs font-medium cursor-pointer rounded-full p-[6px_16px]  border-white border bg-gradient-to-b shadow-2xl from-[#FFF7E0CC]  to-[#FEFEFE] peer-checked:to-[#ebdcae] text-[#BE8D00]  pill-shadow"
                               >
                                 {age}
                               </label>
@@ -1477,7 +1477,7 @@ const SegmentsSelectorKettleAndFire: React.FC<SegmentsSelectorProps> = ({
                               />
                               <label
                                 htmlFor={`income-${segment.id}-${i}`}
-                                className="text-xs font-medium cursor-pointer rounded-full p-[6px_16px]  border-white border bg-gradient-to-b shadow-2xl from-[#E0E7FFCC]  to-[#FEFEFE] peer-checked:to-[#beccfa]"
+                                className="text-xs font-medium cursor-pointer rounded-full p-[6px_16px]  border-white border bg-gradient-to-b shadow-2xl from-[#E0E7FFCC]  to-[#FEFEFE] peer-checked:to-[#beccfa] text-[#4F46E5]  pill-shadow"
                               >
                                 {income}
                               </label>
@@ -1522,7 +1522,7 @@ const SegmentsSelectorKettleAndFire: React.FC<SegmentsSelectorProps> = ({
                               />
                               <label
                                 htmlFor={`location-${segment.id}-${i}`}
-                                className="text-xs font-medium cursor-pointer rounded-full p-[6px_16px]  border-white border bg-gradient-to-b shadow-2xl from-[#D1FAE5CC]  to-[#FEFEFE] peer-checked:to-[#96ecbf]"
+                                className="text-xs font-medium cursor-pointer rounded-full p-[6px_16px]  border-white border bg-gradient-to-b shadow-2xl from-[#D1FAE5CC]  to-[#FEFEFE] peer-checked:to-[#96ecbf] text-[#059669]  pill-shadow"
                               >
                                 {location}
                               </label>
@@ -1567,7 +1567,7 @@ const SegmentsSelectorKettleAndFire: React.FC<SegmentsSelectorProps> = ({
                               />
                               <label
                                 htmlFor={`pet-${segment.id}-${i}`}
-                                className="text-xs font-medium cursor-pointer rounded-full p-[6px_16px]  border-white border bg-gradient-to-b shadow-2xl from-[#EEDBFFCC]  to-[#FEFEFE] peer-checked:to-[#c69cea]"
+                                className="text-xs font-medium cursor-pointer rounded-full p-[6px_16px]  border-white border bg-gradient-to-b shadow-2xl peer-checked:from-[#EEDBFFCC]  peer-checked:to-[#FEFEFE]  bg-[#FAFAFA] text-[#9333EA]  pill-shadow"
                               >
                                 {pet}
                               </label>
@@ -1611,7 +1611,7 @@ const SegmentsSelectorKettleAndFire: React.FC<SegmentsSelectorProps> = ({
                               />
                               <label
                                 htmlFor={`child-${segment.id}-${i}`}
-                                className="text-xs font-medium cursor-pointer rounded-full p-[6px_16px]  border-white border bg-gradient-to-b shadow-2xl from-[#E6FCFACC]  to-[#FEFEFE] peer-checked:to-[#adfdf7]"
+                                className="text-xs font-medium cursor-pointer rounded-full p-[6px_16px]  border-white border bg-gradient-to-b shadow-2xl  peer-checked:from-[#E6FCFACC]  peer-checked:to-[#FEFEFE] bg-[#FAFAFA] text-primary2  pill-shadow"
                               >
                                 {child}
                               </label>

@@ -1357,13 +1357,13 @@ const SegmentsSelectorCoreStack: React.FC<SegmentsSelectorProps> = ({
                         {segment.industryL1.slice(0, 2).map((ind, i) => (
                           <span
                             key={i}
-                            className="text-xs font-medium rounded-full p-[6px_16px]  border-white border bg-gradient-to-b shadow-2xl from-[#E6FCFACC] to-[#FEFEFE]"
+                            className="text-xs font-medium rounded-full p-[6px_16px]  border-white border bg-gradient-to-b shadow-2xl from-[#E6FCFACC] to-[#FEFEFE] text-primary2  pill-shadow"
                           >
                             {ind}
                           </span>
                         ))}
                         {segment.industryL1.length > 2 && (
-                          <span className="text-xs font-medium rounded-full p-[6px_16px]  border-white border bg-[#FAFAFA] shadow-2xl">
+                          <span className="text-xs font-medium rounded-full p-[6px_16px]  border-white border bg-[#FAFAFA] shadow-2xl text-[#595E64]  pill-shadow">
                             +{segment.industryL1.length - 2}
                           </span>
                         )}
@@ -1374,13 +1374,13 @@ const SegmentsSelectorCoreStack: React.FC<SegmentsSelectorProps> = ({
                         {segment.industryL2.slice(0, 2).map((ind, i) => (
                           <span
                             key={i}
-                            className="text-xs font-medium rounded-full p-[6px_16px]  border-white border bg-gradient-to-b shadow-2xl from-[#E0E7FFCC] to-[#FEFEFE]"
+                            className="text-xs font-medium rounded-full p-[6px_16px]  border-white border bg-gradient-to-b shadow-2xl from-[#E0E7FFCC] to-[#FEFEFE] text-[#4F46E5]  pill-shadow"
                           >
                             {ind}
                           </span>
                         ))}
                         {segment.industryL2.length > 2 && (
-                          <span className="text-xs font-medium rounded-full p-[6px_16px]  border-white border bg-[#FAFAFA] shadow-2xl">
+                          <span className="text-xs font-medium rounded-full p-[6px_16px]  border-white border bg-[#FAFAFA] shadow-2xl text-[#595E64]  pill-shadow">
                             +{segment.industryL2.length - 2}
                           </span>
                         )}
@@ -1402,13 +1402,13 @@ const SegmentsSelectorCoreStack: React.FC<SegmentsSelectorProps> = ({
                         {segment.functions.slice(0, 2).map((func, i) => (
                           <span
                             key={i}
-                            className="text-xs font-medium rounded-full p-[6px_16px]  border-white border bg-gradient-to-b shadow-2xl from-[#D1FAE5CC] to-[#FEFEFE]"
+                            className="text-xs font-medium rounded-full p-[6px_16px]  border-white border bg-gradient-to-b shadow-2xl from-[#D1FAE5CC] to-[#FEFEFE] text-[#059669] pill-shadow"
                           >
                             {func}
                           </span>
                         ))}
                         {segment.functions.length > 2 && (
-                          <span className="text-xs font-medium rounded-full p-[6px_16px]  border-white border bg-[#FAFAFA] shadow-2xl">
+                          <span className="text-xs font-medium rounded-full p-[6px_16px]  border-white border bg-[#FAFAFA] shadow-2xl  text-[#595E64]  pill-shadow">
                             +{segment.functions.length - 2}
                           </span>
                         )}
@@ -1419,13 +1419,13 @@ const SegmentsSelectorCoreStack: React.FC<SegmentsSelectorProps> = ({
                         {segment.roles.slice(0, 2).map((role, i) => (
                           <span
                             key={i}
-                            className="text-xs font-medium rounded-full p-[6px_16px]  border-white border bg-gradient-to-b shadow-2xl from-[#FFF7E0CC] to-[#FEFEFE]"
+                            className="text-xs font-medium rounded-full p-[6px_16px]  border-white border bg-gradient-to-b shadow-2xl from-[#FFF7E0CC] to-[#FEFEFE] text-[#BE8D00]  pill-shadow"
                           >
                             {role}
                           </span>
                         ))}
                         {segment.roles.length > 2 && (
-                          <span className="text-xs font-medium rounded-full p-[6px_16px]  border-white border bg-[#FAFAFA] shadow-2xl">
+                          <span className="text-xs font-medium rounded-full p-[6px_16px]  border-white border bg-[#FAFAFA] shadow-2xl text-[#595E64]  pill-shadow">
                             +{segment.roles.length - 2}
                           </span>
                         )}
@@ -1556,7 +1556,7 @@ const SegmentsSelectorCoreStack: React.FC<SegmentsSelectorProps> = ({
                                   />
                                   <label
                                     htmlFor={`subind-${segment.id}-${l1}-${i}`}
-                                    className="cursor-pointer text-xs font-medium rounded-full p-[6px_16px]  border-white border bg-gradient-to-b shadow-2xl from-[#E6FCFACC]  to-[#FEFEFE] peer-checked:to-[#81fef4]"
+                                    className="cursor-pointer text-xs font-medium rounded-full p-[6px_16px]  border-white border bg-gradient-to-b shadow-2xl from-[#E6FCFACC]  to-[#FEFEFE] peer-checked:to-[#81fef4] text-primary2 pill-shadow"
                                   >
                                     {l2}
                                   </label>
@@ -1602,7 +1602,7 @@ const SegmentsSelectorCoreStack: React.FC<SegmentsSelectorProps> = ({
                               />
                               <label
                                 htmlFor={`func-${segment.id}-${i}`}
-                                className="text-xs cursor-pointer font-medium rounded-full p-[6px_16px]  border-white border bg-gradient-to-b shadow-2xl from-[#FFF7E0CC]  to-[#FEFEFE] peer-checked:to-[#ebdcae]"
+                                className="text-xs cursor-pointer font-medium rounded-full p-[6px_16px]  border-white border bg-gradient-to-b shadow-2xl from-[#FFF7E0CC]  to-[#FEFEFE] peer-checked:to-[#ebdcae] text-[#BE8D00] pill-shadow"
                               >
                                 {func}
                               </label>
@@ -1646,7 +1646,7 @@ const SegmentsSelectorCoreStack: React.FC<SegmentsSelectorProps> = ({
                               />
                               <label
                                 htmlFor={`role-${segment.id}-${i}`}
-                                className="text-xs font-medium cursor-pointer rounded-full p-[6px_16px]  border-white border bg-gradient-to-b shadow-2xl from-[#E0E7FFCC]  to-[#FEFEFE] peer-checked:to-[#beccfa]"
+                                className="text-xs font-medium cursor-pointer rounded-full p-[6px_16px]  border-white border bg-gradient-to-b shadow-2xl from-[#E0E7FFCC]  to-[#FEFEFE] peer-checked:to-[#beccfa] text-[#4F46E5] pill-shadow"
                               >
                                 {role}
                               </label>

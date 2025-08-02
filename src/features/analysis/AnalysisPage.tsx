@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import {
   ArrowLeft,
@@ -59,6 +59,25 @@ const AnalysisPage: React.FC = () => {
   const [hasAnimated, setHasAnimated] = useState(false);
   const [isSimulationsLoaded, setIsSimulationsLoaded] = useState(false);
   const [simulationLoading, setSimulationLoading] = useState(true);
+  const selectedSimRef = useRef<HTMLButtonElement | null>(null);
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      const el = selectedSimRef.current;
+      if (el) {
+        const rect = el.getBoundingClientRect();
+        const isFullyVisible =
+          rect.top >= 0 &&
+          rect.bottom <=
+            (window.innerHeight || document.documentElement.clientHeight);
+
+        if (!isFullyVisible) {
+          el.scrollIntoView({ behavior: "smooth", block: "center" });
+        }
+      }
+    }, 100);
+    return () => clearTimeout(timeout);
+  }, [urlSimId, simulations]);
+
   // Fetch audiences on component mount
   useEffect(() => {
     fetchAudiences();
@@ -233,65 +252,63 @@ const AnalysisPage: React.FC = () => {
               </div>
             )
           ) : (
-            <div className="space-y-2 ">
-              {filteredSimulations.map((simulation) => (
-                <button
-                  type="button"
-                  key={simulation.id}
-                  onClick={() => navigate(`/analysis/${simulation.id}`)}
-                  className={`w-full text-left rounded-lg sim-btn transition-colors  ${
-                    urlSimId === simulation.id.toString()
-                      ? ""
-                      : "border-gray-200"
-                  }`}
-                >
-                  <div
-                    className={`${
-                      urlSimId === simulation.id.toString()
-                        ? "bg-primary"
-                        : "bg-[#E8E8E8]"
-                    }  sim-btn-top rounded`}
+            <div className="space-y-2">
+              {filteredSimulations.map((simulation) => {
+                const isSelected = urlSimId === simulation.id.toString();
+                return (
+                  <button
+                    type="button"
+                    key={simulation.id}
+                    ref={isSelected ? selectedSimRef : null}
+                    onClick={() => navigate(`/analysis/${simulation.id}`)}
+                    className={`w-full text-left rounded-lg sim-btn transition-colors ${
+                      isSelected ? "" : "border-gray-200"
+                    }`}
                   >
-                    <span>{simulation.audience_name}</span>
-                  </div>
-                  <div className="bg-white border sim-btn-bottom border-gray-200">
-                    <div className="font-semibold text-[14px] text-black-600">
-                      {simulation.name}
+                    <div
+                      className={`${
+                        isSelected ? "bg-primary" : "bg-[#E8E8E8]"
+                      } sim-btn-top rounded`}
+                    >
+                      <span>{simulation.audience_name}</span>
                     </div>
-                    <div className="text-[12px] text-gray-600 mt-1">
-                      {simulation.description?.substring(0, 60) ||
-                        "No description"}
-                      {(simulation.description?.length || 0) > 60 ? "..." : ""}
-                    </div>
-                    <div className="flex justify-between items-center border-t mt-2 text-xs text-gray-500">
-                      <div className="flex items-center justify-between pt-4 pb-1 bg-white w-full">
-                        {/* Date */}
-                        <div className="flex items-center gap-2">
-                          <CalendarDays className="text-primary w-5 h-5" />
-                          <span className="text-black text-[12px] font-medium">
-                            {format(
-                              new Date(simulation?.created_at),
-                              "MMM dd, yyyy"
-                            )}
-                          </span>
-                        </div>
-
-                        {/* Time */}
-                        <div className="flex items-center gap-2">
-                          <AlarmClock className="text-primary w-5 h-5" />
-                          <span className="text-black text-[12px] font-medium">
-                            {format(
-                              new Date(simulation?.created_at),
-                              "hh:mm a"
-                            )}
-                          </span>
+                    <div className="bg-white border sim-btn-bottom border-gray-200">
+                      <div className="font-semibold text-[14px] text-black-600">
+                        {simulation.name}
+                      </div>
+                      <div className="text-[12px] text-gray-600 mt-1">
+                        {simulation.description?.substring(0, 60) ||
+                          "No description"}
+                        {(simulation.description?.length || 0) > 60
+                          ? "..."
+                          : ""}
+                      </div>
+                      <div className="flex justify-between items-center border-t mt-2 text-xs text-gray-500">
+                        <div className="flex items-center justify-between pt-4 pb-1 bg-white w-full">
+                          <div className="flex items-center gap-2">
+                            <CalendarDays className="text-primary w-5 h-5" />
+                            <span className="text-black text-[12px] font-medium">
+                              {format(
+                                new Date(simulation?.created_at),
+                                "MMM dd, yyyy"
+                              )}
+                            </span>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <AlarmClock className="text-primary w-5 h-5" />
+                            <span className="text-black text-[12px] font-medium">
+                              {format(
+                                new Date(simulation?.created_at),
+                                "hh:mm a"
+                              )}
+                            </span>
+                          </div>
                         </div>
                       </div>
-                      {/* <span>{formatDate(simulation.created_at)}</span> */}
                     </div>
-                  </div>
-                </button>
-              ))}
+                  </button>
+                );
+              })}
             </div>
           )}
         </div>
@@ -338,14 +355,18 @@ const AnalysisPage: React.FC = () => {
               className={`relative h-full transition-all duration-500  origin-left ease-[cubic-bezier(0.25,0.8,0.25,1)] transform w-full flex-shrink-0 ${
                 isListCollapsed
                   ? "min-w-[0%] max-w-[0%] scale-x-0 opacity-50"
-                  : "min-w-[26%] max-w-[26%] scale-x-100 opacity-100"
+                  : "min-w-[22%] max-w-[22%] scale-x-100 opacity-100"
               }`}
             >
               <div
                 className={`
                       h-full overflow-hidden transition-all duration-500 ease-[cubic-bezier(0.25,0.8,0.25,1)]
                       transform origin-left
-                      ${isListCollapsed ? "scale-x-0 opacity-0" : "scale-x-100 opacity-100"}
+                      ${
+                        isListCollapsed
+                          ? "scale-x-0 opacity-0"
+                          : "scale-x-100 opacity-100"
+                      }
                       ${isListCollapsed ? "bg-transparent " : "bg-white "}
                     `}
               >
@@ -359,7 +380,7 @@ const AnalysisPage: React.FC = () => {
               className={`relative w-full h-full transition-all duration-500 ease-[cubic-bezier(0.25,0.8,0.25,1)]   ${
                 isListCollapsed
                   ? "max-w-full pl-[5.5rem]"
-                  : "max-w-[74%] pl-[30px]"
+                  : "max-w-[78%] pl-[30px]"
               }`}
             >
               <div

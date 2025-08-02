@@ -179,6 +179,28 @@ body {
 .tableFirstRowColor td:first-child {
   color: #028b7e;
 }
+.cht-card{
+      padding: 2px;
+    background: linear-gradient(180deg, #ffffff, #ECECEC);
+    border-radius: 10px;
+    height: 61px;
+    position: relative;
+    box-shadow: 0px 3px 2px #b1b1b1;
+}
+.cht-card .cht-inn{
+  height: 57px
+}
+.pill-shadow{
+  box-shadow: 2px 2px 1px #D9D9DA40;
+}
+.side-card-shadow{
+      padding: 2px;
+    background: linear-gradient(180deg, #ffffff, #ECECEC);
+    border-radius: 16px;
+    position: relative;
+    box-shadow: 0px 2px 2px #b1b1b1;
+}
+
 /* -----------------------------Scrollable container ---------------------*/
 
 .table-scroll::-webkit-scrollbar {

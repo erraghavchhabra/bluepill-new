@@ -155,7 +155,7 @@ const TableView: React.FC<TableViewProps> = ({
             </tbody>
           ) : (
             <>
-              <thead className="bg-gray-50">
+              <thead className="bg-white">
                 <tr>
                   {headers.map((header, i) => (
                     <th
@@ -193,7 +193,7 @@ const TableView: React.FC<TableViewProps> = ({
 
       <div className="max-w-full overflow-x-auto w-full custom-scrollbar no-print">
         <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
+          <thead className="bg-white">
             <tr>
               {headers.map((header, i) => (
                 <th
